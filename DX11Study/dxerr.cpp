@@ -63,7 +63,7 @@
 
 #define  CHK_ERRA_W(hrchk) \
         case hrchk: \
-             return L#hrchk;
+             return L""#hrchk;
 
 #define  CHK_ERR_A(hrchk, strOut) \
         case hrchk: \
@@ -78,7 +78,7 @@
 #define  CHK_ERR_WIN32A_W(hrchk) \
         case HRESULT_FROM_WIN32b(hrchk): \
         case hrchk: \
-             return L#hrchk;
+             return L""#hrchk;
 
 #define  CHK_ERR_WIN32_ONLY_W(hrchk, strOut) \
         case HRESULT_FROM_WIN32b(hrchk): \
@@ -135,7 +135,7 @@ const CHAR* WINAPI DXGetErrorStringA(_In_ HRESULT hr) {
 
 #define  CHK_ERRA_W(hrchk) \
         case hrchk: \
-             wcscpy_s( desc, count, L#hrchk ); \
+             wcscpy_s( desc, count, L""#hrchk ); \
 			 break;
 #define  CHK_ERR_W(hrchk, strOut) \
         case hrchk: \

@@ -168,6 +168,9 @@
     <ClCompile Include="Cylinder.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="AssimpTest.cpp">
+      <Filter>소스 파일\Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -336,6 +339,9 @@
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Cylinder.h">
+      <Filter>헤더 파일\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpTest.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
