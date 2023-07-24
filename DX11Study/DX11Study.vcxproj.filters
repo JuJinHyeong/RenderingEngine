@@ -344,6 +344,9 @@
     <ClInclude Include="AssimpTest.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">

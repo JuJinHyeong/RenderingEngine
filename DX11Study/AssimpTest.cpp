@@ -4,6 +4,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "Vertex.h"
 
 AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
@@ -21,10 +22,11 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 			dx::XMFLOAT3 pos;
 			dx::XMFLOAT3 n;
 		};
+		using custom::VertexLayout;
+		custom::VertexBuffer vbuf(std::move(VertexLayout{}.Append(VertexLayout::Position3D).Append(VertexLayout::Normal)));
 
 		Assimp::Importer imp;
 		const auto pModel = imp.ReadFile("models/suzanne.obj",
-			aiProcess_Triangulate |
 			aiProcess_JoinIdenticalVertices
 		);
 		const auto pMesh = pModel->mMeshes[0];
@@ -32,10 +34,8 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 		std::vector<Vertex> vertices;
 		vertices.reserve(pMesh->mNumVertices);
 		for (unsigned int i = 0; i < pMesh->mNumVertices; i++) {
-			vertices.push_back({
-				{ pMesh->mVertices[i].x * scale,pMesh->mVertices[i].y * scale,pMesh->mVertices[i].z * scale },
-				*reinterpret_cast<dx::XMFLOAT3*>(&pMesh->mNormals[i])
-				});
+			vbuf.EmplaceBack(dx::XMFLOAT3{ pMesh->mVertices[i].x* scale, pMesh->mVertices[i].y* scale, pMesh->mVertices[i].z* scale },
+				*reinterpret_cast<dx::XMFLOAT3*>(&pMesh->mNormals[i]));
 		}
 
 		std::vector<unsigned short> indices;
@@ -48,7 +48,7 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 			indices.push_back(face.mIndices[2]);
 		}
 
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, vertices));
+		AddStaticBind(std::make_unique<VertexBuffer>(gfx, vbuf));
 
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, indices));
 
@@ -58,13 +58,7 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
-
+		AddStaticBind(std::make_unique<InputLayout>(gfx, vbuf.GetLayout().GetD3DLayout(), pvsbc));
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 		struct PSMaterialConstant {
