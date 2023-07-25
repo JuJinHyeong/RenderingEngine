@@ -9,7 +9,7 @@ public:
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
 	void Draw(Graphics& gfx) const noexcept(!IS_DEBUG);
-	void Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept;
+	void Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept;
 private:
 	struct PointLightCBuf {
 		alignas(16) DirectX::XMFLOAT3 pos;

@@ -14,7 +14,7 @@ public:
 	virtual ~Drawable() = default;
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void Draw(Graphics& gfx) const noexcept(!IS_DEBUG);
-	virtual void Update(float dt) noexcept = 0;
+	virtual void Update(float dt) noexcept {}
 protected:
 	template<class T>
 	T* QueryBindable() noexcept {
