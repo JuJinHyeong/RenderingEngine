@@ -59,12 +59,12 @@ Node::Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::
 	meshPtrs(std::move(meshPtrs)),
 	name(name)
 {
-	DirectX::XMStoreFloat4x4(&baseTransform, transform);
+	DirectX::XMStoreFloat4x4(&this->transform, transform);
 	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
 }
 void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
-	const auto built = DirectX::XMLoadFloat4x4(&baseTransform) 
-		* DirectX::XMLoadFloat4x4(&appliedTransform) 
+	const auto built = DirectX::XMLoadFloat4x4(&appliedTransform) 
+		* DirectX::XMLoadFloat4x4(&transform) 
 		* accumulatedTransform;
 
 	for (const auto pm : meshPtrs) {
@@ -85,13 +85,17 @@ void Node::ShowTree(int& nodeIndex, std::optional<int>& selectedIndex, Node*& pS
 	const int nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow
 		| ((currentNodeIndex == selectedIndex.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
 		| (childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : 0);
+
+	// create expandable node
+	const auto expanded = ImGui::TreeNodeEx((void*)(intptr_t)currentNodeIndex, nodeFlags, name.c_str());
+
+	if (ImGui::IsItemClicked()) {
+		selectedIndex = currentNodeIndex;
+		// future need to modify
+		pSelectedNode = const_cast<Node*>(this);
+	}
 	// int to void* need to cast.
-	if (ImGui::TreeNodeEx((void*)(intptr_t)currentNodeIndex, nodeFlags, name.c_str())) {
-		if (ImGui::IsItemClicked()) {
-			selectedIndex = currentNodeIndex;
-			// future need to modify
-			pSelectedNode = const_cast<Node*>(this);
-		}
+	if (expanded) {
 		for (const auto& pChild : childPtrs) {
 			pChild->ShowTree(nodeIndex, selectedIndex, pSelectedNode);
 		}

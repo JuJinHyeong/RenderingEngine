@@ -23,5 +23,5 @@ private:
 	Timer timer;
 	Camera cam;
 	PointLight light;
-	Model nano{ wnd.Gfx(),"models/nanosuit.obj" };
+	Model nano{ wnd.Gfx(),"models/nano.gltf" };
 };

@@ -44,7 +44,7 @@ private:
 	std::vector<Mesh*> meshPtrs;
 	// relative transform from parent
 	// loaded by file
-	DirectX::XMFLOAT4X4 baseTransform;
+	DirectX::XMFLOAT4X4 transform;
 	DirectX::XMFLOAT4X4 appliedTransform;
 };
 

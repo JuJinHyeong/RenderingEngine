@@ -13,10 +13,10 @@ namespace dx = DirectX;
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-Graphics::Graphics(HWND hWnd) : projection(DirectX::XMMATRIX()) {
+Graphics::Graphics(HWND hWnd, unsigned int width, unsigned int height) : projection(DirectX::XMMATRIX()) {
 	DXGI_SWAP_CHAIN_DESC sd = {};
-	sd.BufferDesc.Width = 0;
-	sd.BufferDesc.Height = 0;
+	sd.BufferDesc.Width = width;
+	sd.BufferDesc.Height = height;
 	// layout
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 0;
@@ -80,8 +80,8 @@ Graphics::Graphics(HWND hWnd) : projection(DirectX::XMMATRIX()) {
 	// create depth texture
 	D3D11_TEXTURE2D_DESC descDepth = {};
 	// width and height need to same with swapchain
-	descDepth.Width = (UINT)WINDOW_WIDTH;
-	descDepth.Height = (UINT)WINDOW_HEIGHT;
+	descDepth.Width = width;
+	descDepth.Height = height;
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -105,8 +105,8 @@ Graphics::Graphics(HWND hWnd) : projection(DirectX::XMMATRIX()) {
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = WINDOW_WIDTH;
-	vp.Height = WINDOW_HEIGHT;
+	vp.Width = static_cast<float>(width);
+	vp.Height = static_cast<float>(height);
 	vp.MinDepth = 0;
 	vp.MaxDepth = 1;
 	vp.TopLeftX = 0;
