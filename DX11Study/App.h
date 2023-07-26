@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "Drawable.h"
 #include "PointLight.h"
-#include "Model.h"
+#include "Mesh.h"
 #include <set>
 #include <vector>
 
@@ -15,7 +15,7 @@ public:
 	int Go();
 private:
 	void DoFrame();
-	void ShowModelWindow();
+	void ShowModelDemoWindow();
 private:
 	float speed_factor = 1.0f;
 	ImguiManager imgui;
@@ -24,13 +24,4 @@ private:
 	Camera cam;
 	PointLight light;
 	Model nano{ wnd.Gfx(),"models/nanosuit.obj" };
-
-	struct {
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-	} pos;
 };
