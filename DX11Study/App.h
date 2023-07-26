@@ -16,7 +16,10 @@ public:
 private:
 	void DoFrame();
 	void ShowModelDemoWindow();
+	void ShowRawInputWindow();
 private:
+	int x = 0;
+	int y = 0;
 	float speed_factor = 1.0f;
 	ImguiManager imgui;
 	Window wnd;
