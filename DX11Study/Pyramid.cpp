@@ -1,5 +1,5 @@
 #include "Pyramid.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include "Cone.h"
 

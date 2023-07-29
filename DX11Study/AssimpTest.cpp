@@ -1,5 +1,5 @@
 #include "AssimpTest.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -48,18 +48,18 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 			indices.push_back(face.mIndices[2]);
 		}
 
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, vbuf));
+		AddStaticBind(std::make_unique<Bind::VertexBuffer>(gfx, vbuf));
 
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, indices));
+		AddStaticIndexBuffer(std::make_unique<Bind::IndexBuffer>(gfx, indices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongVS.cso");
+		auto pvs = std::make_unique<Bind::VertexShader>(gfx, L"PhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
+		AddStaticBind(std::make_unique<Bind::PixelShader>(gfx, L"PhongPS.cso"));
 
-		AddStaticBind(std::make_unique<InputLayout>(gfx, vbuf.GetLayout().GetD3DLayout(), pvsbc));
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		AddStaticBind(std::make_unique<Bind::InputLayout>(gfx, vbuf.GetLayout().GetD3DLayout(), pvsbc));
+		AddStaticBind(std::make_unique<Bind::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 		struct PSMaterialConstant {
 			DirectX::XMFLOAT3 color = { 0.0f, 0.0f, 0.0f };
@@ -68,11 +68,11 @@ AssimpTest::AssimpTest(Graphics& gfx, std::mt19937& rng,
 			float padding[3] = { 0.0f };
 		} pmc;
 		pmc.color = material;
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, pmc, 1u));
+		AddStaticBind(std::make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(gfx, pmc, 1u));
 	}
 	else {
 		SetIndexFromStatic();
 	}
 
-	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+	AddBind(std::make_unique<Bind::TransformCbuf>(gfx, *this));
 }

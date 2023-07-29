@@ -16,15 +16,13 @@ public:
 private:
 	void DoFrame();
 	void ShowModelDemoWindow();
-	void ShowRawInputWindow();
 private:
-	int x = 0;
-	int y = 0;
+	bool showDemoWindow = false;
 	float speed_factor = 1.0f;
 	ImguiManager imgui;
 	Window wnd;
 	Timer timer;
 	Camera cam;
 	PointLight light;
-	Model nano{ wnd.Gfx(),"models/nano.gltf" };
+	Model nano{ wnd.Gfx(),"models/nano_textured/nanosuit.obj" };
 };

@@ -1,5 +1,5 @@
 #include "Box.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include "Cube.h"
 #include "imgui/imgui.h"
@@ -89,7 +89,7 @@ bool Box::SpawnControlWindow(int id, Graphics& gfx) noexcept {
 }
 
 void Box::SyncMaterial(Graphics& gfx) {
-	auto pConstPS = QueryBindable<PixelConstantBuffer<PSMaterialConstant>>();
+	auto pConstPS = QueryBindable<Bind::PixelConstantBuffer<PSMaterialConstant>>();
 	assert(pConstPS != nullptr);
 	pConstPS->Update(gfx, materialConstants);
 }

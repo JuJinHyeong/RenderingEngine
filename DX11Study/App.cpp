@@ -62,36 +62,64 @@ void App::DoFrame() {
 	light.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.keyboard.ReadKey()) {
-		if (e->IsPress() && e->GetCode() == VK_MENU) {
-			wnd.EnableCursor();
-			wnd.mouse.DisableRaw();
+		if (!e->IsPress()) {
+			continue;
 		}
-		else if (e->IsRelease() && e->GetCode() == VK_MENU) {
-			wnd.DisableCursor();
-			wnd.mouse.EnableRaw();
+		switch (e->GetCode()) {
+		case VK_ESCAPE:
+			if (wnd.CursorEnabled()) {
+				wnd.DisableCursor();
+				wnd.mouse.EnableRaw();
+			}
+			else {
+				wnd.EnableCursor();
+				wnd.mouse.DisableRaw();
+			}
+			break;
+		case VK_F1:
+			showDemoWindow = !showDemoWindow;
+			break;
+		default:
+			break;
 		}
 	}
 
-	cam.SpawnControlWindow();
-	light.SpawnControlWindow();
-	ShowModelDemoWindow();
-	ShowRawInputWindow();
+	if (!wnd.CursorEnabled()) {
+		if (wnd.keyboard.KeyIsPressed('W')) {
+			cam.Translate({ 0.0f, 0.0f, dt });
+		}
+		if (wnd.keyboard.KeyIsPressed('A')) {
+			cam.Translate({ -dt, 0.0f, 0.0f });
+		}
+		if (wnd.keyboard.KeyIsPressed('S')) {
+			cam.Translate({ 0.0f, 0.0f, -dt });
+		}
+		if (wnd.keyboard.KeyIsPressed('D')) {
+			cam.Translate({ dt, 0.0f, 0.0f });
+		}
+		if (wnd.keyboard.KeyIsPressed('R')) {
+			cam.Translate({ 0.0f, dt, 0.0f });
+		}
+		if (wnd.keyboard.KeyIsPressed('F')) {
+			cam.Translate({ 0.0f, -dt, 0.0f });
+		}
+	}
+
+	while (const auto delta = wnd.mouse.ReadRawDelta()) {
+		if (!wnd.CursorEnabled()) {
+			cam.Rotate(static_cast<float>(delta->x), static_cast<float>(delta->y));
+		}
+	}
+
+	if (showDemoWindow) {
+		cam.SpawnControlWindow();
+		light.SpawnControlWindow();
+		ShowModelDemoWindow();
+	}
 
 	wnd.Gfx().EndFrame();
 }
 
 void App::ShowModelDemoWindow() {
 	nano.ShowWindow("nanosuit.obj");
-}
-
-void App::ShowRawInputWindow() {
-	while (const auto d = wnd.mouse.ReadRawDelta()) {
-		x += d->x;
-		y += d->y;
-	}
-	if (ImGui::Begin("Raw Input")) {
-		ImGui::Text("Mouse Delta (%d, %d)", x, y);
-		ImGui::Text("Cursor: %s", wnd.CursorEnabled() ? "Enabled" : "Disabled");
-	}
-	ImGui::End();
 }

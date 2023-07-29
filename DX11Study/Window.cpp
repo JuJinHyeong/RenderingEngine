@@ -69,6 +69,7 @@ Window::Window(int width, int height, const char* name)
 	ImGui_ImplWin32_Init(hWnd);
 
 	DisableCursor();
+	mouse.EnableRaw();
 	//EnableCursor();
 
 	// create graphics object

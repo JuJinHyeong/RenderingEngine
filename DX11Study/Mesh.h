@@ -1,6 +1,6 @@
 #pragma once
 #include "DrawableBase.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "Vertex.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -20,7 +20,7 @@ private:
 
 class Mesh : public DrawableBase<Mesh> {
 public:
-	Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bindable>> bindPtrs);
+	Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs);
 	void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
@@ -29,17 +29,18 @@ private:
 
 class Node {
 	friend class Model;
-	friend class ModelWindow;
 public:
-	Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG);
+	Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG);
 	void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
+	int GetId() const noexcept;
+	// index need to imgui, Node need to graphics
+	void ShowTree(Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
 private:
 	void AddChild(std::unique_ptr<Node> pChild) noexcept(!IS_DEBUG);
-	// index need to imgui, Node need to graphics
-	void ShowTree(int& nodeIndex, std::optional<int>& selectedIndex, Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
 private:
 	std::string name;
+	int id;
 	std::vector<std::unique_ptr<Node>> childPtrs;
 	std::vector<Mesh*> meshPtrs;
 	// relative transform from parent
@@ -55,11 +56,13 @@ public:
 	void ShowWindow(const char* windowName) noexcept(!IS_DEBUG);
 	~Model() noexcept(!IS_DEBUG);
 private:
-	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh);
-	std::unique_ptr<Node> ParseNode(const aiNode& node);
+	// const aiMaterial* -> aiMaterial* that aiMaterial can't be modified
+	// const aiMaterial* const -> aiMaterial can't be modified also aiMaterial* can't be modified
+	// const aiMaterial* const* -> aiMaterial* is array that each element can't be modified aiMaterial, pointer
+	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials);
+	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node);
 private:
 	std::unique_ptr<Node> pRoot;
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;
 	std::unique_ptr<class ModelWindow> pWindow;
-
 };

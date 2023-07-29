@@ -17,10 +17,10 @@ private:
 	void SyncMaterial(Graphics& gfx);
 private:
 	struct PSMaterialConstant {
-		DirectX::XMFLOAT3 color;
+		DirectX::XMFLOAT3 color = { 0.0f, 0.0f, 0.0f };
 		float specularIntensity = 0.6f;
 		float specularPower = 30.0f;
-		float padding[3];
+		float padding[3] = { 0.0f, 0.0f, 0.0f };
 	} materialConstants;
 	// model transform
 	DirectX::XMFLOAT3X3 mt;

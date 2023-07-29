@@ -8,8 +8,12 @@
 #include <wrl.h>
 #include <random>
 
+namespace Bind {
+	class Bindable;
+}
+
 class Graphics {
-	friend class Bindable;
+	friend class Bind::Bindable;
 public:
 	class Exception : public BasicException {
 		using BasicException::BasicException;

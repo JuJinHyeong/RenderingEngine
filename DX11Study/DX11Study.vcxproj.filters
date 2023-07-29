@@ -81,9 +81,6 @@
     <ClCompile Include="IndexBuffer.cpp">
       <Filter>소스 파일\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBuffers.cpp">
-      <Filter>소스 파일\Bindable</Filter>
-    </ClCompile>
     <ClCompile Include="PixelShader.cpp">
       <Filter>소스 파일\Bindable</Filter>
     </ClCompile>
@@ -99,17 +96,8 @@
     <ClCompile Include="Drawable.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>소스 파일\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="TransformCbuf.cpp">
       <Filter>소스 파일\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Melon.cpp">
-      <Filter>소스 파일\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Pyramid.cpp">
-      <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Surface.cpp">
       <Filter>소스 파일</Filter>
@@ -122,12 +110,6 @@
     </ClCompile>
     <ClCompile Include="Sampler.cpp">
       <Filter>소스 파일\Bindable</Filter>
-    </ClCompile>
-    <ClCompile Include="Sheet.cpp">
-      <Filter>소스 파일\Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinnedBox.cpp">
-      <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
       <Filter>imgui</Filter>
@@ -159,20 +141,17 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SolidSphere.cpp">
-      <Filter>소스 파일\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="DataMacros.h">
       <Filter>헤더 파일\Macros</Filter>
-    </ClCompile>
-    <ClCompile Include="Cylinder.cpp">
-      <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="AssimpTest.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidSphere.cpp">
+      <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,7 +224,7 @@
     <ClInclude Include="Box.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="BindableBase.h">
+    <ClInclude Include="BindableCommon.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="DrawableBase.h">
@@ -425,6 +404,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="TexturedPhongPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongSpecMapPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

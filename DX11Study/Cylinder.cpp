@@ -1,6 +1,6 @@
 #include "Cylinder.h"
 #include "Prism.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 
 Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng, 
 	std::uniform_real_distribution<float>& adist, 
@@ -13,20 +13,20 @@ Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng,
 {
 	namespace dx = DirectX;
 	if (!IsStaticInitialized()) {
-		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongVS.cso");
+		auto pvs = std::make_unique<Bind::VertexShader>(gfx, L"PhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"IndexedPhongPS.cso"));
+		AddStaticBind(std::make_unique<Bind::PixelShader>(gfx, L"IndexedPhongPS.cso"));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
-		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
+		AddStaticBind(std::make_unique<Bind::InputLayout>(gfx, ied, pvsbc));
 
-		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		AddStaticBind(std::make_unique<Bind::Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 		struct PSMaterialConstant {
 			dx::XMFLOAT3A colors[6] = {

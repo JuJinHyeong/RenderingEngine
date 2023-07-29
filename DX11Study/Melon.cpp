@@ -1,5 +1,5 @@
 #include "Melon.h"
-#include "BindableBase.h"
+#include "BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include "Sphere.h"
 
