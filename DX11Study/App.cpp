@@ -1,14 +1,7 @@
 #include "DataMacros.h"
 #include "App.h"
 #include <vector>
-#include "Box.h"
-#include "Pyramid.h"
-#include "Melon.h"
 #include "CustomMath.h"
-#include "Sheet.h"
-#include "Cylinder.h"
-#include "SkinnedBox.h"
-#include "AssimpTest.h"
 #include "GDIPlusManager.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -59,6 +52,7 @@ void App::DoFrame() {
 	light.Bind(wnd.Gfx(), cam.GetMatrix());
 
 	nano.Draw(wnd.Gfx());
+	nano2.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.keyboard.ReadKey()) {
@@ -115,6 +109,7 @@ void App::DoFrame() {
 		cam.SpawnControlWindow();
 		light.SpawnControlWindow();
 		ShowModelDemoWindow();
+		//ShowFrameRateWindow();
 	}
 
 	wnd.Gfx().EndFrame();
@@ -122,4 +117,12 @@ void App::DoFrame() {
 
 void App::ShowModelDemoWindow() {
 	nano.ShowWindow("nanosuit.obj");
+	nano2.ShowWindow("nanosuit2.obj");
+}
+
+void App::ShowFrameRateWindow() {
+	if (ImGui::Begin("Frame Rate")) {
+		ImGui::Text("%d fps", static_cast<int>(1.0f / timer.Mark()));
+	}
+	ImGui::End();
 }

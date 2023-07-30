@@ -1,7 +1,9 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <DirectXMath.h>
 #include <type_traits>
+#include <d3d11.h>
 
 namespace custom {
 	struct BGRAColor {
@@ -28,100 +30,58 @@ namespace custom {
 			using SysType = DirectX::XMFLOAT2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
+			static constexpr const char* code = "P2";
 		};
 		template<> struct Map<Position3D> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
+			static constexpr const char* code = "P3";
 		};
 		template<> struct Map<Texture2D> {
 			using SysType = DirectX::XMFLOAT2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
+			static constexpr const char* code = "T2";
 		};
 		template<> struct Map<Normal> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
+			static constexpr const char* code = "N";
 		};
 		template<> struct Map<Float3Color> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Color";
+			static constexpr const char* code = "C3";
 		};
 		template<> struct Map<Float4Color> {
 			using SysType = DirectX::XMFLOAT4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
+			static constexpr const char* code = "C4";
 		};
 		template<> struct Map<BGRAColor> {
 			using SysType = DirectX::XMFLOAT4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
+			static constexpr const char* code = "CB";
 		};
-
 
 		class Element {
 		public:
-			Element(ElementType type, size_t offset)
-				:
-				type(type),
-				offset(offset) {}
-			size_t GetOffsetAfter() const noexcept(!IS_DEBUG) {
-				return offset + Size();
-			}
-			size_t GetOffset() const {
-				return offset;
-			}
-			size_t Size() const noexcept(!IS_DEBUG) {
-				return SizeOf(type);
-			}
-			static constexpr size_t SizeOf(ElementType type) noexcept(!IS_DEBUG) {
-				switch (type) {
-				case Position2D:
-					return sizeof(Map<Position2D>::SysType);
-				case Position3D:
-					return sizeof(Map<Position3D>::SysType);
-				case Texture2D:
-					return sizeof(Map<Texture2D>::SysType);
-				case Normal:
-					return sizeof(Map<Normal>::SysType);
-				case Float3Color:
-					return sizeof(Map<Float3Color>::SysType);
-				case Float4Color:
-					return sizeof(Map<Float4Color>::SysType);
-				case BGRAColor:
-					return sizeof(Map<BGRAColor>::SysType);
-				}
-				assert("Invalid element type" && false);
-				return 0u;
-			}
-			ElementType GetType() const noexcept {
-				return type;
-			}
-			D3D11_INPUT_ELEMENT_DESC GetDesc() const noexcept(!IS_DEBUG) {
-				switch (type) {
-				case Position2D:
-					return GenerateDesc<Position2D>(GetOffset());
-				case Position3D:
-					return GenerateDesc<Position3D>(GetOffset());
-				case Texture2D:
-					return GenerateDesc<Texture2D>(GetOffset());
-				case Normal:
-					return GenerateDesc<Normal>(GetOffset());
-				case Float3Color:
-					return GenerateDesc<Float3Color>(GetOffset());
-				case Float4Color:
-					return GenerateDesc<Float4Color>(GetOffset());
-				case BGRAColor:
-					return GenerateDesc<BGRAColor>(GetOffset());
-				}
-				assert("Invalid element type" && false);
-				return { "INVALID",0,DXGI_FORMAT_UNKNOWN,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 };
-			}
+			Element(ElementType type, size_t offset);
+			size_t GetOffsetAfter() const noexcept(!IS_DEBUG);
+			size_t GetOffset() const;
+			size_t Size() const noexcept(!IS_DEBUG);
+			static constexpr size_t SizeOf(ElementType type) noexcept(!IS_DEBUG);
+			ElementType GetType() const noexcept;
+			const char* GetCode() const noexcept;
+			D3D11_INPUT_ELEMENT_DESC GetDesc() const noexcept(!IS_DEBUG);
 		private:
 			template<ElementType type>
-			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset) noexcept(!IS_DEBUG) {
+			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateDesc(size_t offset) noexcept {
 				return { Map<type>::semantic,0,Map<type>::dxgiFormat,0,(UINT)offset,D3D11_INPUT_PER_VERTEX_DATA,0 };
 			}
 		private:
@@ -138,28 +98,13 @@ namespace custom {
 			}
 			assert("Could not resolve element type" && false);
 			return elements.front();
-		}
-		const Element& ResolveByIndex(size_t i) const noexcept(!IS_DEBUG) {
-			return elements[i];
-		}
-		VertexLayout& Append(ElementType type) noexcept(!IS_DEBUG) {
-			elements.emplace_back(type, Size());
-			return *this;
-		}
-		size_t Size() const noexcept(!IS_DEBUG) {
-			return elements.empty() ? 0u : elements.back().GetOffsetAfter();
-		}
-		size_t GetElementCount() const noexcept {
-			return elements.size();
-		}
-		std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const noexcept(!IS_DEBUG) {
-			std::vector<D3D11_INPUT_ELEMENT_DESC> desc;
-			desc.reserve(GetElementCount());
-			for (const auto& e : elements) {
-				desc.push_back(e.GetDesc());
-			}
-			return desc;
-		}
+		};
+		const Element& ResolveByIndex(size_t i) const noexcept(!IS_DEBUG);
+		VertexLayout& Append(ElementType type) noexcept(!IS_DEBUG);
+		size_t Size() const noexcept(!IS_DEBUG);
+		std::string GetCode() const noexcept;
+		size_t GetElementCount() const noexcept;
+		std::vector<D3D11_INPUT_ELEMENT_DESC> GetD3DLayout() const noexcept(!IS_DEBUG);
 	private:
 		std::vector<Element> elements;
 	};
@@ -203,12 +148,7 @@ namespace custom {
 			}
 		}
 	protected:
-		Vertex(char* pData, const VertexLayout& layout) noexcept(!IS_DEBUG)
-			:
-			pData(pData),
-			layout(layout) {
-			assert(pData != nullptr);
-		}
+		Vertex(char* pData, const VertexLayout& layout) noexcept(!IS_DEBUG);
 		template<typename First, typename ...Rest>
 		// enables parameter pack setting of multiple parameters by element index
 		void SetAttributeByIndex(size_t i, First&& first, Rest&&... rest) noexcept(!IS_DEBUG) {
@@ -234,9 +174,7 @@ namespace custom {
 	// only to read
 	class ConstVertex {
 	public:
-		ConstVertex(const Vertex& v) noexcept
-			:
-			vertex(v) {}
+		ConstVertex(const Vertex& v) noexcept;
 		template<VertexLayout::ElementType Type>
 		const auto& Attr() const noexcept(!IS_DEBUG) {
 			return const_cast<Vertex&>(vertex).Attr<Type>();
@@ -247,51 +185,23 @@ namespace custom {
 
 	class VertexBuffer {
 	public:
-		VertexBuffer(VertexLayout layout) noexcept(!IS_DEBUG)
-			:
-			layout(std::move(layout)) {}
-		const VertexLayout& GetLayout() const noexcept {
-			return layout;
-		}
-		size_t Size() const noexcept(!IS_DEBUG) {
-			return buffer.size() / layout.Size();
-		}
-		const char* GetData() const noexcept(!IS_DEBUG) {
-			return buffer.data();
-		}
-		size_t SizeBytes() const noexcept(!IS_DEBUG) {
-			return buffer.size();
-		}
+		VertexBuffer(VertexLayout layout) noexcept(!IS_DEBUG);
+		const VertexLayout& GetLayout() const noexcept;
+		size_t Size() const noexcept(!IS_DEBUG);
+		const char* GetData() const noexcept(!IS_DEBUG);
+		size_t SizeBytes() const noexcept(!IS_DEBUG);
 		template<typename ...Params>
 		void EmplaceBack(Params&&... params) noexcept(!IS_DEBUG) {
 			assert(sizeof...(params) == layout.GetElementCount() && "Param count doesn't match number of vertex element");
 			buffer.resize(buffer.size() + layout.Size());
 			Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
 		}
-		Vertex Back() noexcept(!IS_DEBUG) {
-			assert(buffer.size() != 0u);
-			return Vertex{ buffer.data() + buffer.size() - layout.Size(),layout };
-		}
-		Vertex Front() noexcept(!IS_DEBUG) {
-			assert(buffer.size() != 0u);
-			return Vertex{ buffer.data(),layout };
-		}
-		Vertex operator[](size_t i) noexcept(!IS_DEBUG) {
-			assert(i < Size());
-			return Vertex{ buffer.data() + layout.Size() * i,layout };
-		}
-		ConstVertex Back() const noexcept(!IS_DEBUG) {
-			assert(buffer.size() != 0u);
-			return const_cast<VertexBuffer*>(this)->Back();
-		}
-		ConstVertex Front() const noexcept(!IS_DEBUG) {
-			assert(buffer.size() != 0u);
-			return const_cast<VertexBuffer*>(this)->Front();
-		}
-		ConstVertex operator[](size_t i) const noexcept(!IS_DEBUG) {
-			assert(i < Size());
-			return const_cast<VertexBuffer&>(*this)[i];
-		}
+		Vertex Back() noexcept(!IS_DEBUG);
+		Vertex Front() noexcept(!IS_DEBUG);
+		Vertex operator[](size_t i) noexcept(!IS_DEBUG);
+		ConstVertex Back() const noexcept(!IS_DEBUG);
+		ConstVertex Front() const noexcept(!IS_DEBUG);
+		ConstVertex operator[](size_t i) const noexcept(!IS_DEBUG);
 	private:
 		std::vector<char> buffer;
 		VertexLayout layout;

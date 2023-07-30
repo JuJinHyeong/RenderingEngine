@@ -16,6 +16,7 @@ public:
 private:
 	void DoFrame();
 	void ShowModelDemoWindow();
+	void ShowFrameRateWindow();
 private:
 	bool showDemoWindow = false;
 	float speed_factor = 1.0f;
@@ -25,4 +26,5 @@ private:
 	Camera cam;
 	PointLight light;
 	Model nano{ wnd.Gfx(),"models/nano_textured/nanosuit.obj" };
+	Model nano2{ wnd.Gfx(),"models/nano_textured/nanosuit.obj" };
 };

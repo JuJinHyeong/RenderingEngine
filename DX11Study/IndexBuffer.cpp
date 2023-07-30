@@ -1,9 +1,12 @@
 #include "IndexBuffer.h"
+#include "BindableCodex.h"
 
 namespace Bind {
-	IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices)
+	IndexBuffer::IndexBuffer(Graphics& gfx, const std::string& tag, const std::vector<unsigned short>& indices)
 		:
-		count(static_cast<UINT>(indices.size())) {
+		tag(tag),
+		count(static_cast<UINT>(indices.size())) 
+	{
 		INFOMAN(gfx);
 
 		D3D11_BUFFER_DESC ibd = {};
@@ -20,11 +23,27 @@ namespace Bind {
 		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&ibd, &isd, &pIndexBuffer));
 	}
 
+	IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices) 
+		:
+		IndexBuffer(gfx, "not in codex system", indices)
+	{}
+
 	void IndexBuffer::Bind(Graphics& gfx) noexcept {
 		GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 	}
 
 	UINT IndexBuffer::GetCount() const noexcept {
 		return count;
+	}
+	std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, const std::string& tag, const std::vector<unsigned short>& indices) {
+		assert(tag != "not in codex system");
+		return Codex::Resolve<IndexBuffer>(gfx, tag, indices);
+	}
+	std::string IndexBuffer::_GenerateUID(const std::string& tag) {
+		using namespace std::string_literals;
+		return typeid(IndexBuffer).name() + "#"s + tag;
+	}
+	std::string IndexBuffer::GetUID() const noexcept {
+		return _GenerateUID(tag);
 	}
 }

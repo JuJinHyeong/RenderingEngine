@@ -144,13 +144,13 @@
     <ClCompile Include="DataMacros.h">
       <Filter>헤더 파일\Macros</Filter>
     </ClCompile>
-    <ClCompile Include="AssimpTest.cpp">
+    <ClCompile Include="SolidSphere.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
+    <ClCompile Include="Vertex.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SolidSphere.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,20 +221,11 @@
     <ClInclude Include="Drawable.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="BindableCommon.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="DrawableBase.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="CustomMath.h">
       <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Melon.h">
-      <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>헤더 파일</Filter>
@@ -247,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="Sampler.h">
       <Filter>헤더 파일\Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Sheet.h">
-      <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Prism.h">
       <Filter>헤더 파일\Geometry</Filter>
@@ -266,9 +254,6 @@
     <ClInclude Include="Cone.h">
       <Filter>헤더 파일\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="Pyramid.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>헤더 파일\Geometry</Filter>
     </ClInclude>
@@ -277,9 +262,6 @@
     </ClInclude>
     <ClInclude Include="WindowsThrowMacros.h">
       <Filter>헤더 파일\Macros</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinnedBox.h">
-      <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
       <Filter>imgui</Filter>
@@ -317,20 +299,14 @@
     <ClInclude Include="SolidSphere.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="TestObject.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Cylinder.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="AssimpTest.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="BindableCodex.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
