@@ -28,6 +28,10 @@ constexpr size_t custom::VertexLayout::Element::SizeOf(ElementType type) noexcep
 		return sizeof(Map<Texture2D>::SysType);
 	case Normal:
 		return sizeof(Map<Normal>::SysType);
+	case Tangent:
+		return sizeof(Map<Tangent>::SysType);
+	case Bitangent:
+		return sizeof(Map<Bitangent>::SysType);
 	case Float3Color:
 		return sizeof(Map<Float3Color>::SysType);
 	case Float4Color:
@@ -53,6 +57,10 @@ const char* custom::VertexLayout::Element::GetCode() const noexcept {
 		return Map<Texture2D>::code;
 	case Normal:
 		return Map<Normal>::code;
+	case Tangent:
+		return Map<Tangent>::code;
+	case Bitangent:
+		return Map<Bitangent>::code;
 	case Float3Color:
 		return Map<Float3Color>::code;
 	case Float4Color:
@@ -75,6 +83,10 @@ D3D11_INPUT_ELEMENT_DESC custom::VertexLayout::Element::GetDesc() const noexcept
 		return GenerateDesc<Texture2D>(GetOffset());
 	case Normal:
 		return GenerateDesc<Normal>(GetOffset());
+	case Tangent:
+		return GenerateDesc<Tangent>(GetOffset());
+	case Bitangent:
+		return GenerateDesc<Bitangent>(GetOffset());
 	case Float3Color:
 		return GenerateDesc<Float3Color>(GetOffset());
 	case Float4Color:
@@ -133,13 +145,22 @@ custom::ConstVertex::ConstVertex(const Vertex& v) noexcept
 	vertex(v) 
 {}
 
-custom::VertexBuffer::VertexBuffer(VertexLayout layout) noexcept(!IS_DEBUG)
+custom::VertexBuffer::VertexBuffer(VertexLayout layout, size_t size) noexcept(!IS_DEBUG)
 	:
 	layout(std::move(layout)) 
-{}
+{
+	Resize(size);
+}
 
 const custom::VertexLayout& custom::VertexBuffer::GetLayout() const noexcept {
 	return layout;
+}
+
+void custom::VertexBuffer::Resize(size_t newSize) noexcept(!IS_DEBUG) {
+	const auto size = Size();
+	if (size < newSize) {
+		buffer.resize(buffer.size() + layout.Size() * (newSize - size));
+	}
 }
 
 size_t custom::VertexBuffer::Size() const noexcept(!IS_DEBUG) {

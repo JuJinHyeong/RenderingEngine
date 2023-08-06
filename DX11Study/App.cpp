@@ -12,11 +12,10 @@
 
 GDIPlusManager gdipm;
 
-App::App() 
+App::App()
 	:
 	wnd(1280, 720, "First App"),
-	light(wnd.Gfx())
-{
+	light(wnd.Gfx()) {
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 40.0f));
 }
 
@@ -52,7 +51,9 @@ void App::DoFrame() {
 	light.Bind(wnd.Gfx(), cam.GetMatrix());
 
 	nano.Draw(wnd.Gfx());
-	nano2.Draw(wnd.Gfx());
+	gobber.Draw(wnd.Gfx());
+	wall.Draw(wnd.Gfx());
+	plane.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.keyboard.ReadKey()) {
@@ -116,8 +117,10 @@ void App::DoFrame() {
 }
 
 void App::ShowModelDemoWindow() {
-	nano.ShowWindow("nanosuit.obj");
-	nano2.ShowWindow("nanosuit2.obj");
+	nano.ShowWindow("Nano");
+	gobber.ShowWindow("Goblin");
+	wall.ShowWindow("Wall");
+	plane.SpawnControlWindow(wnd.Gfx());
 }
 
 void App::ShowFrameRateWindow() {

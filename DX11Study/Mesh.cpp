@@ -151,15 +151,18 @@ private:
 	std::unordered_map<int, TransformParameters> transforms;
 };
 
-Model::Model(Graphics& gfx, const std::string fileName)
+Model::~Model() noexcept(!IS_DEBUG) {}
+
+Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 	:
 	pWindow(std::make_unique<ModelWindow>()) {
 	Assimp::Importer imp;
-	const auto pScene = imp.ReadFile(fileName.c_str(),
+	const auto pScene = imp.ReadFile(pathStr.c_str(),
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
 	);
 
 	if (pScene == nullptr) {
@@ -167,14 +170,12 @@ Model::Model(Graphics& gfx, const std::string fileName)
 	}
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++) {
-		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], pScene->mMaterials));
+		meshPtrs.push_back(ParseMesh(gfx, *pScene->mMeshes[i], pScene->mMaterials, pathStr, scale));
 	}
 
 	int curId = 0;
 	pRoot = ParseNode(curId, *pScene->mRootNode);
 }
-
-Model::~Model() noexcept(!IS_DEBUG) {}
 
 void Model::Draw(Graphics& gfx) const noexcept(!IS_DEBUG) {
 	if (auto node = pWindow->GetSelectedNode()) {
@@ -185,88 +186,318 @@ void Model::Draw(Graphics& gfx) const noexcept(!IS_DEBUG) {
 void Model::ShowWindow(const char* windowName) noexcept(!IS_DEBUG) {
 	pWindow->Show(windowName, *pRoot);
 }
-std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials) {
+std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials, const std::filesystem::path& path, const float scale) {
 	using custom::VertexLayout;
 	using namespace Bind;
-
-	custom::VertexBuffer vbuf(std::move(
-		VertexLayout{}
-		.Append(VertexLayout::Position3D)
-		.Append(VertexLayout::Normal)
-		.Append(VertexLayout::Texture2D)
-	));
-
-	for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
-		vbuf.EmplaceBack(
-			*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mVertices[i]),
-			*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
-			*reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
-		);
-	}
-
-	std::vector<unsigned short> indices;
-	indices.reserve(mesh.mNumFaces * 3);
-	for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
-		const auto& face = mesh.mFaces[i];
-		assert(face.mNumIndices == 3);
-		indices.push_back(face.mIndices[0]);
-		indices.push_back(face.mIndices[1]);
-		indices.push_back(face.mIndices[2]);
-	}
-
 	std::vector<std::shared_ptr<Bindable>> bindablePtrs;
+
+	const auto rootPath = path.parent_path();
 
 	// i think this variable change to int and use switch statement (no texture, diffuse, diffuse + specular)
 	bool hasSpecularMap = false;
+	bool hasDiffuseMap = false;
+	bool hasNormalMap = false;
+	bool hasAlphaGloss = false;
 	float shiniess = 35.0f;
-	const std::string base = std::string("models/nano_textured/");
+	DirectX::XMFLOAT4 specularColor = { 0.18f, 0.18f, 0.18f, 1.0f };
+	DirectX::XMFLOAT4 diffuseColor = { 0.45f, 0.45f, 0.85f, 1.0f };
 	// add material ex) texture, specular, sampler...
 	if (mesh.mMaterialIndex >= 0) {
 		auto& material = *pMaterials[mesh.mMaterialIndex];
 		aiString texFileName;
 
 		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS) {
-			bindablePtrs.push_back(Texture::Resolve(gfx, base + texFileName.C_Str()));
+			bindablePtrs.push_back(Texture::Resolve(gfx, (rootPath / texFileName.C_Str()).string()));
+			hasDiffuseMap = true;
+		}
+		else {
+			material.Get(AI_MATKEY_COLOR_DIFFUSE, reinterpret_cast<aiColor3D&>(diffuseColor));
 		}
 
 		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS) {
-			bindablePtrs.push_back(Texture::Resolve(gfx, base + texFileName.C_Str(), 1u));
+			auto tex = Texture::Resolve(gfx, (rootPath / texFileName.C_Str()).string(), 1u);
+			hasAlphaGloss = tex->HasAlpha();
+			bindablePtrs.push_back(std::move(tex));
 			hasSpecularMap = true;
-			OutputDebugString(texFileName.C_Str());
 		}
 		else {
+			material.Get(AI_MATKEY_COLOR_SPECULAR, reinterpret_cast<aiColor3D&>(specularColor));
+		}
+
+		if (!hasAlphaGloss) {
 			material.Get(AI_MATKEY_SHININESS, shiniess);
 		}
 
-		bindablePtrs.push_back(Sampler::Resolve(gfx));
+		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS) {
+			bindablePtrs.push_back(Texture::Resolve(gfx, (rootPath / texFileName.C_Str()).string(), 2u));
+			hasNormalMap = true;
+		}
+
+		if (hasDiffuseMap || hasSpecularMap || hasNormalMap) {
+			bindablePtrs.push_back(Bind::Sampler::Resolve(gfx));
+		}
 	}
 
-	auto meshTag = base + "%" + mesh.mName.C_Str();
-	bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+	auto meshTag = path.string() + "%" + mesh.mName.C_Str();
 
-	bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+	if (hasDiffuseMap && hasNormalMap && hasSpecularMap) {
+		custom::VertexBuffer vbuf(std::move(
+			VertexLayout{}
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
+			.Append(VertexLayout::Tangent)
+			.Append(VertexLayout::Bitangent)
+			.Append(VertexLayout::Texture2D)
+		));
 
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
-	// why???
-	auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
-	bindablePtrs.push_back(std::move(pvs));
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			vbuf.EmplaceBack(
+				DirectX::XMFLOAT3(mesh.mVertices[i].x * scale, mesh.mVertices[i].y * scale, mesh.mVertices[i].z * scale),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTangents[i]),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mBitangents[i]),
+				*reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
+			);
+		}
 
-	bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+		std::vector<unsigned short> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			const auto& face = mesh.mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
 
-	if (hasSpecularMap) {
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongSpecMapPS.cso"));
-	}
-	else {
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
 
-		struct PSMaterialConstant {
-			//DirectX::XMFLOAT3 color = { 0.6f,0.6f,0.8f };
-			float specularIntensity = 1.6f;
-			float specularPower = 0.0f;
-			float padding[2] = { 0.0f, 0.0f };
+		bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+
+		bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+
+		auto pvs = VertexShader::Resolve(gfx, "PhongNormalMapVS.cso");
+		// why casting like this???
+		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
+		bindablePtrs.push_back(std::move(pvs));
+
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongSpecNormalMapPS.cso"));
+
+		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+
+		struct PSMaterialConstantFullmonte {
+			BOOL normalMapEnabled = TRUE;
+			BOOL hasSpecularMap = FALSE;
+			BOOL hasGlossMap = FALSE;
+			float specularPower = 3.1f;
+			DirectX::XMFLOAT3 specularColor = { 0.75f, 0.75f, 0.75f };
+			float specularMapWeight = 0.67f;
 		} pmc;
 		pmc.specularPower = shiniess;
-		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+		pmc.hasGlossMap = hasAlphaGloss ? TRUE : FALSE;
+		pmc.hasSpecularMap = hasSpecularMap ? TRUE : FALSE;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantFullmonte>::Resolve(gfx, pmc, 1u));
+	}
+	else if (hasDiffuseMap && hasNormalMap && !hasSpecularMap) {
+		custom::VertexBuffer vbuf(std::move(
+			VertexLayout{}
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
+			.Append(VertexLayout::Tangent)
+			.Append(VertexLayout::Bitangent)
+			.Append(VertexLayout::Texture2D)
+		));
+
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			vbuf.EmplaceBack(
+				DirectX::XMFLOAT3(mesh.mVertices[i].x * scale, mesh.mVertices[i].y * scale, mesh.mVertices[i].z * scale),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mTangents[i]),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mBitangents[i]),
+				*reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
+			);
+		}
+
+		std::vector<unsigned short> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			const auto& face = mesh.mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
+
+
+		bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+
+		bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+
+		auto pvs = VertexShader::Resolve(gfx, "PhongNormalMapVS.cso");
+		// why casting like this???
+		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
+		bindablePtrs.push_back(std::move(pvs));
+
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNormalMapPS.cso"));
+
+		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+
+		struct PSMaterialConstantDiffNorm {
+			float specularIntensity = 0.18f;
+			float specularPower = 10.0f;
+			BOOL normalMapEnabled = TRUE;
+			float padding = 0.0f;
+		} pmc;
+		pmc.specularPower = shiniess;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantDiffNorm>::Resolve(gfx, pmc, 1u));
+	}
+	else if (hasDiffuseMap && !hasNormalMap && hasSpecularMap) {
+		custom::VertexBuffer vbuf(std::move(
+			custom::VertexLayout{}
+			.Append(custom::VertexLayout::Position3D)
+			.Append(custom::VertexLayout::Normal)
+			.Append(custom::VertexLayout::Texture2D)
+			)
+		);
+
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			vbuf.EmplaceBack(
+				DirectX::XMFLOAT3(mesh.mVertices[i].x * scale, mesh.mVertices[i].y * scale, mesh.mVertices[i].z * scale),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
+				*reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
+			);
+		}
+
+		std::vector<unsigned short> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			const auto& face = mesh.mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
+
+		bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+
+		bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+
+		auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+		// why casting like this???
+		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
+		bindablePtrs.push_back(std::move(pvs));
+
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongSpecMapPS.cso"));
+
+		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+		struct PSMaterialConstantSpecMap {
+			float specularPowerConst = 0.0f;
+			BOOL hasGloss = FALSE;
+			float specularMapWeight = 1.0f;
+			float padding = 0.0f;
+		} pmc;
+		pmc.specularPowerConst = shiniess;
+		pmc.hasGloss = hasAlphaGloss ? TRUE : FALSE;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantSpecMap>::Resolve(gfx, pmc, 1u));
+	}
+	else if (hasDiffuseMap && !hasNormalMap && !hasSpecularMap) {
+		custom::VertexBuffer vbuf(std::move(
+			VertexLayout{}
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
+			.Append(VertexLayout::Texture2D)
+		));
+
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			vbuf.EmplaceBack(
+				DirectX::XMFLOAT3(mesh.mVertices[i].x * scale, mesh.mVertices[i].y * scale, mesh.mVertices[i].z * scale),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i]),
+				*reinterpret_cast<DirectX::XMFLOAT2*>(&mesh.mTextureCoords[0][i])
+			);
+		}
+
+		std::vector<unsigned short> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			const auto& face = mesh.mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
+
+
+		bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+
+		bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+
+		auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+		// why casting like this???
+		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
+		bindablePtrs.push_back(std::move(pvs));
+
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPS.cso"));
+
+		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+
+		struct PSMaterialConstantDiffuse {
+			float specularIntensity = 0.18f;
+			float specularPower = 10.0f;
+			float padding[2] = { 0.0f };
+		} pmc;
+		pmc.specularPower = shiniess;
+		pmc.specularIntensity = (specularColor.x + specularColor.y + specularColor.z) / 3.0f;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantDiffuse>::Resolve(gfx, pmc, 1u));
+	}
+	else if (!hasDiffuseMap && !hasNormalMap && !hasSpecularMap) {
+		custom::VertexBuffer vbuf(std::move(
+			VertexLayout{}
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
+		));
+
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			vbuf.EmplaceBack(
+				DirectX::XMFLOAT3(mesh.mVertices[i].x * scale, mesh.mVertices[i].y * scale, mesh.mVertices[i].z * scale),
+				*reinterpret_cast<DirectX::XMFLOAT3*>(&mesh.mNormals[i])
+			);
+		}
+
+		std::vector<unsigned short> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			const auto& face = mesh.mFaces[i];
+			assert(face.mNumIndices == 3);
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+		}
+
+		bindablePtrs.push_back(VertexBuffer::Resolve(gfx, meshTag, vbuf));
+
+		bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
+
+		auto pvs = VertexShader::Resolve(gfx, "PhongNotexVS.cso");
+		// why casting like this???
+		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
+		bindablePtrs.push_back(std::move(pvs));
+
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongNotexPS.cso"));
+
+		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
+
+		struct PSMaterialConstantNotex {
+			DirectX::XMFLOAT4 materialColor = { 0.65f, 0.45f, 0.65f, 1.0f };
+			DirectX::XMFLOAT4 specularColor = { 0.0f, 0.0f, 0.0f, 0.0f };
+			float specularPower = 10.0f;
+			float padding[3] = { 0.0f };
+		} pmc;
+		pmc.materialColor = diffuseColor;
+		pmc.specularColor = specularColor;
+		pmc.specularPower = shiniess;
+		bindablePtrs.push_back(PixelConstantBuffer<PSMaterialConstantNotex>::Resolve(gfx, pmc, 1u));
+	}
+	else {
+		throw std::runtime_error("material has unsupported combination of textures");
 	}
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
@@ -290,4 +521,8 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node) {
 	}
 
 	return pNode;
+}
+
+void Model::SetRootTransform(DirectX::FXMMATRIX tf) noexcept {
+	pRoot->SetAppliedTransform(tf);
 }
