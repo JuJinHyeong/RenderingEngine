@@ -177,7 +177,7 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 	pRoot = ParseNode(curId, *pScene->mRootNode);
 }
 
-void Model::Draw(Graphics& gfx) const noexcept(!IS_DEBUG) {
+void Model::Draw(Graphics& gfx) const {
 	if (auto node = pWindow->GetSelectedNode()) {
 		node->SetAppliedTransform(pWindow->GetTransform());
 	}
@@ -196,6 +196,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	// i think this variable change to int and use switch statement (no texture, diffuse, diffuse + specular)
 	bool hasSpecularMap = false;
 	bool hasDiffuseMap = false;
+	bool hasAlphaDiffuse = false;
 	bool hasNormalMap = false;
 	bool hasAlphaGloss = false;
 	float shiniess = 35.0f;
@@ -207,7 +208,9 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		aiString texFileName;
 
 		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS) {
-			bindablePtrs.push_back(Texture::Resolve(gfx, (rootPath / texFileName.C_Str()).string()));
+			auto tex = Texture::Resolve(gfx, (rootPath / texFileName.C_Str()).string());
+			hasAlphaDiffuse = tex->HasAlpha();
+			bindablePtrs.push_back(std::move(tex));
 			hasDiffuseMap = true;
 		}
 		else {
@@ -280,7 +283,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 		auto pvsbc = static_cast<VertexShader&>(*pvs).GetBytecode();
 		bindablePtrs.push_back(std::move(pvs));
 
-		bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongSpecNormalMapPS.cso"));
+		bindablePtrs.push_back(PixelShader::Resolve(gfx, hasAlphaDiffuse ? "PhongSpecNormalMapMaskPS.cso" : "PhongSpecNormalMapPS.cso"));
 
 		bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
 
@@ -499,6 +502,10 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 	else {
 		throw std::runtime_error("material has unsupported combination of textures");
 	}
+
+	bindablePtrs.push_back(Blender::Resolve(gfx, false));
+
+	bindablePtrs.push_back(Rasterizer::Resolve(gfx, hasAlphaDiffuse));
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }

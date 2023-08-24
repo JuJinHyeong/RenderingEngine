@@ -23,17 +23,7 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTa
     viewNormal = normalize(viewNormal);
     if (normalMapEnabled)
     {
-        const float3x3 tanToView = float3x3(
-            normalize(viewTan),
-            normalize(viewBitan),
-            normalize(viewNormal)
-        );
-        const float3 normalSample = normalMap.Sample(splr, tc).xyz;
-        viewNormal = normalSample * 2.0f - 1.0f;
-        viewNormal.z *= -1.0f;
-        viewNormal.y *= -1.0f;
-        // bring normal to tangent space to view space
-        viewNormal = normalize(mul(viewNormal, tanToView));
+        viewNormal = MapNormal(normalize(viewTan), normalize(viewBitan), viewNormal, tc, normalMap, splr);
     }
     const LightVectorData lv = CalculateLightVectorData(viewLightPos, viewPos);
     const float att = Attenuate(attConst, attLin, attQuad, lv.distToLight);

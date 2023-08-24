@@ -22,14 +22,16 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius) {
 
 	AddBind(PixelShader::Resolve(gfx, "SolidPS.cso"));
 	struct PSColorConstant {
-		DirectX::XMFLOAT3 color = { 1.0f, 1.0f, 1.0f };
-		float padding = 0.0f;
+		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	} colorConst;
 	AddBind(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
 
 	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
+
+	AddBind(Blender::Resolve(gfx, false));
+	AddBind(Rasterizer::Resolve(gfx, false));
 }
 
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept {

@@ -6,13 +6,13 @@ namespace Bind {
 	Sampler::Sampler(Graphics& gfx) {
 		INFOMAN(gfx);
 
-		D3D11_SAMPLER_DESC samplerDesc = {};
+		D3D11_SAMPLER_DESC samplerDesc = CD3D11_SAMPLER_DESC(CD3D11_DEFAULT{});
 		// filter mode
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
 		// method get pixel outside of border
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
 
 		GFX_THROW_INFO(GetDevice(gfx)->CreateSamplerState(&samplerDesc, &pSampler));
 	}

@@ -1,22 +1,24 @@
 #include "DataMacros.h"
 #include "App.h"
-#include <vector>
 #include "CustomMath.h"
-#include "GDIPlusManager.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-GDIPlusManager gdipm;
+#include <dxtex/DirectXTex.h>
+#include <vector>
 
 App::App()
 	:
-	wnd(1280, 720, "First App"),
-	light(wnd.Gfx()) {
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 40.0f));
+	wnd(1980, 1080, "First App"),
+	light(wnd.Gfx()) 
+{
+	// TODO command line scripts
+	bluePlane.SetPos(cam.GetPos());
+	redPlane.SetPos(cam.GetPos());
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 400.0f));
 }
 
 
@@ -50,11 +52,13 @@ void App::DoFrame() {
 	wnd.Gfx().SetCamera(cam.GetMatrix());
 	light.Bind(wnd.Gfx(), cam.GetMatrix());
 
-	nano.Draw(wnd.Gfx());
-	gobber.Draw(wnd.Gfx());
-	wall.Draw(wnd.Gfx());
-	plane.Draw(wnd.Gfx());
+	//nano.Draw(wnd.Gfx());
+	//gobber.Draw(wnd.Gfx());
+	//wall.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
+	sponza.Draw(wnd.Gfx());
+	bluePlane.Draw(wnd.Gfx());
+	redPlane.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.keyboard.ReadKey()) {
 		if (!e->IsPress()) {
@@ -110,17 +114,18 @@ void App::DoFrame() {
 		cam.SpawnControlWindow();
 		light.SpawnControlWindow();
 		ShowModelDemoWindow();
-		//ShowFrameRateWindow();
 	}
 
 	wnd.Gfx().EndFrame();
 }
 
 void App::ShowModelDemoWindow() {
-	nano.ShowWindow("Nano");
-	gobber.ShowWindow("Goblin");
-	wall.ShowWindow("Wall");
-	plane.SpawnControlWindow(wnd.Gfx());
+	//nano.ShowWindow("Nano");
+	//gobber.ShowWindow("Goblin");
+	//wall.ShowWindow("Wall");
+	bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
+	redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
+	sponza.ShowWindow("Sponza");
 }
 
 void App::ShowFrameRateWindow() {

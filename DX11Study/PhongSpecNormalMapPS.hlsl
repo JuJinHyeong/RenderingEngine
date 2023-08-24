@@ -19,6 +19,16 @@ SamplerState splr;
 
 float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
+    float4 dtex = tex.Sample(splr, tc);
+    
+    #ifdef BACK_FACE
+    clip(dtex.a < 0.1f ? -1 : 1);
+    // when back face rendering, normal need to be flipped
+    if (dot(viewNormal, viewPos) >= 0.0f)
+    {
+        viewNormal = -viewNormal;
+    }
+    #endif
     if (normalMapEnabled)
     {
         viewNormal = MapNormal(viewTan, viewBitan, viewNormal, tc, normalMap, splr);
@@ -40,5 +50,5 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTa
     }
     const float3 specularReflected = Speculate(specularReflectionColor, 1.0f, viewNormal, lv.dirToLight, viewPos, att, specularPower);
 	// final color
-    return float4(saturate(diffuse + ambient) * tex.Sample(splr, tc).rgb + specularReflected, 1.0f);
+    return float4(saturate(diffuse + ambient) * dtex.rgb + specularReflected, dtex.a);
 }
