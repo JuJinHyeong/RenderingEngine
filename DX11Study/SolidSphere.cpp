@@ -2,6 +2,7 @@
 #include "BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include "Sphere.h"
+#include "Stencil.h"
 
 
 SolidSphere::SolidSphere(Graphics& gfx, float radius) {
@@ -13,25 +14,37 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius) {
 	auto model = Sphere::Make();
 	model.Transform(DirectX::XMMatrixScaling(radius, radius, radius));
 	const auto geometryTag = "$sphere" + std::to_string(radius);
-	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
-	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	auto pvs = Bind::VertexShader::Resolve(gfx, "SolidVS.cso");
-	auto pvsbc = pvs->GetBytecode();
-	AddBind(std::move(pvs));
+	{
+		Technique solid;
+		Step only(0);
 
-	AddBind(PixelShader::Resolve(gfx, "SolidPS.cso"));
-	struct PSColorConstant {
-		DirectX::XMFLOAT4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
-	} colorConst;
-	AddBind(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+		auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+		auto pvsbc = pvs->GetBytecode();
+		only.AddBindable(std::move(pvs));
 
-	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
+		only.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
 
-	AddBind(Blender::Resolve(gfx, false));
-	AddBind(Rasterizer::Resolve(gfx, false));
+		struct PSColorConstant {
+			DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
+			float padding = 0.0f;
+		} colorConst;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Blender::Resolve(gfx, false));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
 }
 
 void SolidSphere::SetPos(DirectX::XMFLOAT3 pos) noexcept {

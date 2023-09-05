@@ -3,6 +3,7 @@
 #include "Texture.h"
 #include "Surface.h"
 #include "Sampler.h"
+#include "Stencil.h"
 #include <unordered_map>
 #include <sstream>
 
@@ -35,12 +36,14 @@ Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs)
 	}
 	AddBind(std::make_shared<Bind::TransformCbuf>(gfx, *this));
 }
-void Mesh::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
-	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
-	Drawable::Draw(gfx);
-}
+
 DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
 	return DirectX::XMLoadFloat4x4(&transform);
+}
+
+void Mesh::Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
+	Drawable::Submit(frame);
 }
 
 
@@ -49,25 +52,39 @@ Node::Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const D
 	:
 	meshPtrs(std::move(meshPtrs)),
 	name(name),
-	id(id) {
+	id(id) 
+{
 	DirectX::XMStoreFloat4x4(&this->transform, transform);
 	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
 }
-void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+//void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+//	const auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
+//		* DirectX::XMLoadFloat4x4(&transform)
+//		* accumulatedTransform;
+//
+//	for (const auto pm : meshPtrs) {
+//		pm->Draw(gfx, built);
+//	}
+//	for (const auto& pc : childPtrs) {
+//		pc->Draw(gfx, built);
+//	}
+//}
+
+int Node::GetId() const noexcept {
+	return id;
+}
+
+void Node::Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
 	const auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
 		* DirectX::XMLoadFloat4x4(&transform)
 		* accumulatedTransform;
 
 	for (const auto pm : meshPtrs) {
-		pm->Draw(gfx, built);
+		pm->Submit(frame, built);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Draw(gfx, built);
+		pc->Submit(frame, built);
 	}
-}
-
-int Node::GetId() const noexcept {
-	return id;
 }
 
 void Node::SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {
@@ -177,12 +194,14 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 	pRoot = ParseNode(curId, *pScene->mRootNode);
 }
 
-void Model::Draw(Graphics& gfx) const {
-	if (auto node = pWindow->GetSelectedNode()) {
-		node->SetAppliedTransform(pWindow->GetTransform());
-	}
-	pRoot->Draw(gfx, DirectX::XMMatrixIdentity());
-}
+//void Model::Draw(Graphics& gfx) const {
+//	if (auto node = pWindow->GetSelectedNode()) {
+//		node->SetAppliedTransform(pWindow->GetTransform());
+//	}
+//	pRoot->Draw(gfx, DirectX::XMMatrixIdentity());
+//}
+
+
 void Model::ShowWindow(const char* windowName) noexcept(!IS_DEBUG) {
 	pWindow->Show(windowName, *pRoot);
 }
@@ -507,7 +526,14 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 	bindablePtrs.push_back(Rasterizer::Resolve(gfx, hasAlphaDiffuse));
 
+	bindablePtrs.push_back(std::make_shared<Stencil>(gfx, Stencil::Mode::Off));
+
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
+}
+
+void Model::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
+	//pWindow->ApplyParameters();
+	pRoot->Submit(frame, DirectX::XMMatrixIdentity());
 }
 
 std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node) {

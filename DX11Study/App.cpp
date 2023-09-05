@@ -16,8 +16,9 @@ App::App()
 	light(wnd.Gfx()) 
 {
 	// TODO command line scripts
-	bluePlane.SetPos(cam.GetPos());
-	redPlane.SetPos(cam.GetPos());
+	//bluePlane.SetPos(cam.GetPos());
+	//redPlane.SetPos(cam.GetPos());
+	
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 400.0f));
 }
 
@@ -55,11 +56,20 @@ void App::DoFrame() {
 	//nano.Draw(wnd.Gfx());
 	//gobber.Draw(wnd.Gfx());
 	//wall.Draw(wnd.Gfx());
-	light.Draw(wnd.Gfx());
-	sponza.Draw(wnd.Gfx());
-	bluePlane.Draw(wnd.Gfx());
-	redPlane.Draw(wnd.Gfx());
+	//light.Draw(wnd.Gfx());
+	//sponza.Draw(wnd.Gfx());
+	//bluePlane.Draw(wnd.Gfx());
+	//redPlane.Draw(wnd.Gfx());
+	//cube1.Draw(wnd.Gfx());
+	//cube2.Draw(wnd.Gfx());
+	//cube1.DrawOutLine(wnd.Gfx());
+	//cube2.DrawOutLine(wnd.Gfx());
 
+	light.Submit(fc);
+	cube1.Submit(fc);
+	cube2.Submit(fc);
+	fc.Execute(wnd.Gfx());
+	fc.Reset();
 	while (const auto e = wnd.keyboard.ReadKey()) {
 		if (!e->IsPress()) {
 			continue;
@@ -123,9 +133,11 @@ void App::ShowModelDemoWindow() {
 	//nano.ShowWindow("Nano");
 	//gobber.ShowWindow("Goblin");
 	//wall.ShowWindow("Wall");
-	bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
-	redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
-	sponza.ShowWindow("Sponza");
+	//bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
+	//redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
+	//sponza.ShowWindow("Sponza");
+	cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
+	cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
 }
 
 void App::ShowFrameRateWindow() {

@@ -40,6 +40,12 @@
     <Filter Include="Shaders\Common">
       <UniqueIdentifier>{758a1f98-dbc4-44a9-b4a6-d1dcaaa4f2b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Jobber">
+      <UniqueIdentifier>{2834a8cf-cc6f-49e0-b3a4-6d79a51fa340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Jobber">
+      <UniqueIdentifier>{523ddc16-086d-4354-8f6f-ebe1d17ffe69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -175,6 +181,30 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DynamicConstant.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="LayoutCodex.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Stencil.cpp">
+      <Filter>소스 파일\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameCommander.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Technique.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Pass.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Step.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Job.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="NullPixelShader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -351,6 +381,30 @@
       <Filter>소스 파일</Filter>
     </ClInclude>
     <ClInclude Include="DynamicConstant.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="LayoutCodex.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Stencil.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameCommander.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Job.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Pass.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Step.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Technique.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="NullPixelShader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

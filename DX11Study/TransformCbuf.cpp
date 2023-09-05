@@ -1,12 +1,21 @@
 #include "TransformCbuf.h"
 
 namespace Bind {
-	TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent, UINT slot)
-		:
-		parent(parent) {
+	TransformCbuf::TransformCbuf(Graphics& gfx, UINT slot) {
 		if (!pVcbuf) {
 			pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx, slot);
 		}
+	}
+	TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent, UINT slot)
+		:
+		pParent(&parent) {
+		if (!pVcbuf) {
+			pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx, slot);
+		}
+	}
+
+	void TransformCbuf::InitializeParentReference(const Drawable& parent) noexcept {
+		pParent = &parent;
 	}
 
 	void TransformCbuf::Bind(Graphics& gfx) noexcept {
@@ -19,7 +28,7 @@ namespace Bind {
 	}
 
 	TransformCbuf::Transforms TransformCbuf::GetTransforms(Graphics& gfx) noexcept {
-		const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
+		const auto modelView = pParent->GetTransformXM() * gfx.GetCamera();
 		return {
 			DirectX::XMMatrixTranspose(modelView),
 			DirectX::XMMatrixTranspose(modelView * gfx.GetProjection())

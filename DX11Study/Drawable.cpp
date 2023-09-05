@@ -3,18 +3,30 @@
 #include "IndexBuffer.h"
 #include <cassert>
 #include <typeinfo>
+#include "BindableCommon.h"
+#include "BindableCodex.h"
 
-void Drawable::Draw(Graphics& gfx) const noexcept(!IS_DEBUG) {
-	for (auto& b : binds) {
-		b->Bind(gfx);
+void Drawable::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
+	for (const auto& tech : techniques) {
+		tech.Submit(frame, *this);
 	}
-	gfx.DrawIndexed(pIndexBuffer->GetCount());
+}
+
+void Drawable::AddTechnique(Technique tech) noexcept {
+	tech.InitializeParentReferences(*this);
+	techniques.push_back(std::move(tech));
+}
+
+void Drawable::Bind(Graphics& gfx) const noexcept {
+	pVertices->Bind(gfx);
+	pIndices->Bind(gfx);
+	pTopology->Bind(gfx);
+}
+
+UINT Drawable::GetIndexCount() const noexcept(!IS_DEBUG) {
+	return pIndices->GetCount();
 }
 
 void Drawable::AddBind(std::shared_ptr<Bind::Bindable> bind) noexcept(!IS_DEBUG) {
-	if (typeid(*bind) == typeid(Bind::IndexBuffer)) {
-		assert("Binding multiple IndexBuffer not allowed" && pIndexBuffer == nullptr);
-		pIndexBuffer = &static_cast<Bind::IndexBuffer&>(*bind);
-	}
-	binds.push_back(std::move(bind));
+
 }

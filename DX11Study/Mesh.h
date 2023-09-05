@@ -22,8 +22,9 @@ private:
 class Mesh : public Drawable {
 public:
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
-	void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
+	void Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
 };
@@ -32,7 +33,8 @@ class Node {
 	friend class Model;
 public:
 	Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG);
-	void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;
 	// index need to imgui, Node need to graphics
@@ -54,7 +56,8 @@ class Model {
 public:
 	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f);
 	~Model() noexcept(!IS_DEBUG);
-	void Draw(Graphics& gfx) const;
+	//void Draw(Graphics& gfx) const;
+	void Submit(FrameCommander& frame) const noexcept(!IS_DEBUG);
 	void ShowWindow(const char* windowName) noexcept(!IS_DEBUG);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 private:
