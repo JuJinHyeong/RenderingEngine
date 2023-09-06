@@ -207,6 +207,15 @@
     <ClCompile Include="NullPixelShader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="PerformanceLog.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TechniqueProbe.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferEx.cpp">
+      <Filter>소스 파일\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -406,6 +415,15 @@
     </ClInclude>
     <ClInclude Include="NullPixelShader.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PerformanceLog.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TechniqueProbe.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferEx.h">
+      <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

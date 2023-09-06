@@ -27,6 +27,12 @@ UINT Drawable::GetIndexCount() const noexcept(!IS_DEBUG) {
 	return pIndices->GetCount();
 }
 
+void Drawable::Accept(TechniqueProbe& probe) {
+	for (auto& tech : techniques) {
+		tech.Accept(probe);
+	}
+}
+
 void Drawable::AddBind(std::shared_ptr<Bind::Bindable> bind) noexcept(!IS_DEBUG) {
 
 }

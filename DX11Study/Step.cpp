@@ -26,3 +26,10 @@ void Step::InitializeParentReferences(const Drawable& parent) noexcept {
 		bind->InitializeParentReference(parent);
 	}
 }
+
+void Step::Accept(TechniqueProbe& probe) {
+	probe.SetStep(this);
+	for (auto& b : bindables) {
+		b->Accept(probe);
+	}
+}

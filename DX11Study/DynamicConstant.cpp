@@ -13,14 +13,22 @@ namespace Dcb {
 		};
 		struct Array : public LayoutElement::ExtraDataBase {
 			std::optional<LayoutElement> layoutElement;
-			size_t size;
+			size_t size = 0u;
 		};
 	};
 #pragma region LayoutElement
-	LayoutElement::LayoutElement(Type type) noexcept(!IS_DEBUG)
+	LayoutElement::LayoutElement(Type type_in) noexcept(!IS_DEBUG)
 		:
-		type(type)
-	{}
+		type(type_in)
+	{
+		assert(type_in != Empty);
+		if(type_in == Struct){
+			pExtraData = std::unique_ptr<ExtraData::Struct>{ new ExtraData::Struct() };
+		}
+		else if (type_in == Array) {
+			pExtraData = std::unique_ptr<ExtraData::Array>{ new ExtraData::Array() };
+		}
+	}
 	std::string LayoutElement::GetSignature() const noexcept(!IS_DEBUG) {
 		switch (type) {
 #define X(el) case el: return Map<el>::code;
@@ -36,7 +44,7 @@ namespace Dcb {
 		}
 	}
 	bool LayoutElement::Exists() const noexcept {
-		return false;
+		return type != Empty;
 	}
 	std::pair<size_t, const LayoutElement*> LayoutElement::CalculateIndexingOffset(size_t offset, size_t index) const noexcept(!IS_DEBUG) {
 		const auto& data = static_cast<ExtraData::Array&>(*pExtraData);
@@ -74,7 +82,7 @@ namespace Dcb {
 		case Struct:
 			{
 				const auto& data = static_cast<ExtraData::Struct&>(*pExtraData);
-				return 0u;
+				return AdvanceToBoundary(data.layoutElements.back().second.GetOffsetEnd());
 			}
 		case Array:
 			{
@@ -94,7 +102,7 @@ namespace Dcb {
 
 	LayoutElement& LayoutElement::Add(Type addedType, std::string name) noexcept(!IS_DEBUG) {
 		assert("Add to non-struct in layout" && type == Struct);
-		assert("invalid symbol name in Struct" && false);
+		assert("invalid symbol name in Struct" && ValidateSymbolName(name));
 		auto& structData = static_cast<ExtraData::Struct&>(*pExtraData);
 		for (auto& mem : structData.layoutElements) {
 			if (mem.first == name) {

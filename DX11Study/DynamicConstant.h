@@ -252,8 +252,8 @@ template<> struct ReverseMap<typename Map<el>::SysType> { \
 		bool Exists() const noexcept;
 		ElementRef operator[](const std::string& key) const noexcept(!IS_DEBUG);
 		ElementRef operator[](size_t index) const noexcept(!IS_DEBUG);
-		template<typename S>
-		bool SetifExists(const S& val) noexcept(!IS_DEBUG) {
+		template<typename T>
+		bool SetifExists(const T& val) noexcept(!IS_DEBUG) {
 			if (Exists()) {
 				*this = val;
 				return true;
@@ -270,16 +270,18 @@ template<> struct ReverseMap<typename Map<el>::SysType> { \
 		template<typename T>
 		T& operator=(const T& rhs) const noexcept(!IS_DEBUG) {
 			static_assert(ReverseMap<std::remove_const_t<T>>::valid, "Unsupported type used in ElementRef::operator T&");
-			return static_cast<T*>(*this) = rhs;
+			return static_cast<T&>(*this) = rhs;
 		}
 	private:
+		// refs should only be constructable by other refs or by the buffer
 		ElementRef(const LayoutElement* pLayout, char* pBytes, size_t offset) noexcept;
+		size_t offset;
 		const LayoutElement* pLayout;
 		char* pBytes;
-		size_t offset;
 	};
 
 	class Buffer {
+	public:
 		Buffer(RawLayout&& lay) noexcept(!IS_DEBUG);
 		Buffer(const CookedLayout& lay) noexcept(!IS_DEBUG);
 		Buffer(CookedLayout&& lay) noexcept(!IS_DEBUG);
