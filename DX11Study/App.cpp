@@ -9,6 +9,7 @@
 #include <assimp/postprocess.h>
 #include <dxtex/DirectXTex.h>
 #include <vector>
+#include "Testing.h"
 
 App::App()
 	:

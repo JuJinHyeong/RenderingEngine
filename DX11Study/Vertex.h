@@ -224,6 +224,7 @@ namespace custom {
 	class VertexBuffer {
 	public:
 		VertexBuffer(VertexLayout layout, size_t size = 0u) noexcept(!IS_DEBUG);
+		VertexBuffer(VertexLayout layout, const aiMesh& mesh);
 		const char* GetData() const noexcept(!IS_DEBUG);
 		const VertexLayout& GetLayout() const noexcept;
 		void Resize(size_t newSize) noexcept(!IS_DEBUG);

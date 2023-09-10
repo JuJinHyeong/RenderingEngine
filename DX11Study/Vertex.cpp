@@ -112,6 +112,24 @@ namespace custom {
 		Resize(size);
 	}
 
+	template<VertexLayout::ElementType type>
+	struct AttributeAiMeshFill {
+		static constexpr void Exec(VertexBuffer* pBuf, const aiMesh& mesh) noexcept(!IS_DEBUG) {
+			for (size_t i = 0u, end = mesh.mNumVertices; i < end; i++) {
+				(*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract(mesh, i);
+			}
+		};
+	};
+	VertexBuffer::VertexBuffer(VertexLayout layout_in, const aiMesh& mesh) 
+		:
+		layout(std::move(layout_in))
+	{
+		Resize(mesh.mNumVertices);
+		for (size_t i = 0, end = layout.GetElementCount(); i < end; i++) {
+			VertexLayout::Bridge<AttributeAiMeshFill>(layout.ResolveByIndex(i).GetType(), this, mesh);
+		}
+	}
+
 	const VertexLayout& VertexBuffer::GetLayout() const noexcept {
 		return layout;
 	}

@@ -198,6 +198,7 @@
     <ClCompile Include="Technique.cpp" />
     <ClCompile Include="TechniqueProbe.cpp" />
     <ClCompile Include="TestCube.cpp" />
+    <ClCompile Include="Testing.cpp" />
     <ClCompile Include="TestPlane.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -270,6 +271,7 @@
     <ClInclude Include="Technique.h" />
     <ClInclude Include="TechniqueProbe.h" />
     <ClInclude Include="TestCube.h" />
+    <ClInclude Include="Testing.h" />
     <ClInclude Include="TestPlane.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
