@@ -1,8 +1,9 @@
 #include "Technique.h"
 
-Technique::Technique(std::string name) noexcept 
+Technique::Technique(std::string name, bool startActive) noexcept
 	:
-	name(std::move(name))
+	name(std::move(name)),
+	active(startActive)
 {}
 
 void Technique::Submit(FrameCommander& frame, const Drawable& drawable) const noexcept {

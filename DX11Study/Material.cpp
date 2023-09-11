@@ -110,6 +110,49 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		phong.AddStep(std::move(step));
 		techniques.push_back(std::move(phong));
 	}
+	{
+		Technique outline("Outline", false);
+		{
+			Step mask(1);
+
+			auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
+			auto pvsbc = pvs->GetBytecode();
+			mask.AddBindable(std::move(pvs));
+
+			mask.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
+			mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+			outline.AddStep(std::move(mask));
+		}
+		{
+			Step draw(2);
+
+			auto pvs = VertexShader::Resolve(gfx, "Offset_VS.cso");
+			auto pvsbc = pvs->GetBytecode();
+			draw.AddBindable(std::move(pvs));
+
+			draw.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
+			{
+				Dcb::RawLayout lay;
+				lay.Add<Dcb::Float3>("materialColor");
+				auto buf = Dcb::Buffer(std::move(lay));
+				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f, 0.4f, 0.4f };
+				draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
+			}
+			{
+				Dcb::RawLayout lay;
+				lay.Add<Dcb::Float>("offset");
+				auto buf = Dcb::Buffer(std::move(lay));
+				buf["offset"] = 0.1f;
+				draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
+			}
+
+			draw.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
+			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			outline.AddStep(std::move(draw));
+		}
+		techniques.push_back(std::move(outline));
+	}
 }
 
 custom::VertexBuffer Material::ExtractVertices(const aiMesh& mesh) const noexcept {
