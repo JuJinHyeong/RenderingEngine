@@ -14,26 +14,26 @@
 
 App::App()
 	:
-	wnd(1980, 1080, "First App"),
+	wnd(1280, 720, "First App"),
 	light(wnd.Gfx()) 
 {
 	// TODO command line scripts
 	//bluePlane.SetPos(cam.GetPos());
 	//redPlane.SetPos(cam.GetPos());
 
-	{
-		std::string path = "models\\brick_wall\\brick_wall.obj";
-		Assimp::Importer imp;
-		const auto pScene = imp.ReadFile(path,
-			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_ConvertToLeftHanded |
-			aiProcess_GenNormals |
-			aiProcess_CalcTangentSpace
-		);
-		Material mat{ wnd.Gfx(),*pScene->mMaterials[1], path };
-		pLoaded = std::make_unique<Mesh>(wnd.Gfx(), mat, *pScene->mMeshes[0]);
-	}
+	//{
+	//	std::string path = "models/gobber/GoblinX.obj";
+	//	Assimp::Importer imp;
+	//	const auto pScene = imp.ReadFile(path,
+	//		aiProcess_Triangulate |
+	//		aiProcess_JoinIdenticalVertices |
+	//		aiProcess_ConvertToLeftHanded |
+	//		aiProcess_GenNormals |
+	//		aiProcess_CalcTangentSpace
+	//	);
+	//	Material mat{ wnd.Gfx(),*pScene->mMaterials[1], path };
+	//	pLoaded = std::make_unique<Mesh>(wnd.Gfx(), mat, *pScene->mMeshes[0]);
+	//}
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 400.0f));
 }
@@ -86,7 +86,8 @@ void App::DoFrame() {
 	//cube2.Submit(fc);
 	//wall.Submit(fc);
 	//gobber.Submit(fc);
-	pLoaded->Submit(fc, DirectX::XMMatrixIdentity());
+	sponza.Submit(fc);
+	//pLoaded->Submit(fc, DirectX::XMMatrixIdentity());
 	fc.Execute(wnd.Gfx());
 
 	while (const auto e = wnd.keyboard.ReadKey()) {
@@ -182,7 +183,8 @@ void App::DoFrame() {
 		}
 	} probe;
 
-	pLoaded->Accept(probe);
+	
+	//pLoaded->Accept(probe);
 	
 	if (showDemoWindow) {
 		cam.SpawnControlWindow();

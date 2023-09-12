@@ -13,7 +13,7 @@ public:
 	// why extract in material??
 	custom::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
 	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
-	std::shared_ptr<Bind::VertexBuffer> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh) const noexcept(!IS_DEBUG);
+	std::shared_ptr<Bind::VertexBuffer> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noexcept(!IS_DEBUG);
 	std::shared_ptr<Bind::IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noexcept(!IS_DEBUG);
 	std::vector<Technique> GetTechniques() const noexcept;
 private:
