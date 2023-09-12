@@ -240,6 +240,9 @@
     <ClCompile Include="ModelWindow.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="ModelProbe.cpp">
+      <Filter>소스 파일\Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -467,6 +470,9 @@
     <ClInclude Include="ModelWindow.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="ModelProbe.h">
+      <Filter>헤더 파일\Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">
@@ -563,6 +569,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PhongDifMskSpcNrmVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDifMskSpcVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDifMskSpcPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

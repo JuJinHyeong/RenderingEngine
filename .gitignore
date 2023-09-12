@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # model obj files
 !models/**/*.obj
+
+# shader compile files
+**/*.cso

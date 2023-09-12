@@ -24,18 +24,20 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			Step only(0);
 			only.AddBindable(Texture::Resolve(gfx, "Images/brickwall.jpg"));
 			only.AddBindable(Sampler::Resolve(gfx));
-			auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+			auto pvs = VertexShader::Resolve(gfx, "PhongDifVS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			only.AddBindable(std::move(pvs));
-			only.AddBindable(PixelShader::Resolve(gfx, "PhongPS.cso"));
+			only.AddBindable(PixelShader::Resolve(gfx, "PhongDifPS.cso"));
 
 			// dynamic constant buffer
 			Dcb::RawLayout lay;
-			lay.Add<Dcb::Float>("specularIntensity");
-			lay.Add<Dcb::Float>("specularPower");
+			lay.Add<Dcb::Float3>("specularColor");
+			lay.Add<Dcb::Float>("specularWeight");
+			lay.Add<Dcb::Float>("specularGloss");
 			auto buf = Dcb::Buffer(std::move(lay));
-			buf["specularIntensity"] = 0.1f;
-			buf["specularPower"] = 20.0f;
+			buf["specularColor"] = DirectX::XMFLOAT3{ 1.0f, 1.0f, 1.0f };
+			buf["specularWeight"] = 0.1f;
+			buf["specularGloss"] = 20.0f;
 			only.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
 			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
@@ -65,9 +67,9 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			draw.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 
 			Dcb::RawLayout lay;
-			lay.Add<Dcb::Float4>("color");
+			lay.Add<Dcb::Float3>("color");
 			auto buf = Dcb::Buffer(std::move(lay));
-			buf["color"] = DirectX::XMFLOAT4{ 1.0f, 0.4f, 0.4f, 1.0f };
+			buf["color"] = DirectX::XMFLOAT3{ 1.0f, 0.4f, 0.4f };
 			draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
 			class TransformCbufScaling : public TransformCbuf {
@@ -153,14 +155,14 @@ void TestCube::SpawnControlWindow(Graphics& gfx, const char* name) noexcept {
 				if (auto v = buf["scale"]; v.Exists()) {
 					dCheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
 				}
-				if (auto v = buf["color"]; v.Exists()) {
+				if (auto v = buf["specularColor"]; v.Exists()) {
 					//TODO: why?? doing like this??
-					dCheck(ImGui::ColorPicker4(tag("Color"), reinterpret_cast<float*>(&static_cast<DirectX::XMFLOAT4&>(v))));
+					dCheck(ImGui::ColorPicker3(tag("specular Color"), reinterpret_cast<float*>(&static_cast<DirectX::XMFLOAT3&>(v))));
 				}
-				if (auto v = buf["specularIntensity"]; v.Exists()) {
-					dCheck(ImGui::SliderFloat(tag("Specular Intensity"), &v, 0.0f, 1.0f));
+				if (auto v = buf["specularWeight"]; v.Exists()) {
+					dCheck(ImGui::SliderFloat(tag("Specular Weight"), &v, 0.0f, 1.0f));
 				}
-				if (auto v = buf["specularPower"]; v.Exists()) {
+				if (auto v = buf["specularGloss"]; v.Exists()) {
 					dCheck(ImGui::SliderFloat(tag("Glossiness"), &v, 0.0f, 100.0f, "%.1f"));
 				}
 				return dirty;

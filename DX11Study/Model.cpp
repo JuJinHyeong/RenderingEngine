@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "ModelWindow.h"
 #include "ExtendedXMMath.h"
+#include "ModelProbe.h"
 
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
@@ -50,6 +51,10 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 void Model::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
 	//pWindow->ApplyParameters();
 	pRoot->Submit(frame, DirectX::XMMatrixIdentity());
+}
+
+void Model::Accept(ModelProbe& probe) {
+	pRoot->Accept(probe);
 }
 
 std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale) {

@@ -13,6 +13,7 @@ public:
 	~Model() noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx) const;
 	void Submit(FrameCommander& frame) const noexcept(!IS_DEBUG);
+	void Accept(class ModelProbe& probe);
 	//void ShowWindow(const char* windowName) noexcept(!IS_DEBUG);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 private:

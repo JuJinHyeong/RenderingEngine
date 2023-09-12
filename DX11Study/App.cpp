@@ -11,12 +11,18 @@
 #include <vector>
 #include "Testing.h"
 #include "Material.h"
+#include "ModelProbe.h"
+#include "ExtendedXMMath.h"
+
+int width = 1980;
+int height = 1080;
 
 App::App()
 	:
-	wnd(1280, 720, "First App"),
+	wnd(width, height, "First App"),
 	light(wnd.Gfx()) 
 {
+	cube1.SetPos(DirectX::XMFLOAT3{20.0f, 0.0f, 0.0f});
 	// TODO command line scripts
 	//bluePlane.SetPos(cam.GetPos());
 	//redPlane.SetPos(cam.GetPos());
@@ -35,7 +41,7 @@ App::App()
 	//	pLoaded = std::make_unique<Mesh>(wnd.Gfx(), mat, *pScene->mMeshes[0]);
 	//}
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1280.0f, 0.5f, 400.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, static_cast<float>(height) / static_cast<float>(width), 0.5f, 400.0f));
 }
 
 
@@ -82,11 +88,12 @@ void App::DoFrame() {
 	//cube2.DrawOutLine(wnd.Gfx());
 
 	light.Submit(fc);
-	//cube1.Submit(fc);
-	//cube2.Submit(fc);
-	//wall.Submit(fc);
-	gobber.Submit(fc);
+	cube1.Submit(fc);
 	sponza.Submit(fc);
+	cube2.Submit(fc);
+	//wall.Submit(fc);
+	//gobber.Submit(fc);
+	//nano.Submit(fc);
 	//pLoaded->Submit(fc, DirectX::XMMatrixIdentity());
 	fc.Execute(wnd.Gfx());
 
@@ -140,7 +147,7 @@ void App::DoFrame() {
 		}
 	}
 
-	class Probe : public TechniqueProbe {
+	class TP : public TechniqueProbe {
 	public:
 		void OnSetTechnique() override {
 			using namespace std::string_literals;
@@ -168,7 +175,7 @@ void App::DoFrame() {
 				dcheck(ImGui::ColorPicker3(tag("Spec. Color"), reinterpret_cast<float*>(&static_cast<DirectX::XMFLOAT3&>(v))));
 			}
 			if (auto v = buf["specularGloss"]; v.Exists()) {
-				dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", 1.5f));
+				dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f));
 			}
 			if (auto v = buf["specularWeight"]; v.Exists()) {
 				dcheck(ImGui::SliderFloat(tag("Spec. Weight"), &v, 0.0f, 2.0f));
@@ -182,6 +189,94 @@ void App::DoFrame() {
 			return dirty;
 		}
 	} probe;
+
+	class MP : public ModelProbe {
+	public:
+		void SpawnWindow(Model& model) {
+			ImGui::Begin("Model");
+			ImGui::Columns(2, nullptr, true);
+			model.Accept(*this);
+
+			ImGui::NextColumn();
+			if (pSelectedNode != nullptr) {
+				bool dirty = false;
+				const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
+				auto& tf = ResolveTransform();
+				ImGui::Text(pSelectedNode->GetName().c_str());
+				ImGui::Text(std::to_string(pSelectedNode->GetId()).c_str());
+				ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Translation");
+				dcheck(ImGui::SliderFloat("X", &tf.x, -60.0f, 60.0f));
+				dcheck(ImGui::SliderFloat("Y", &tf.y, -60.0f, 60.0f));
+				dcheck(ImGui::SliderFloat("Z", &tf.z, -60.0f, 60.0f));
+				ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Orientation");
+				dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
+				dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
+				dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
+				if (dirty) {
+					pSelectedNode->SetAppliedTransform(
+						DirectX::XMMatrixRotationX(tf.xRot) *
+						DirectX::XMMatrixRotationY(tf.yRot) *
+						DirectX::XMMatrixRotationZ(tf.zRot) *
+						DirectX::XMMatrixTranslation(tf.x, tf.y, tf.z)
+					);
+				}
+			}
+			ImGui::End();
+		}
+	protected:
+		bool PushNode(Node& node) override {
+			const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
+			const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+				| ((node.GetId() == selectedId) ? ImGuiTreeNodeFlags_Selected : 0)
+				| (node.HasChildren() ? 0 : ImGuiTreeNodeFlags_Leaf);
+
+			const auto expanded = ImGui::TreeNodeEx((void*)(intptr_t)node.GetId(), node_flags, node.GetName().c_str());
+			if (ImGui::IsItemClicked()) {
+				pSelectedNode = &node;
+			}
+			return expanded;
+		}
+
+		void PopNode(Node& node) override {
+			ImGui::TreePop();
+		}
+	private:
+		Node* pSelectedNode = nullptr;
+		struct TransformParameters {
+			float xRot = 0.0f;
+			float yRot = 0.0f;
+			float zRot = 0.0f;
+			float x = 0.0f;
+			float y = 0.0f;
+			float z = 0.0f;
+		};
+		std::unordered_map<int, TransformParameters> transformParams;
+	private:
+		TransformParameters& ResolveTransform() noexcept {
+			const auto id = pSelectedNode->GetId();
+			auto i = transformParams.find(id);
+			if (i == transformParams.end()) {
+				return LoadTransform(id);
+			}
+			return i->second;
+		}
+		TransformParameters& LoadTransform(int id) noexcept {
+			const auto& applied = pSelectedNode->GetAppliedTransform();
+			const auto angles = ExtractEulerAngles(applied);
+			const auto translation = ExtractTranslation(applied);
+			TransformParameters tp;
+			tp.xRot = angles.x;
+			tp.yRot = angles.y;
+			tp.zRot = angles.z;
+			tp.x = translation.x;
+			tp.y = translation.y;
+			tp.z = translation.z;
+			return transformParams.insert({ id, {tp} }).first->second;
+		}
+	};
+	static MP modelProbe;
+
+	modelProbe.SpawnWindow(sponza);
 
 	
 	//pLoaded->Accept(probe);
@@ -203,8 +298,8 @@ void App::ShowModelDemoWindow() {
 	//bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
 	//redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
 	//sponza.ShowWindow("Sponza");
-	//cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
-	//cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
+	cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
+	cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
 }
 
 void App::ShowFrameRateWindow() {
