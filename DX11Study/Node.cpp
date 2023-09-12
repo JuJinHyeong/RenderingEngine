@@ -31,6 +31,12 @@ void Node::Accept(ModelProbe& probe) {
 	}
 }
 
+void Node::Accept(TechniqueProbe& probe) {
+	for (auto& mp : meshPtrs) {
+		mp->Accept(probe);
+	}
+}
+
 std::string Node::GetName() const noexcept {
 	return name;
 }

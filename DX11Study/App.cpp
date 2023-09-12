@@ -22,7 +22,7 @@ App::App()
 	wnd(width, height, "First App"),
 	light(wnd.Gfx()) 
 {
-	cube1.SetPos(DirectX::XMFLOAT3{20.0f, 0.0f, 0.0f});
+	//cube1.SetPos(DirectX::XMFLOAT3{20.0f, 0.0f, 0.0f});
 	// TODO command line scripts
 	//bluePlane.SetPos(cam.GetPos());
 	//redPlane.SetPos(cam.GetPos());
@@ -88,9 +88,9 @@ void App::DoFrame() {
 	//cube2.DrawOutLine(wnd.Gfx());
 
 	light.Submit(fc);
-	cube1.Submit(fc);
+	//cube1.Submit(fc);
 	sponza.Submit(fc);
-	cube2.Submit(fc);
+	//cube2.Submit(fc);
 	//wall.Submit(fc);
 	//gobber.Submit(fc);
 	//nano.Submit(fc);
@@ -183,17 +183,20 @@ void App::DoFrame() {
 			if (auto v = buf["useNormalMap"]; v.Exists()) {
 				dcheck(ImGui::Checkbox(tag("Normal Map Enable"), &v));
 			}
+			if (auto v = buf["useSpecularMap"]; v.Exists()) {
+				dcheck(ImGui::Checkbox(tag("Specular Map Enable"), &v));
+			}
 			if (auto v = buf["normalMapWeight"]; v.Exists()) {
 				dcheck(ImGui::SliderFloat(tag("Normal Map Weight"), &v, 0.0f, 2.0f));
 			}
 			return dirty;
 		}
-	} probe;
+	};
 
 	class MP : public ModelProbe {
 	public:
-		void SpawnWindow(Model& model) {
-			ImGui::Begin("Model");
+		void SpawnWindow(Model& model, std::string name) {
+			ImGui::Begin(name.c_str());
 			ImGui::Columns(2, nullptr, true);
 			model.Accept(*this);
 
@@ -220,6 +223,8 @@ void App::DoFrame() {
 						DirectX::XMMatrixTranslation(tf.x, tf.y, tf.z)
 					);
 				}
+				TP probe;
+				pSelectedNode->Accept(probe);
 			}
 			ImGui::End();
 		}
@@ -232,6 +237,26 @@ void App::DoFrame() {
 
 			const auto expanded = ImGui::TreeNodeEx((void*)(intptr_t)node.GetId(), node_flags, node.GetName().c_str());
 			if (ImGui::IsItemClicked()) {
+				struct Probe : public TechniqueProbe {
+					virtual void OnSetTechnique() {
+						if (pTech->GetName() == "Outline") {
+							pTech->SetActiveState(highlighted);
+						}
+					}
+					bool OnVisitBuffer(Dcb::Buffer& buf) override {
+						return false;
+					};
+					bool highlighted = false;
+				} probe;
+
+				// remove highlight on prev-seleted node
+				if (pSelectedNode != nullptr) {
+					pSelectedNode->Accept(probe);
+				}
+				// add highlight on current selected node
+				probe.highlighted = true;
+				node.Accept(probe);
+
 				pSelectedNode = &node;
 			}
 			return expanded;
@@ -276,15 +301,15 @@ void App::DoFrame() {
 	};
 	static MP modelProbe;
 
-	modelProbe.SpawnWindow(sponza);
-
-	
 	//pLoaded->Accept(probe);
 	
 	if (showDemoWindow) {
 		cam.SpawnControlWindow();
 		light.SpawnControlWindow();
 		ShowModelDemoWindow();
+		//modelProbe.SpawnWindow(nano, "nano");
+		//modelProbe.SpawnWindow(gobber, "gobber");
+		modelProbe.SpawnWindow(sponza, "sponza");
 	}
 
 	wnd.Gfx().EndFrame();
@@ -298,8 +323,8 @@ void App::ShowModelDemoWindow() {
 	//bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
 	//redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
 	//sponza.ShowWindow("Sponza");
-	cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
-	cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
+	//cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
+	//cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
 }
 
 void App::ShowFrameRateWindow() {

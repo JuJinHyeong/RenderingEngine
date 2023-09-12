@@ -18,6 +18,7 @@ public:
 	//void ShowTree(Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
 	bool HasChildren() const noexcept;
 	void Accept(class ModelProbe& probe);
+	void Accept(class TechniqueProbe& probe);
 	std::string GetName() const noexcept;
 private:
 	void AddChild(std::unique_ptr<Node> pChild) noexcept(!IS_DEBUG);
