@@ -6,13 +6,15 @@
 #include "ModelException.h"
 #include "Material.h"
 #include "ModelWindow.h"
+#include "ExtendedXMMath.h"
 
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
 
 Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
-	:
-	pWindow(std::make_unique<ModelWindow>()) {
+	//:
+	//pWindow(std::make_unique<ModelWindow>()) 
+{
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(pathStr.c_str(),
 		aiProcess_Triangulate |
@@ -38,22 +40,22 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 	}
 
 	int nextId = 0;
-	pRoot = ParseNode(nextId, *pScene->mRootNode);
+	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
 
-void Model::ShowWindow(const char* windowName) noexcept(!IS_DEBUG) {
-	pWindow->Show(windowName, *pRoot);
-}
+//void Model::ShowWindow(const char* windowName) noexcept(!IS_DEBUG) {
+//	pWindow->Show(windowName, *pRoot);
+//}
 
 void Model::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
 	//pWindow->ApplyParameters();
 	pRoot->Submit(frame, DirectX::XMMatrixIdentity());
 }
 
-std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node) {
-	const auto transform = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
+std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale) {
+	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
-	));
+	)), scale);
 
 	std::vector<Mesh*> curMeshPtrs;
 	curMeshPtrs.reserve(node.mNumMeshes);
@@ -64,7 +66,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node) {
 
 	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t i = 0; i < node.mNumChildren; i++) {
-		pNode->AddChild(ParseNode(curId, *node.mChildren[i]));
+		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale));
 	}
 
 	return pNode;

@@ -12,7 +12,7 @@ public:
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;
 	// index need to imgui, Node need to graphics
-	void ShowTree(Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
+	//void ShowTree(Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
 private:
 	void AddChild(std::unique_ptr<Node> pChild) noexcept(!IS_DEBUG);
 private:

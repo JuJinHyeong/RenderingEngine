@@ -5,7 +5,7 @@ void ModelWindow::Show(const char* windowName, const Node& root) noexcept(!IS_DE
 	windowName = windowName ? windowName : "Model";
 	if (ImGui::Begin(windowName)) {
 		ImGui::Columns(2, nullptr, true);
-		root.ShowTree(pSelectedNode);
+		//root.ShowTree(pSelectedNode);
 
 		ImGui::NextColumn();
 		if (pSelectedNode != nullptr) {

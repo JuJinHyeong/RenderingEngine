@@ -113,7 +113,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		techniques.push_back(std::move(phong));
 	}
 	{
-		Technique outline("Outline", true);
+		Technique outline("Outline", false);
 		{
 			Step mask(1);
 

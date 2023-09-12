@@ -85,7 +85,7 @@ void App::DoFrame() {
 	//cube1.Submit(fc);
 	//cube2.Submit(fc);
 	//wall.Submit(fc);
-	//gobber.Submit(fc);
+	gobber.Submit(fc);
 	sponza.Submit(fc);
 	//pLoaded->Submit(fc, DirectX::XMMatrixIdentity());
 	fc.Execute(wnd.Gfx());
