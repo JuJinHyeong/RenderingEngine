@@ -66,7 +66,9 @@ namespace custom {
 	}
 
 	VertexLayout& VertexLayout::Append(ElementType type) noexcept(!IS_DEBUG) {
-		elements.emplace_back(type, Size());
+		if (!Has(type)) {
+			elements.emplace_back(type, Size());
+		}
 		return *this;
 	}
 
@@ -93,6 +95,15 @@ namespace custom {
 			desc.push_back(e.GetDesc());
 		}
 		return desc;
+	}
+
+	bool VertexLayout::Has(ElementType type) const noexcept {
+		for (auto& el : elements) {
+			if (el.GetType() == type) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	Vertex::Vertex(char* pData, const VertexLayout& layout) noexcept(!IS_DEBUG)

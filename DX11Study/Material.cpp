@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "BindableCommon.h"
 
 Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG) 
 	:
@@ -52,6 +53,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1u);
 				hasGlossAlpha = tex->HasAlpha();
 				step.AddBindable(std::move(tex));
+				pscLayout.Add<Dcb::Bool>("useGlossAlpha");
 				pscLayout.Add<Dcb::Bool>("useSpecularMap");
 			}
 			pscLayout.Add<Dcb::Float3>("specularColor");
@@ -111,11 +113,11 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		techniques.push_back(std::move(phong));
 	}
 	{
-		Technique outline("Outline", false);
+		Technique outline("Outline", true);
 		{
 			Step mask(1);
 
-			auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
+			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			mask.AddBindable(std::move(pvs));
 
@@ -127,28 +129,54 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		{
 			Step draw(2);
 
-			auto pvs = VertexShader::Resolve(gfx, "Offset_VS.cso");
+			// these can be pass-constant (tricky due to layout issues)
+			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable(std::move(pvs));
 
-			draw.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
-			{
-				Dcb::RawLayout lay;
-				lay.Add<Dcb::Float3>("materialColor");
-				auto buf = Dcb::Buffer(std::move(lay));
-				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f, 0.4f, 0.4f };
-				draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
-			}
-			{
-				Dcb::RawLayout lay;
-				lay.Add<Dcb::Float>("offset");
-				auto buf = Dcb::Buffer(std::move(lay));
-				buf["offset"] = 0.1f;
-				draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
-			}
+			// this can be pass-constant
+			draw.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
 
+			Dcb::RawLayout lay;
+			lay.Add<Dcb::Float3>("materialColor");
+			auto buf = Dcb::Buffer(std::move(lay));
+			buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
+			draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
+
+			// TODO: better sub-layout generation tech for future consideration maybe
 			draw.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
-			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+			// quick and dirty... nicer solution maybe takes a lamba... we'll see :)
+			class TransformCbufScaling : public TransformCbuf {
+			public:
+				TransformCbufScaling(Graphics& gfx, float scale = 1.04)
+					:
+					TransformCbuf(gfx),
+					buf(MakeLayout()) {
+					buf["scale"] = scale;
+				}
+				void Accept(TechniqueProbe& probe) override {
+					probe.VisitBuffer(buf);
+				}
+				void Bind(Graphics& gfx) noexcept override {
+					const float scale = buf["scale"];
+					const auto scaleMatrix = DirectX::XMMatrixScaling(scale, scale, scale);
+					auto xf = GetTransforms(gfx);
+					xf.modelView = xf.modelView * scaleMatrix;
+					xf.modelTransform = xf.modelTransform * scaleMatrix;
+					UpdateBindImpl(gfx, xf);
+				}
+			private:
+				static Dcb::RawLayout MakeLayout() {
+					Dcb::RawLayout layout;
+					layout.Add<Dcb::Float>("scale");
+					return layout;
+				}
+			private:
+				Dcb::Buffer buf;
+			};
+			draw.AddBindable(std::make_shared<TransformCbufScaling>(gfx));
+			
 			outline.AddStep(std::move(draw));
 		}
 		techniques.push_back(std::move(outline));

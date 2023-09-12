@@ -4,11 +4,11 @@
 
 cbuffer ObjectCBuf
 {
-    float specularIntensity;
-    float specularPower;
-    // bool is 4bytes in hlsl
-    bool normalMapEnabled;
-    float padding;
+    float3 specularColor;
+    float specularWeight;
+    float specularGloss;
+    bool useNormalMap;
+    float normalMapWeight;
 };
 
 #include "Transform.hlsl"
@@ -21,13 +21,14 @@ SamplerState splr;
 float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     viewNormal = normalize(viewNormal);
-    if (normalMapEnabled)
+    if (useNormalMap)
     {
-        viewNormal = MapNormal(normalize(viewTan), normalize(viewBitan), viewNormal, tc, normalMap, splr);
+        const float3 mappedNormal = MapNormal(normalize(viewTan), normalize(viewBitan), viewNormal, tc, normalMap, splr);
+        viewNormal = lerp(viewNormal, mappedNormal, normalMapWeight);
     }
     const LightVectorData lv = CalculateLightVectorData(viewLightPos, viewPos);
     const float att = Attenuate(attConst, attLin, attQuad, lv.distToLight);
     const float3 diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lv.dirToLight, viewNormal);
-    const float3 specular = Speculate(specularIntensity.rrr, 1.0f, viewNormal, lv.dirToLight, viewPos, att, specularPower);
+    const float3 specular = Speculate(diffuseColor * diffuseIntensity * specularColor, specularWeight, viewNormal, lv.dirToLight, viewPos, att, specularGloss);
     return float4(saturate(diffuse + ambient) * tex.Sample(splr, tc).rgb + specular, 1.0f);
 }

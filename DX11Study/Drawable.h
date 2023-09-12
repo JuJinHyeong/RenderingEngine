@@ -1,9 +1,12 @@
 #pragma once
-#include "Graphics.h"
 #include <memory>
 #include <DirectXMath.h>
+#include "Graphics.h"
 #include "Technique.h"
 #include "TechniqueProbe.h"
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/Importer.hpp>
 
 namespace Bind {
 	class Bindable;
@@ -13,9 +16,12 @@ namespace Bind {
 	class InputLayout;
 }
 
+class Material;
+
 class Drawable {
 public:
 	Drawable() = default;
+	Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept;
 	Drawable(const Drawable&) = delete;
 	virtual ~Drawable() = default;
 	

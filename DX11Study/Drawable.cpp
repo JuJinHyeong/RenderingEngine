@@ -5,6 +5,17 @@
 #include <typeinfo>
 #include "BindableCommon.h"
 #include "BindableCodex.h"
+#include "Material.h"
+
+Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept {
+	pVertices = mat.MakeVertexBindable(gfx, mesh);
+	pIndices = mat.MakeIndexBindable(gfx, mesh);
+	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	for (auto& t : mat.GetTechniques()) {
+		AddTechnique(std::move(t));
+	}
+}
 
 void Drawable::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
 	for (const auto& tech : techniques) {
