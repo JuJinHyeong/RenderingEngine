@@ -35,10 +35,10 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTa
     
     const LightVectorData lightData = CalculateLightVectorData(viewLightPos, viewPos);
     const float att = Attenuate(attConst, attLin, attQuad, lightData.distToLight);
-    const float diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal);
+    const float3 diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal);
     const float4 specularSample = spec.Sample(splr, tc);
     float3 specularReflectionColor = useSpecularMap ? specularSample.rgb :specularColor;
     float specularGlossLoaded = useGlossAlpha ? pow(2.0f, specularSample.a * 13.0f) : specularGloss;
-    const float specular = Speculate(specularReflectionColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGlossLoaded);
+    const float3 specular = Speculate(specularReflectionColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGlossLoaded);
     return float4(saturate((diffuse + ambient) * diffuseSample.rgb + specular), diffuseSample.a);
 }

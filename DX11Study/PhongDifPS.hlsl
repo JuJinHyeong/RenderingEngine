@@ -17,7 +17,7 @@ float4 main(float3 viewPos: Position, float3 viewNormal: Normal, float2 tc: Texc
     viewNormal = normalize(viewNormal);
     const LightVectorData lightData = CalculateLightVectorData(viewLightPos, viewPos);
     const float att = Attenuate(attConst, attLin, attQuad, lightData.distToLight);
-    const float diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal);
-    const float specular = Speculate(specularColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGloss);
+    const float3 diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal);
+    const float3 specular = Speculate(specularColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGloss);
     return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specular), 1.0f);
 }

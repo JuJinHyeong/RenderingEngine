@@ -5,58 +5,9 @@
 #include "assimp/postprocess.h"
 #include "ModelException.h"
 #include "Material.h"
+#include "ModelWindow.h"
 
 // Model
-
-// ModelWindow class doesn't need to be read from another header.
-// so ModelWindow class is defined in cpp file.
-class ModelWindow {
-public:
-	void Show(const char* windowName, const Node& root) noexcept(!IS_DEBUG) {
-		windowName = windowName ? windowName : "Model";
-		if (ImGui::Begin(windowName)) {
-			ImGui::Columns(2, nullptr, true);
-			root.ShowTree(pSelectedNode);
-
-			ImGui::NextColumn();
-			if (pSelectedNode != nullptr) {
-				ImGui::Text("Id: %d", pSelectedNode->GetId());
-				auto& transform = transforms[pSelectedNode->GetId()];
-				ImGui::Text("Orientation");
-				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
-				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
-				ImGui::SliderAngle("Yaw", &transform.yaw, -180.0f, 180.0f);
-
-				ImGui::Text("Position");
-				ImGui::SliderFloat("X", &transform.x, -20.0f, 20.0f);
-				ImGui::SliderFloat("Y", &transform.y, -20.0f, 20.0f);
-				ImGui::SliderFloat("Z", &transform.z, -20.0f, 20.0f);
-			}
-		}
-		ImGui::End();
-	}
-	DirectX::XMMATRIX GetTransform() const noexcept(!IS_DEBUG) {
-		assert(pSelectedNode != nullptr);
-		const auto& transform = transforms.at(pSelectedNode->GetId());
-		return DirectX::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw)
-			* DirectX::XMMatrixTranslation(transform.x, transform.y, transform.z);
-	}
-	Node* GetSelectedNode() const noexcept(!IS_DEBUG) {
-		return pSelectedNode;
-	}
-private:
-	Node* pSelectedNode = nullptr;
-	struct TransformParameters {
-		float roll = 0.0f;
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float x = 0.0f;
-		float y = 0.0f;
-		float z = 0.0f;
-	};
-	std::unordered_map<int, TransformParameters> transforms;
-};
-
 Model::~Model() noexcept(!IS_DEBUG) {}
 
 Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
