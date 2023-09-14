@@ -2,6 +2,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "ExtendedXMMath.h"
 
 void TestDynamicMeshLoading() {
 	using namespace custom;
@@ -29,4 +30,15 @@ void TestDynamicMeshLoading() {
 		const auto d = buf[i].Attr<VertexLayout::Bitangent>();
 		const auto e = buf[i].Attr<VertexLayout::Texture2D>();
 	}
+}
+
+
+void TestScaleMatrixTranslation()
+{
+	auto tlMat = DirectX::XMMatrixTranslation(20.f, 30.f, 40.f);
+	tlMat = ScaleTranslation(tlMat, 0.1f);
+	DirectX::XMFLOAT4X4 f4;
+	DirectX::XMStoreFloat4x4(&f4, tlMat);
+	auto etl = ExtractTranslation(f4);
+	assert(etl.x == 2.f && etl.y == 3.f && etl.z == 4.f);
 }

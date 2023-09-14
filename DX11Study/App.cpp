@@ -14,8 +14,8 @@
 #include "ModelProbe.h"
 #include "ExtendedXMMath.h"
 
-int width = 1980;
-int height = 1080;
+int width = 1280;
+int height = 720;
 
 App::App()
 	:
@@ -166,7 +166,10 @@ void App::DoFrame() {
 			};
 
 			if (auto v = buf["scale"]; v.Exists()) {
-				dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
+				dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f));
+			}
+			if (auto v = buf["offset"]; v.Exists()) {
+				dcheck(ImGui::SliderFloat(tag("offset"), &v, 0.01f, 0.5f));
 			}
 			if (auto v = buf["materialColor"]; v.Exists()) {
 				dcheck(ImGui::ColorPicker3(tag("Color"), reinterpret_cast<float*>(&static_cast<DirectX::XMFLOAT3&>(v))));
@@ -194,40 +197,43 @@ void App::DoFrame() {
 	};
 
 	class MP : public ModelProbe {
-	public:
-		void SpawnWindow(Model& model, std::string name) {
-			ImGui::Begin(name.c_str());
-			ImGui::Columns(2, nullptr, true);
-			model.Accept(*this);
+	public:void SpawnWindow(Model& model, std::string name)
+	{
+		ImGui::Begin(name.c_str());
+		ImGui::Columns(2, nullptr, true);
+		model.Accept(*this);
 
-			ImGui::NextColumn();
-			if (pSelectedNode != nullptr) {
-				bool dirty = false;
-				const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
-				auto& tf = ResolveTransform();
-				ImGui::Text(pSelectedNode->GetName().c_str());
-				ImGui::Text(std::to_string(pSelectedNode->GetId()).c_str());
-				ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Translation");
-				dcheck(ImGui::SliderFloat("X", &tf.x, -60.0f, 60.0f));
-				dcheck(ImGui::SliderFloat("Y", &tf.y, -60.0f, 60.0f));
-				dcheck(ImGui::SliderFloat("Z", &tf.z, -60.0f, 60.0f));
-				ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Orientation");
-				dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
-				dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
-				dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
-				if (dirty) {
-					pSelectedNode->SetAppliedTransform(
-						DirectX::XMMatrixRotationX(tf.xRot) *
-						DirectX::XMMatrixRotationY(tf.yRot) *
-						DirectX::XMMatrixRotationZ(tf.zRot) *
-						DirectX::XMMatrixTranslation(tf.x, tf.y, tf.z)
-					);
-				}
-				TP probe;
-				pSelectedNode->Accept(probe);
+		ImGui::NextColumn();
+		if (pSelectedNode != nullptr)
+		{
+			bool dirty = false;
+			const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
+			auto& tf = ResolveTransform();
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Translation");
+			dcheck(ImGui::SliderFloat("X", &tf.x, -60.f, 60.f));
+			dcheck(ImGui::SliderFloat("Y", &tf.y, -60.f, 60.f));
+			dcheck(ImGui::SliderFloat("Z", &tf.z, -60.f, 60.f));
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
+			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
+			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
+			dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
+			if (dirty)
+			{
+				pSelectedNode->SetAppliedTransform(
+					DirectX::XMMatrixRotationX(tf.xRot) *
+					DirectX::XMMatrixRotationY(tf.yRot) *
+					DirectX::XMMatrixRotationZ(tf.zRot) *
+					DirectX::XMMatrixTranslation(tf.x, tf.y, tf.z)
+				);
 			}
-			ImGui::End();
 		}
+		if (pSelectedNode != nullptr)
+		{
+			TP probe;
+			pSelectedNode->Accept(probe);
+		}
+		ImGui::End();
+	}
 	protected:
 		bool PushNode(Node& node) override {
 			const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
@@ -307,9 +313,12 @@ void App::DoFrame() {
 		cam.SpawnControlWindow();
 		light.SpawnControlWindow();
 		ShowModelDemoWindow();
-		//modelProbe.SpawnWindow(nano, "nano");
-		//modelProbe.SpawnWindow(gobber, "gobber");
 		modelProbe.SpawnWindow(sponza, "sponza");
+		//modelProbe.SpawnWindow(gobber, "gobber");
+		//modelProbe.SpawnWindow(nano, "nano");
+		//nanoProbe.SpawnWindow(nano, "nano");
+		//gobberProbe.SpawnWindow(gobber, "gobber");
+		//cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
 	}
 
 	wnd.Gfx().EndFrame();

@@ -4,38 +4,71 @@
 #include "TechniqueProbe.h"
 
 namespace Bind {
-	class PixelConstantBufferEx : public Bindable {
+	class ConstantBufferEx : public Bindable {
 	public:
 		void Update(Graphics& gfx, const Dcb::Buffer& buf);
-		void Bind(Graphics& gfx) noexcept override;
 		virtual const Dcb::LayoutElement& GetRootLayoutElement() const noexcept = 0;
 	protected:
-		PixelConstantBufferEx(Graphics& gfx, const Dcb::LayoutElement& layoutRoot, UINT slot, const Dcb::Buffer* pBuf);
-	private:
+		ConstantBufferEx(Graphics& gfx, const Dcb::LayoutElement& layoutRoot, UINT slot, const Dcb::Buffer* pBuf);
+	protected:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
 		UINT slot;
 	};
 
-	class CachingPixelConstantBufferEx : public PixelConstantBufferEx {
+
+	class PixelConstantBufferEx : public ConstantBufferEx {
 	public:
-		CachingPixelConstantBufferEx(Graphics& gfx, const Dcb::CookedLayout& layout, UINT slot);
-		CachingPixelConstantBufferEx(Graphics& gfx, const Dcb::Buffer& buf_in, UINT slot);
-		const Dcb::LayoutElement& GetRootLayoutElement() const noexcept override;
-		const Dcb::Buffer& GetBuffer() const noexcept;
-		const void SetBuffer(const Dcb::Buffer& buf_in);
+		using ConstantBufferEx::ConstantBufferEx;
+		void Bind(Graphics& gfx) noexcept override;		
+	};
+
+	class VertexConstantBufferEx : public ConstantBufferEx {
+	public:
+		using ConstantBufferEx::ConstantBufferEx;
 		void Bind(Graphics& gfx) noexcept override;
-		void Accept(TechniqueProbe& probe) override;
+	};
+
+	template<class T>
+	class CachingConstantBufferEx : public T {
+	public:
+		CachingConstantBufferEx(Graphics& gfx, const Dcb::CookedLayout& layout, UINT slot) 
+			:
+			T(gfx, *layout.ShareRoot(), slot, nullptr),
+			buf(Dcb::Buffer(layout))
+		{}
+		CachingConstantBufferEx(Graphics& gfx, const Dcb::Buffer& buf, UINT slot)
+			:
+			T(gfx, buf.GetRootLayoutElement(), slot, &buf),
+			buf(buf)
+		{}
+		const Dcb::LayoutElement& GetRootLayoutElement() const noexcept override {
+			return buf.GetRootLayoutElement();
+		}
+		const Dcb::Buffer& GetBuffer() const noexcept {
+			return buf;
+		}
+		void SetBuffer(const Dcb::Buffer& buf_in) {
+			buf.CopyFrom(buf_in);
+			dirty = true;
+		}
+		void Bind(Graphics& gfx) noexcept override {
+			if (dirty) {
+				T::Update(gfx, buf);
+				dirty = false;
+			}
+			T::Bind(gfx);
+		}
+		void Accept(TechniqueProbe& probe) override {
+			if (probe.VisitBuffer(buf)) {
+				dirty = true;
+			}
+		}
 	private:
 		bool dirty = false;
 		Dcb::Buffer buf;
 	};
 
-	class NocachePixelConstantBufferEx : public PixelConstantBufferEx {
-	public:
-		NocachePixelConstantBufferEx(Graphics& gfx, const Dcb::CookedLayout& layout, UINT slot);
-		NocachePixelConstantBufferEx(Graphics& gfx, const Dcb::Buffer& buf, UINT slot);
-		const Dcb::LayoutElement& GetRootLayoutElement() const noexcept override;
-	private:
-		std::shared_ptr<Dcb::LayoutElement> pLayoutRoot;
-	};
+	using CachingPixelConstantBufferEx = CachingConstantBufferEx<PixelConstantBufferEx>;
+	using CachingVertexConstantBufferEx = CachingConstantBufferEx<VertexConstantBufferEx>;
+
 }

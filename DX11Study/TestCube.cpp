@@ -74,7 +74,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 
 			class TransformCbufScaling : public TransformCbuf {
 			public:
-				TransformCbufScaling(Graphics& gfx, float scale = 1.04f) 
+				TransformCbufScaling(Graphics& gfx, float scale = 1.04f)
 					:
 					TransformCbuf(gfx),
 					buf(MakeLayout())
@@ -89,7 +89,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 					const auto scaleMatrix = DirectX::XMMatrixScaling(scale, scale, scale);
 					auto xf = GetTransforms(gfx);
 					xf.modelView = xf.modelView * scaleMatrix;
-					xf.modelTransform = xf.modelTransform * scaleMatrix;
+					xf.modelViewProj = xf.modelViewProj * scaleMatrix;
 					UpdateBindImpl(gfx, xf);
 				}
 			private:
@@ -107,7 +107,6 @@ TestCube::TestCube(Graphics& gfx, float size) {
 		}
 		AddTechnique(std::move(outline));
 	}
-
 }
 
 void TestCube::SetPos(DirectX::XMFLOAT3 pos) noexcept {

@@ -30,8 +30,8 @@ private:
 	PointLight light;
 	FrameCommander fc;
 
-	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 6.0f };
-	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
+	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 6.0f };
+	Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };

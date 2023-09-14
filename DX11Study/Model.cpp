@@ -13,8 +13,6 @@
 Model::~Model() noexcept(!IS_DEBUG) {}
 
 Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
-	//:
-	//pWindow(std::make_unique<ModelWindow>()) 
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(pathStr.c_str(),

@@ -8,7 +8,7 @@ namespace Bind {
 	protected:
 		struct Transforms {
 			DirectX::XMMATRIX modelView;
-			DirectX::XMMATRIX modelTransform;
+			DirectX::XMMATRIX modelViewProj;
 		};
 	public:
 		TransformCbuf(Graphics& gfx, UINT slot = 0u);

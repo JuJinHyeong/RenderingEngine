@@ -30,5 +30,6 @@ private:
 	// relative transform from parent
 	// loaded by file
 	DirectX::XMFLOAT4X4 transform;
+	// local transform
 	DirectX::XMFLOAT4X4 appliedTransform;
 };
