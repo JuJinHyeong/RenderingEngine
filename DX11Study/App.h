@@ -28,7 +28,7 @@ private:
 	Timer timer;
 	Camera cam;
 	PointLight light;
-	FrameCommander fc;
+	FrameCommander fc{ wnd.Gfx() };
 
 	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 6.0f };
 	Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };

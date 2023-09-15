@@ -12,8 +12,10 @@ namespace Bind {
 	class Bindable;
 }
 
+class DepthStencil;
+
 class Graphics {
-	friend class Bind::Bindable;
+	friend class GraphicsResource;
 public:
 	class Exception : public BasicException {
 		using BasicException::BasicException;
@@ -55,6 +57,8 @@ public:
 	~Graphics();
 	void EndFrame();
 	void BeginFrame(float red, float green, float blue) noexcept;
+	void BindSwapBuffer() noexcept;
+	void BindSwapBuffer(const DepthStencil& ds) noexcept;
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
 	void DrawTestTriangle(float angle, float x, float y);
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
@@ -67,7 +71,12 @@ public:
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
 
+	UINT GetWidth() const noexcept;
+	UINT GetHeight() const noexcept;
+
 private:
+	UINT width;
+	UINT height;
 	bool imguiEnabled = true;
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX camera;
