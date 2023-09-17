@@ -37,8 +37,8 @@ private:
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
 	Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
 
-	//TestCube cube1{ wnd.Gfx(), 4.0f };
-	//TestCube cube2{ wnd.Gfx(), 4.0f };
+	TestCube cube1{ wnd.Gfx(), 4.0f };
+	TestCube cube2{ wnd.Gfx(), 4.0f };
 	//std::unique_ptr<Mesh> pLoaded;
 };
  

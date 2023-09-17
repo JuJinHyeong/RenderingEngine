@@ -88,9 +88,9 @@ void App::DoFrame() {
 	//cube2.DrawOutLine(wnd.Gfx());
 
 	light.Submit(fc);
-	//cube1.Submit(fc);
+	cube1.Submit(fc);
 	sponza.Submit(fc);
-	//cube2.Submit(fc);
+	cube2.Submit(fc);
 	//wall.Submit(fc);
 	//gobber.Submit(fc);
 	//nano.Submit(fc);
@@ -318,7 +318,8 @@ void App::DoFrame() {
 		//modelProbe.SpawnWindow(nano, "nano");
 		//nanoProbe.SpawnWindow(nano, "nano");
 		//gobberProbe.SpawnWindow(gobber, "gobber");
-		//cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
+		cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
+		cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
 	}
 
 	wnd.Gfx().EndFrame();

@@ -71,37 +71,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			auto buf = Dcb::Buffer(std::move(lay));
 			buf["color"] = DirectX::XMFLOAT3{ 1.0f, 0.4f, 0.4f };
 			draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
-
-			class TransformCbufScaling : public TransformCbuf {
-			public:
-				TransformCbufScaling(Graphics& gfx, float scale = 1.04f)
-					:
-					TransformCbuf(gfx),
-					buf(MakeLayout())
-				{
-					buf["scale"] = scale;
-				}
-				void Accept(TechniqueProbe& probe) override {
-					probe.VisitBuffer(buf);
-				}
-				void Bind(Graphics& gfx) noexcept override {
-					const float scale = buf["scale"];
-					const auto scaleMatrix = DirectX::XMMatrixScaling(scale, scale, scale);
-					auto xf = GetTransforms(gfx);
-					xf.modelView = xf.modelView * scaleMatrix;
-					xf.modelViewProj = xf.modelViewProj * scaleMatrix;
-					UpdateBindImpl(gfx, xf);
-				}
-			private:
-				static Dcb::RawLayout MakeLayout() {
-					Dcb::RawLayout layout;
-					layout.Add<Dcb::Float>("scale");
-					return layout;
-				}
-			private:
-				Dcb::Buffer buf;
-			};
-			draw.AddBindable(std::make_shared<TransformCbufScaling>(gfx));
+			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
 			outline.AddStep(std::move(draw));
 		}

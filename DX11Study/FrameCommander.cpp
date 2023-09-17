@@ -5,7 +5,9 @@
 FrameCommander::FrameCommander(Graphics& gfx)
 	:
 	ds(gfx, gfx.GetWidth(), gfx.GetHeight()),
-	rt(gfx, gfx.GetWidth(), gfx.GetHeight())
+	rt1(gfx, gfx.GetWidth(), gfx.GetHeight()),
+	rt2(gfx, gfx.GetWidth(), gfx.GetHeight()),
+	blur(gfx)
 {
 	namespace dx = DirectX;
 
@@ -22,43 +24,57 @@ FrameCommander::FrameCommander(Graphics& gfx)
 	pIbFull = Bind::IndexBuffer::Resolve(gfx, "$Full", std::move(indices));
 
 	// setup fullscreen shaders
-	pPsFull = Bind::PixelShader::Resolve(gfx, "FullscreenEffectPS.cso");
 	pVsFull = Bind::VertexShader::Resolve(gfx, "FullscreenVS.cso");
 	pLayoutFull = Bind::InputLayout::Resolve(gfx, lay, pVsFull->GetBytecode());
+	pSamplerFull = Bind::Sampler::Resolve(gfx, false, true);
 }
 
 void FrameCommander::Accept(Job job, size_t target) noexcept {
 	passes[target].Accept(job);
 }
 
-void FrameCommander::Execute(Graphics& gfx) const noexcept(!IS_DEBUG) {
+void FrameCommander::Execute(Graphics& gfx) noexcept(!IS_DEBUG) {
 	using namespace Bind;
 
 	// setup render target used for normal passes
 	ds.Clear(gfx);
-	rt.BindAsTarget(gfx, ds);
+	rt1.Clear(gfx);
+	rt1.BindAsTarget(gfx, ds);
 
 	// render phong
+	Blender::Resolve(gfx, false)->Bind(gfx);
 	Stencil::Resolve(gfx, Stencil::Mode::Off)->Bind(gfx);
 	passes[0].Execute(gfx);
 
-	// masking
-	Stencil::Resolve(gfx, Stencil::Mode::Write)->Bind(gfx);
-	NullPixelShader::Resolve(gfx)->Bind(gfx);
-	passes[1].Execute(gfx);
+	//// masking
+	//Stencil::Resolve(gfx, Stencil::Mode::Write)->Bind(gfx);
+	//NullPixelShader::Resolve(gfx)->Bind(gfx);
+	//passes[1].Execute(gfx);
 
-	// outline drawing
-	Stencil::Resolve(gfx, Stencil::Mode::Mask)->Bind(gfx);
-	passes[2].Execute(gfx);
-
-	// fullscreen funky pass
-	gfx.BindSwapBuffer();
-	rt.BindAsTexture(gfx, 0);
+	//// outline drawing
+	//rt1.BindAsTarget(gfx);
+	//Stencil::Resolve(gfx, Stencil::Mode::Off)->Bind(gfx);
+	//passes[2].Execute(gfx);
+	
+	// passes[2] excueted result is stored in rt
+	// fullscreen blur + blend pass
+	// output
+	rt2.BindAsTarget(gfx);
+	// input
+	rt1.BindAsTexture(gfx, 0);
 	pVbFull->Bind(gfx);
 	pIbFull->Bind(gfx);
 	pVsFull->Bind(gfx);
-	pPsFull->Bind(gfx);
 	pLayoutFull->Bind(gfx);
+	pSamplerFull->Bind(gfx);
+
+	blur.Bind(gfx);
+	blur.SetHorizontal(gfx);
+	gfx.DrawIndexed(pIbFull->GetCount());
+
+	gfx.BindSwapBuffer();
+	rt2.BindAsTexture(gfx, 0u);
+	blur.SetVertical(gfx);
 	gfx.DrawIndexed(pIbFull->GetCount());
 }
 
