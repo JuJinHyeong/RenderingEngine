@@ -320,6 +320,7 @@ void App::DoFrame() {
 		//gobberProbe.SpawnWindow(gobber, "gobber");
 		cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
 		cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
+		fc.ShowWindow(wnd.Gfx());
 	}
 
 	wnd.Gfx().EndFrame();

@@ -14,6 +14,7 @@ public:
 	void Accept(Job job, size_t target) noexcept;
 	void Execute(Graphics& gfx) noexcept(!IS_DEBUG);
 	void Reset() noexcept;
+	void ShowWindow(Graphics& gfx);
 private:
 	std::array<Pass, 3> passes;
 	DepthStencil ds;
