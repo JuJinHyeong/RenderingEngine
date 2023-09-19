@@ -72,15 +72,15 @@ Graphics::Graphics(HWND hWnd, unsigned int width, unsigned int height)
 		&pTarget
 	));
 
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = static_cast<float>(width);
-	vp.Height = static_cast<float>(height);
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	pContext->RSSetViewports(1u, &vp);
+	//// configure viewport
+	//D3D11_VIEWPORT vp;
+	//vp.Width = static_cast<float>(width);
+	//vp.Height = static_cast<float>(height);
+	//vp.MinDepth = 0;
+	//vp.MaxDepth = 1;
+	//vp.TopLeftX = 0;
+	//vp.TopLeftY = 0;
+	//pContext->RSSetViewports(1u, &vp);
 
 	// imgui init
 	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
@@ -125,11 +125,29 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept {
 void Graphics::BindSwapBuffer() noexcept
 {
 	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (float)width;
+	vp.Height = (float)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vp);
 }
 
 void Graphics::BindSwapBuffer(const DepthStencil& ds) noexcept
 {
 	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), ds.pDepthStencilView.Get());
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = (float)width;
+	vp.Height = (float)height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vp);
 }
 
 void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept {

@@ -17,17 +17,17 @@ public:
 	void ShowWindow(Graphics& gfx);
 private:
 	std::array<Pass, 3> passes;
+	int downFactor = 2;
 	DepthStencil ds;
-	// render to original outline
-	RenderTarget rt1;
-	// render to horizontal path, then vertical path to swapchain
-	RenderTarget rt2;
+	std::optional<RenderTarget> rt1;
+	std::optional<RenderTarget> rt2;
 	BlurPack blur;
 	std::shared_ptr<Bind::VertexBuffer> pVbFull;
 	std::shared_ptr<Bind::IndexBuffer> pIbFull;
 	std::shared_ptr<Bind::VertexShader> pVsFull;
 	std::shared_ptr<Bind::PixelShader> pPsFull;
 	std::shared_ptr<Bind::InputLayout> pLayoutFull;
-	std::shared_ptr<Bind::Sampler> pSamplerFull;
+	std::shared_ptr<Bind::Sampler> pSamplerFullPoint;
+	std::shared_ptr<Bind::Sampler> pSamplerFullBilin;
 	std::shared_ptr<Bind::Blender> pBlenderFull;
 };

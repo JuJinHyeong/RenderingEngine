@@ -80,15 +80,13 @@ public:
 		Kernel k;
 		k.nTaps = radius * 2 + 1;
 		float sum = 0.0f;
-		for (int i = 0; i < k.nTaps; i++)
-		{
+		for (int i = 0; i < k.nTaps; i++) {
 			const auto x = float(i - radius);
 			const auto g = gauss(x, sigma);
 			sum += g;
 			k.coefficients[i].x = g;
 		}
-		for (int i = 0; i < k.nTaps; i++)
-		{
+		for (int i = 0; i < k.nTaps; i++) {
 			k.coefficients[i].x /= sum;
 		}
 		pcb.Update(gfx, k);
@@ -99,8 +97,7 @@ public:
 		Kernel k;
 		k.nTaps = radius * 2 + 1;
 		const float c = 1.0f / k.nTaps;
-		for (int i = 0; i < k.nTaps; i++)
-		{
+		for (int i = 0; i < k.nTaps; i++) {
 			k.coefficients[i].x = c;
 		}
 		pcb.Update(gfx, k);
@@ -111,17 +108,17 @@ private:
 		Gauss,
 		Box,
 	};
+	static constexpr int maxRadius = 15;
 	struct Kernel {
 		int nTaps;
 		float padding[3];
-		DirectX::XMFLOAT4 coefficients[15];
+		DirectX::XMFLOAT4 coefficients[maxRadius * 2 + 1];
 	};
 	struct Control {
 		BOOL horizontal;
 		float padding[3];
 	};
 	KernelType kernelType = KernelType::Gauss;
-	static constexpr int maxRadius = 15;
 	Bind::PixelShader shader;
 	Bind::PixelConstantBuffer<Kernel> pcb;
 	Bind::PixelConstantBuffer<Control> ccb;

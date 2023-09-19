@@ -5,8 +5,8 @@
 FrameCommander::FrameCommander(Graphics& gfx)
 	:
 	ds(gfx, gfx.GetWidth(), gfx.GetHeight()),
-	rt1(gfx, gfx.GetWidth(), gfx.GetHeight()),
-	rt2(gfx, gfx.GetWidth(), gfx.GetHeight()),
+	rt1({ gfx, gfx.GetWidth() / downFactor, gfx.GetHeight() / downFactor }),
+	rt2({ gfx, gfx.GetWidth() / downFactor, gfx.GetHeight() / downFactor }),
 	blur(gfx, 7, 2.6f, "BlurOutlinePS.cso")
 {
 	namespace dx = DirectX;
@@ -26,7 +26,8 @@ FrameCommander::FrameCommander(Graphics& gfx)
 	// setup fullscreen shaders
 	pVsFull = Bind::VertexShader::Resolve(gfx, "FullscreenVS.cso");
 	pLayoutFull = Bind::InputLayout::Resolve(gfx, lay, pVsFull->GetBytecode());
-	pSamplerFull = Bind::Sampler::Resolve(gfx, false, true);
+	pSamplerFullPoint = Bind::Sampler::Resolve(gfx, false, true);
+	pSamplerFullBilin = Bind::Sampler::Resolve(gfx, true, true);
 	pBlenderFull = Bind::Blender::Resolve(gfx, true);
 }
 
@@ -39,41 +40,36 @@ void FrameCommander::Execute(Graphics& gfx) noexcept(!IS_DEBUG) {
 
 	// setup render target used for normal passes
 	ds.Clear(gfx);
-	rt1.Clear(gfx);
+	rt1->Clear(gfx);
 	gfx.BindSwapBuffer(ds);
-
-	// render phong
+	// main phong lighting pass
 	Blender::Resolve(gfx, false)->Bind(gfx);
 	Stencil::Resolve(gfx, Stencil::Mode::Off)->Bind(gfx);
 	passes[0].Execute(gfx);
-
-	// masking
+	// outline masking pass
 	Stencil::Resolve(gfx, Stencil::Mode::Write)->Bind(gfx);
 	NullPixelShader::Resolve(gfx)->Bind(gfx);
 	passes[1].Execute(gfx);
-
-	// outline drawing
-	rt1.BindAsTarget(gfx);
+	// outline drawing pass
+	rt1->BindAsTarget(gfx);
 	Stencil::Resolve(gfx, Stencil::Mode::Off)->Bind(gfx);
 	passes[2].Execute(gfx);
-	
-	// passes[2] excueted result is stored in rt
-	// fullscreen blur + blend pass
-	rt2.BindAsTarget(gfx);
-	rt1.BindAsTexture(gfx, 0);
+	// fullscreen blur h-pass
+	rt2->BindAsTarget(gfx);
+	rt1->BindAsTexture(gfx, 0);
 	pVbFull->Bind(gfx);
 	pIbFull->Bind(gfx);
 	pVsFull->Bind(gfx);
 	pLayoutFull->Bind(gfx);
-	pSamplerFull->Bind(gfx);
+	pSamplerFullPoint->Bind(gfx);
 	blur.Bind(gfx);
 	blur.SetHorizontal(gfx);
 	gfx.DrawIndexed(pIbFull->GetCount());
 	// fullscreen blur v-pass + combine
 	gfx.BindSwapBuffer(ds);
-	rt2.BindAsTexture(gfx, 0u);
+	rt2->BindAsTexture(gfx, 0u);
 	pBlenderFull->Bind(gfx);
-	pSamplerFull->Bind(gfx);
+	pSamplerFullBilin->Bind(gfx);
 	Stencil::Resolve(gfx, Stencil::Mode::Mask)->Bind(gfx);
 	blur.SetVertical(gfx);
 	gfx.DrawIndexed(pIbFull->GetCount());
@@ -87,5 +83,12 @@ void FrameCommander::Reset() noexcept {
 
 void FrameCommander::ShowWindow(Graphics& gfx)
 {
-	blur.RenderWidgets(gfx);
+	if (ImGui::Begin("Blur")) {
+		if (ImGui::SliderInt("Down Factor", &downFactor, 1, 16)) {
+			rt1.emplace(gfx, gfx.GetWidth() / downFactor, gfx.GetHeight() / downFactor);
+			rt2.emplace(gfx, gfx.GetWidth() / downFactor, gfx.GetHeight() / downFactor);
+		}
+		blur.RenderWidgets(gfx);
+	}
+	ImGui::End();
 }
