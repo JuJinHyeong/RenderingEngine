@@ -11,7 +11,8 @@
 	X(Float3) \
 	X(Float4) \
 	X(Matrix) \
-	X(Bool)
+	X(Bool) \
+	X(Integer)
 
 namespace Dcb {
 	namespace dx = DirectX;
@@ -64,13 +65,19 @@ namespace Dcb {
 		static constexpr const char* code = "BL";
 		static constexpr bool valid = true;
 	};
+	template<> struct Map<Integer> {
+		using SysType = int;
+		static constexpr size_t hlslSize = sizeof(SysType);
+		static constexpr const char* code = "IN";
+		static constexpr bool valid = true;
+	};
 
 #define X(el) static_assert(Map<el>::valid, "Missing implementation for " #el);
 	LEAF_ELEMENT_TYPES
 #undef X
 		template <typename T>
 	struct ReverseMap {
-		static constexpr bool valid = false;
+	static constexpr bool valid = false;
 	};
 #define X(el) \
 template<> struct ReverseMap<typename Map<el>::SysType> { \
@@ -117,7 +124,7 @@ template<> struct ReverseMap<typename Map<el>::SysType> { \
 			LayoutElement& Set(Type addedType, size_t size) noexcept(!IS_DEBUG);
 			template<Type typeAdded>
 			LayoutElement& Set(size_t size) noexcept(!IS_DEBUG) {
-				Set(typeAdded, size);
+				return Set(typeAdded, size);
 			}
 			// return offset of leaf types for read/write purpose
 			template<typename T>

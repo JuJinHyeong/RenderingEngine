@@ -18,4 +18,9 @@ namespace Bind {
 		// use only when bindable class havs dyanamic constant buffer
 		virtual void Accept(TechniqueProbe& probe) {};
 	};
+
+	class CloningBindable : public Bindable {
+	public:
+		virtual std::unique_ptr<CloningBindable> Clone() const noexcept = 0;
+	};
 }

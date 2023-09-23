@@ -31,8 +31,9 @@ namespace Bind {
 	}
 
 	void Blender::Bind(Graphics& gfx) noexcept {
+		INFOMAN_NOHR(gfx);
 		const float* data = factors ? factors->data() : nullptr;
-		GetContext(gfx)->OMSetBlendState(pBlender.Get(), data, 0xffffffffu);
+		GFX_THROW_INFO_ONLY(GetContext(gfx)->OMSetBlendState(pBlender.Get(), data, 0xFFFFFFFFu));
 	}
 
 	void Blender::SetFactor(float factor) noexcept(!IS_DEBUG) {

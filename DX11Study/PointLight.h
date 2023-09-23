@@ -3,6 +3,10 @@
 #include "SolidSphere.h"
 #include "ConstantBuffers.h"
 
+namespace Rgph {
+	class RenderGraph;
+}
+
 class PointLight {
 public:
 	PointLight(Graphics& gfx, float radius = 0.5f);
@@ -10,6 +14,7 @@ public:
 	void Reset() noexcept;
 	void Submit(class FrameCommander& frame) const noexcept(!IS_DEBUG);
 	void Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept;
+	void LinkTechniques(Rgph::RenderGraph& rg);
 private:
 	struct PointLightCBuf {
 		alignas(16) DirectX::XMFLOAT3 pos;

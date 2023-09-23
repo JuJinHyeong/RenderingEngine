@@ -3,10 +3,17 @@
 #include <DirectXMath.h>
 #include "Graphics.h"
 #include "Technique.h"
-#include "TechniqueProbe.h"
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
+
+class TechniqueProbe;
+class Material;
+struct aiMesh;
+
+namespace Rgph {
+	class RenderGraph;
+}
 
 namespace Bind {
 	class Bindable;
@@ -25,7 +32,7 @@ public:
 	Drawable(const Drawable&) = delete;
 	virtual ~Drawable() = default;
 	
-	void Submit(class FrameCommander& frame) const noexcept(!IS_DEBUG);
+	void Submit() const noexcept;
 	void AddTechnique(Technique tech) noexcept;
 	void Bind(Graphics& gfx) const noexcept;
 	UINT GetIndexCount() const noexcept(!IS_DEBUG);
@@ -33,6 +40,8 @@ public:
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
 	void AddBind(std::shared_ptr<Bind::Bindable> bind) noexcept(!IS_DEBUG);
+
+	void LinkTechniques(Rgph::RenderGraph& rg);
 
 protected:
 	std::shared_ptr<Bind::IndexBuffer> pIndices;

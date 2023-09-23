@@ -1,6 +1,5 @@
 #include "Node.h"
 #include "imgui/imgui.h"
-#include "FrameCommander.h"
 #include "ModelProbe.h"
 
 // Node
@@ -41,16 +40,16 @@ std::string Node::GetName() const noexcept {
 	return name;
 }
 
-void Node::Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+void Node::Submit(DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
 	const auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
 		* DirectX::XMLoadFloat4x4(&transform)
 		* accumulatedTransform;
 
 	for (const auto pm : meshPtrs) {
-		pm->Submit(frame, built);
+		pm->Submit(built);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(frame, built);
+		pc->Submit(built);
 	}
 }
 

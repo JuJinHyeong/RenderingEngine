@@ -9,7 +9,7 @@ public:
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
-	void Submit(FrameCommander& frame, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void Submit(DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
 };

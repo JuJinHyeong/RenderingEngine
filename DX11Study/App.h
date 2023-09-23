@@ -7,8 +7,8 @@
 #include "PointLight.h"
 #include "TestPlane.h"
 #include "TestCube.h"
-#include "FrameCommander.h"
 #include "Model.h"
+#include "BlurOutlineRenderGraph.h"
 #include <set>
 #include <vector>
 
@@ -17,7 +17,8 @@ public:
 	App();
 	int Go();
 private:
-	void DoFrame();
+	void DoFrame(float dt);
+	void HandleInput(float dt);
 	void ShowModelDemoWindow();
 	void ShowFrameRateWindow();
 private:
@@ -28,17 +29,17 @@ private:
 	Timer timer;
 	Camera cam;
 	PointLight light;
-	FrameCommander fc{ wnd.Gfx() };
 
-	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 6.0f };
-	Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
+	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 6.0f };
+	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
 	Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
 
+	Rgph::BlurOutlineRenderGraph rg{wnd.Gfx()};
+
 	TestCube cube1{ wnd.Gfx(), 4.0f };
 	TestCube cube2{ wnd.Gfx(), 4.0f };
-	//std::unique_ptr<Mesh> pLoaded;
 };
  

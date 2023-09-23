@@ -1,6 +1,7 @@
 #include "CustomUtils.h"
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 std::vector<std::string> TokenizeQuated(const std::string& input) {
     std::istringstream stream;
@@ -24,4 +25,14 @@ std::string toNarrow(const std::wstring& wide) {
     char narrow[512] = "";
     wcstombs_s(nullptr, narrow, wide.c_str(), _TRUNCATE);
     return narrow;
+}
+
+std::vector<std::string> SplitString(const std::string& s, const std::string& delim) {
+    std::vector<std::string> strings;
+    SplitStringIter(s, delim, std::back_inserter(strings));
+    return strings;
+}
+
+bool StringContains(std::string_view haystack, std::string_view needle) {
+    return std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end()) != haystack.end();
 }

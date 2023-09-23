@@ -48,7 +48,7 @@ void PointLight::Reset() noexcept {
 
 void PointLight::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
 	mesh.SetPos(cbData.pos);
-	mesh.Submit(frame);
+	mesh.Submit();
 }
 
 void PointLight::Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept {
@@ -57,4 +57,8 @@ void PointLight::Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept {
 	DirectX::XMStoreFloat3(&dataCopy.pos, DirectX::XMVector3Transform(pos, view));
 	cbuf.Update(gfx, dataCopy);
 	cbuf.Bind(gfx);
+}
+
+void PointLight::LinkTechniques(Rgph::RenderGraph& rg) {
+	mesh.LinkTechniques(rg);
 }

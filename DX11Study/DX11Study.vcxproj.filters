@@ -52,6 +52,24 @@
     <Filter Include="헤더 파일\Testing">
       <UniqueIdentifier>{f203ade8-aa1b-437e-aaa8-7268875eba17}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Jobber\Passlib">
+      <UniqueIdentifier>{f9f2c6c3-d3f7-4917-ba97-b8a426827e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Jobber\Passlib">
+      <UniqueIdentifier>{acb5977d-8b77-42c3-b833-bfddb0c0414a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Jobber\Passlib\Base">
+      <UniqueIdentifier>{15e34578-028d-4f89-8c00-f3fe6746aad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Jobber\Passlib\Base">
+      <UniqueIdentifier>{d9a51bd0-89ab-45d9-97d9-cda23c6ba187}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Jobber\Graphlib">
+      <UniqueIdentifier>{fe818f6f-b424-41c1-a7f6-dc95889dbfb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Jobber\Graphlib">
+      <UniqueIdentifier>{488ebf33-5de0-45a5-91d0-1d32b32af210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -195,13 +213,7 @@
     <ClCompile Include="Stencil.cpp">
       <Filter>소스 파일\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="FrameCommander.cpp">
-      <Filter>소스 파일\Jobber</Filter>
-    </ClCompile>
     <ClCompile Include="Technique.cpp">
-      <Filter>소스 파일\Jobber</Filter>
-    </ClCompile>
-    <ClCompile Include="Pass.cpp">
       <Filter>소스 파일\Jobber</Filter>
     </ClCompile>
     <ClCompile Include="Step.cpp">
@@ -251,6 +263,48 @@
     </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Sink.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Pass.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="BindingPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="FullscreenPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderQueuePass.cpp">
+      <Filter>소스 파일\Jobber\Passlib\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurOutlineDrawingPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferClearPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib</Filter>
+    </ClCompile>
+    <ClCompile Include="HorizontalBlurPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalBlurPass.cpp">
+      <Filter>소스 파일\Jobber\Passlib</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraphCompileException.cpp">
+      <Filter>소스 파일\Jobber\Passlib</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph.cpp">
+      <Filter>소스 파일\Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurOutlineRenderGraph.cpp">
+      <Filter>소스 파일\Jobber\Graphlib</Filter>
+    </ClCompile>
+    <ClCompile Include="ScaleOutlineRenderGraph.cpp">
+      <Filter>소스 파일\Jobber\Graphlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -434,13 +488,7 @@
     <ClInclude Include="Stencil.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="FrameCommander.h">
-      <Filter>헤더 파일\Jobber</Filter>
-    </ClInclude>
     <ClInclude Include="Job.h">
-      <Filter>헤더 파일\Jobber</Filter>
-    </ClInclude>
-    <ClInclude Include="Pass.h">
       <Filter>헤더 파일\Jobber</Filter>
     </ClInclude>
     <ClInclude Include="Step.h">
@@ -492,6 +540,63 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="BlurPack.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferClearPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Sink.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BindingPass.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderQueuePass.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Pass.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="FullscreenPass.h">
+      <Filter>헤더 파일\Jobber\Passlib\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurOutlineDrawingPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferResource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HorizontalBlurPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="LambertianPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineDrawingPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="OutlineMaskGenerationPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="VerticalBlurPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraphCompileException.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph.h">
+      <Filter>헤더 파일\Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="BlurOutlineRenderGraph.h">
+      <Filter>헤더 파일\Jobber\Graphlib</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleOutlineRenderGraph.h">
+      <Filter>헤더 파일\Jobber\Graphlib</Filter>
+    </ClInclude>
+    <ClInclude Include="TestModelProbe.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -46,9 +46,9 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 //	pWindow->Show(windowName, *pRoot);
 //}
 
-void Model::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
+void Model::Submit() const noexcept(!IS_DEBUG) {
 	//pWindow->ApplyParameters();
-	pRoot->Submit(frame, DirectX::XMMatrixIdentity());
+	pRoot->Submit(DirectX::XMMatrixIdentity());
 }
 
 void Model::Accept(ModelProbe& probe) {
@@ -77,4 +77,10 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 
 void Model::SetRootTransform(DirectX::FXMMATRIX tf) noexcept {
 	pRoot->SetAppliedTransform(tf);
+}
+
+void Model::LinkTechniques(Rgph::RenderGraph& rg) {
+	for (auto& pMesh : meshPtrs) {
+		pMesh->LinkTechniques(rg);
+	}
 }

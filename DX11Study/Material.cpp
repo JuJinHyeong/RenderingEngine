@@ -14,7 +14,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 	}
 	{
 		Technique phong{ "Phong" };
-		Step step(0);
+		Step step("lambertian");
 		std::string shaderCode = "Phong";
 		aiString texFileName;
 
@@ -115,7 +115,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 	{
 		Technique outline("Outline", false);
 		{
-			Step mask(1);
+			Step mask("outlineMask");
 
 			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
 			auto pvsbc = pvs->GetBytecode();
@@ -127,7 +127,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			outline.AddStep(std::move(mask));
 		}
 		{
-			Step draw(2);
+			Step draw("outlineDraw");
 
 			// these can be pass-constant (tricky due to layout issues)
 			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");

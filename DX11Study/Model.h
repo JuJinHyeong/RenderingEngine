@@ -1,5 +1,4 @@
 #pragma once
-#include "FrameCommander.h"
 #include "Mesh.h"
 #include "Node.h"
 #include <string>
@@ -7,15 +6,20 @@
 
 class ModelWindow;
 
+namespace Rgph {
+	class RenderGraph;
+}
+
 class Model {
 public:
 	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f);
 	~Model() noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx) const;
-	void Submit(FrameCommander& frame) const noexcept(!IS_DEBUG);
+	void Submit() const noexcept(!IS_DEBUG);
 	void Accept(class ModelProbe& probe);
 	//void ShowWindow(const char* windowName) noexcept(!IS_DEBUG);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
+	void LinkTechniques(Rgph::RenderGraph& rg);
 private:
 	// const aiMaterial* -> aiMaterial* that aiMaterial can't be modified
 	// const aiMaterial* const -> aiMaterial can't be modified also aiMaterial* can't be modified

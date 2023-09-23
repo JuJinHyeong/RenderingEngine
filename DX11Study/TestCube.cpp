@@ -1,10 +1,10 @@
 #include "TestCube.h"
 #include "Cube.h"
 #include "BindableCommon.h"
-#include "TransformDoubleCbuf.h"
+#include "ConstantBufferEx.h"
 #include "imgui/imgui.h"
-#include "Stencil.h"
 #include "DynamicConstant.h"
+#include "TechniqueProbe.h"
 
 TestCube::TestCube(Graphics& gfx, float size) {
 	using namespace Bind;
@@ -18,60 +18,72 @@ TestCube::TestCube(Graphics& gfx, float size) {
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	auto tcb = std::make_shared<TransformCbuf>(gfx);
+
 	{
 		Technique shade("Shade");
 		{
-			Step only(0);
+			Step only("lambertian");
+
 			only.AddBindable(Texture::Resolve(gfx, "Images/brickwall.jpg"));
 			only.AddBindable(Sampler::Resolve(gfx));
+
 			auto pvs = VertexShader::Resolve(gfx, "PhongDifVS.cso");
 			auto pvsbc = pvs->GetBytecode();
 			only.AddBindable(std::move(pvs));
+
 			only.AddBindable(PixelShader::Resolve(gfx, "PhongDifPS.cso"));
 
-			// dynamic constant buffer
 			Dcb::RawLayout lay;
 			lay.Add<Dcb::Float3>("specularColor");
 			lay.Add<Dcb::Float>("specularWeight");
 			lay.Add<Dcb::Float>("specularGloss");
 			auto buf = Dcb::Buffer(std::move(lay));
-			buf["specularColor"] = DirectX::XMFLOAT3{ 1.0f, 1.0f, 1.0f };
+			buf["specularColor"] = dx::XMFLOAT3{ 1.0f,1.0f,1.0f };
 			buf["specularWeight"] = 0.1f;
 			buf["specularGloss"] = 20.0f;
 			only.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
 			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
-			only.AddBindable(std::make_shared<TransformDoubleCbuf>(gfx, *this, 0u, 2u));
+
+			only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+			only.AddBindable(tcb);
+
 			shade.AddStep(std::move(only));
 		}
 		AddTechnique(std::move(shade));
 	}
+
 	{
 		Technique outline("Outline");
 		{
-			Step mask(1);
-			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-			auto pvsbc = pvs->GetBytecode();
-			mask.AddBindable(std::move(pvs));
-			mask.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
-			mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			Step mask("outlineMask");
+
+			// TODO: better sub-layout generation tech for future consideration maybe
+			mask.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), VertexShader::Resolve(gfx, "SolidVS.cso")->GetBytecode()));
+
+			mask.AddBindable(std::move(tcb));
+
+			// TODO: might need to specify rasterizer when doubled-sided models start being used
 
 			outline.AddStep(std::move(mask));
 		}
 		{
-			Step draw(2);
-			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-			auto pvsbc = pvs->GetBytecode();
-			draw.AddBindable(std::move(pvs));
-			draw.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
-			draw.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+			Step draw("outlineDraw");
 
 			Dcb::RawLayout lay;
-			lay.Add<Dcb::Float3>("color");
+			lay.Add<Dcb::Float4>("color");
 			auto buf = Dcb::Buffer(std::move(lay));
-			buf["color"] = DirectX::XMFLOAT3{ 1.0f, 0.4f, 0.4f };
+			buf["color"] = DirectX::XMFLOAT4{ 1.0f,0.4f,0.4f,1.0f };
 			draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
+
+			// TODO: better sub-layout generation tech for future consideration maybe
+			draw.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), VertexShader::Resolve(gfx, "SolidVS.cso")->GetBytecode()));
+
 			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+			// TODO: might need to specify rasterizer when doubled-sided models start being used
 
 			outline.AddStep(std::move(draw));
 		}
@@ -106,33 +118,35 @@ void TestCube::SpawnControlWindow(Graphics& gfx, const char* name) noexcept {
 		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
 
 		class Probe : public TechniqueProbe {
+		public:
 			void OnSetTechnique() override {
 				using namespace std::string_literals;
-				ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, pTech->GetName().c_str());
+				ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, pTech->GetName().c_str());
 				bool active = pTech->IsActive();
 				ImGui::Checkbox(("Tech Active##"s + std::to_string(techIdx)).c_str(), &active);
 				pTech->SetActiveState(active);
 			}
 			bool OnVisitBuffer(Dcb::Buffer& buf) override {
+				namespace dx = DirectX;
 				float dirty = false;
-				const auto dCheck = [&dirty](bool changed) {dirty = dirty || changed; };
+				const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
 				auto tag = [tagScratch = std::string{}, tagString = "##" + std::to_string(bufIdx)]
 				(const char* label) mutable {
 					tagScratch = label + tagString;
 					return tagScratch.c_str();
 				};
+
 				if (auto v = buf["scale"]; v.Exists()) {
-					dCheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
+					dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f", 3.5f));
 				}
-				if (auto v = buf["specularColor"]; v.Exists()) {
-					//TODO: why?? doing like this??
-					dCheck(ImGui::ColorPicker3(tag("specular Color"), reinterpret_cast<float*>(&static_cast<DirectX::XMFLOAT3&>(v))));
+				if (auto v = buf["color"]; v.Exists()) {
+					dcheck(ImGui::ColorPicker4(tag("Color"), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT4&>(v))));
 				}
-				if (auto v = buf["specularWeight"]; v.Exists()) {
-					dCheck(ImGui::SliderFloat(tag("Specular Weight"), &v, 0.0f, 1.0f));
+				if (auto v = buf["specularIntensity"]; v.Exists()) {
+					dcheck(ImGui::SliderFloat(tag("Spec. Intens."), &v, 0.0f, 1.0f));
 				}
-				if (auto v = buf["specularGloss"]; v.Exists()) {
-					dCheck(ImGui::SliderFloat(tag("Glossiness"), &v, 0.0f, 100.0f, "%.1f"));
+				if (auto v = buf["specularPower"]; v.Exists()) {
+					dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", 1.5f));
 				}
 				return dirty;
 			}

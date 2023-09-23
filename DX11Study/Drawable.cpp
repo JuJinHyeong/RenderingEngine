@@ -17,9 +17,9 @@ Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float
 	}
 }
 
-void Drawable::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
+void Drawable::Submit() const noexcept {
 	for (const auto& tech : techniques) {
-		tech.Submit(frame, *this);
+		tech.Submit(*this);
 	}
 }
 
@@ -46,4 +46,10 @@ void Drawable::Accept(TechniqueProbe& probe) {
 
 void Drawable::AddBind(std::shared_ptr<Bind::Bindable> bind) noexcept(!IS_DEBUG) {
 
+}
+
+void Drawable::LinkTechniques(Rgph::RenderGraph& rg) {
+	for (auto& tech : techniques) {
+		tech.Link(rg);
+	}
 }

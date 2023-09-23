@@ -20,7 +20,7 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius) {
 
 	{
 		Technique solid;
-		Step only(0);
+		Step only("lambertian");
 
 		auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
 		auto pvsbc = pvs->GetBytecode();
