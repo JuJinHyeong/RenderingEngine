@@ -47,8 +47,8 @@ int App::Go() {
 
 void App::DoFrame(float dt) {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	cameras.GetCurCamera().BindToGraphics(wnd.Gfx());
-	light.Bind(wnd.Gfx(), cameras.GetCurCamera().GetMatrix());
+	cameras->BindToGraphics(wnd.Gfx());
+	light.Bind(wnd.Gfx(), cameras->GetMatrix());
 
 	cube1.Submit();
 	cube2.Submit();
@@ -103,28 +103,28 @@ void App::HandleInput(float dt) {
 
 	if (!wnd.CursorEnabled()) {
 		if (wnd.keyboard.KeyIsPressed('W')) {
-			cameras.GetCurCamera().Translate({ 0.0f,0.0f,dt });
+			cameras->Translate({ 0.0f,0.0f,dt });
 		}
 		if (wnd.keyboard.KeyIsPressed('A')) {
-			cameras.GetCurCamera().Translate({ -dt,0.0f,0.0f });
+			cameras->Translate({ -dt,0.0f,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('S')) {
-			cameras.GetCurCamera().Translate({ 0.0f,0.0f,-dt });
+			cameras->Translate({ 0.0f,0.0f,-dt });
 		}
 		if (wnd.keyboard.KeyIsPressed('D')) {
-			cameras.GetCurCamera().Translate({ dt,0.0f,0.0f });
+			cameras->Translate({ dt,0.0f,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('R')) {
-			cameras.GetCurCamera().Translate({ 0.0f,dt,0.0f });
+			cameras->Translate({ 0.0f,dt,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('F')) {
-			cameras.GetCurCamera().Translate({ 0.0f,-dt,0.0f });
+			cameras->Translate({ 0.0f,-dt,0.0f });
 		}
 	}
 
 	while (const auto delta = wnd.mouse.ReadRawDelta()) {
 		if (!wnd.CursorEnabled()) {
-			cameras.GetCurCamera().Rotate((float)delta->x, (float)delta->y);
+			cameras->Rotate((float)delta->x, (float)delta->y);
 		}
 	}
 }

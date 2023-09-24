@@ -24,10 +24,10 @@ void Projection::RenderWidgets(Graphics& gfx) {
 	const auto dcheck = [&dirty](bool d) { dirty = dirty || d; };
 
 	ImGui::Text("Projection");
-	ImGui::SliderFloat("Width", &width, 0.01f, 4.0f, "%.2f");
-	ImGui::SliderFloat("Height", &height, 0.01f, 4.0f, "%.2f");
-	ImGui::SliderFloat("Near Z", &nearZ, 0.01f, 1.0f, "%.2f");
-	ImGui::SliderFloat("Far Z", &farZ, nearZ + 0.01f, 400.0f, "%.2f");
+	dcheck(ImGui::SliderFloat("Width", &width, 0.01f, 4.0f, "%.2f"));
+	dcheck(ImGui::SliderFloat("Height", &height, 0.01f, 4.0f, "%.2f"));
+	dcheck(ImGui::SliderFloat("Near Z", &nearZ, 0.01f, 1.0f, "%.2f"));
+	dcheck(ImGui::SliderFloat("Far Z", &farZ, nearZ + 0.01f, 400.0f, "%.2f"));
 
 	if (dirty) {
 		frust.SetVertices(gfx, width, height, nearZ, farZ);

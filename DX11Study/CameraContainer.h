@@ -13,11 +13,14 @@ public:
 	void SpawnWindow(Graphics& gfx);
 	void Bind(Graphics& gfx);
 	void AddCamera(std::unique_ptr<Camera> pCam);
-	Camera& GetCurCamera();
+	Camera* operator->();
 	~CameraContainer();
 	void LinkTechniques(Rgph::RenderGraph& rg);
 	void Submit() const;
 private:
+	Camera& GetControlledCamera();
+private:
 	std::vector<std::unique_ptr<Camera>> cameras;
-	int selected = 0;
+	int actived = 0;
+	int controlled = 0;
 };

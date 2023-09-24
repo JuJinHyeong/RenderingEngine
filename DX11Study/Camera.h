@@ -14,7 +14,7 @@ public:
 	void BindToGraphics(Graphics& gfx) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
 	void SpawnControlWidgets(Graphics& gfx) noexcept;
-	void Reset() noexcept;
+	void Reset(Graphics& gfx) noexcept;
 	void Rotate(float dx, float dy) noexcept;
 	void Translate(DirectX::XMFLOAT3 translation) noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
@@ -33,6 +33,8 @@ private:
 	float roll;
 	static constexpr float moveSpeed = 12.0f;
 	static constexpr float rotationSpeed = 0.004f;
+	bool enableCameraIndicator = true;
+	bool enableFrustumIndicator = true;
 	std::string name;
 	Projection proj;
 	CameraIndicator indicator;
