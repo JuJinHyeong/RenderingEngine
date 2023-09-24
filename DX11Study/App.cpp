@@ -13,16 +13,15 @@
 #include "TestModelProbe.h"
 #include "ExtendedXMMath.h"
 
-#include "Testing.h"
-
-int width = 1280;
-int height = 720;
+constexpr static int width = 1280;
+constexpr static int height = 720;
 
 App::App()
 	:
 	wnd(width, height, "First App"),
-	light(wnd.Gfx()) 
-{
+	light(wnd.Gfx()) {
+	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "First", DirectX::XMFLOAT3{ -13.5f, 6.0f, 3.5f }, 0.0f, PI / 2.0f, false));
+	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{ -13.5f, 28.0f, -3.5f }, 0.0f, PI / 2.0f, false));
 	cube1.SetPos({ 4.0f, 0.0f, 0.0f });
 	cube2.SetPos({ 0.0f, 4.0f, 0.0f });
 
@@ -49,8 +48,8 @@ int App::Go() {
 
 void App::DoFrame(float dt) {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	wnd.Gfx().SetCamera(cam.GetMatrix());
-	light.Bind(wnd.Gfx(), cam.GetMatrix());
+	wnd.Gfx().SetCamera(cameras.GetCurCamera().GetMatrix());
+	light.Bind(wnd.Gfx(), cameras.GetCurCamera().GetMatrix());
 
 	cube1.Submit();
 	cube2.Submit();
@@ -65,7 +64,7 @@ void App::DoFrame(float dt) {
 	static MP gobberProbe("goblin");
 
 	if (showDemoWindow) {
-		cam.SpawnControlWindow();
+		cameras.SpawnWindow(wnd.Gfx());
 		light.SpawnControlWindow();
 		sponzaProbe.SpawnWindow(sponza);
 		nanoProbe.SpawnWindow(nano);
@@ -104,28 +103,28 @@ void App::HandleInput(float dt) {
 
 	if (!wnd.CursorEnabled()) {
 		if (wnd.keyboard.KeyIsPressed('W')) {
-			cam.Translate({ 0.0f,0.0f,dt });
+			cameras.GetCurCamera().Translate({ 0.0f,0.0f,dt });
 		}
 		if (wnd.keyboard.KeyIsPressed('A')) {
-			cam.Translate({ -dt,0.0f,0.0f });
+			cameras.GetCurCamera().Translate({ -dt,0.0f,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('S')) {
-			cam.Translate({ 0.0f,0.0f,-dt });
+			cameras.GetCurCamera().Translate({ 0.0f,0.0f,-dt });
 		}
 		if (wnd.keyboard.KeyIsPressed('D')) {
-			cam.Translate({ dt,0.0f,0.0f });
+			cameras.GetCurCamera().Translate({ dt,0.0f,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('R')) {
-			cam.Translate({ 0.0f,dt,0.0f });
+			cameras.GetCurCamera().Translate({ 0.0f,dt,0.0f });
 		}
 		if (wnd.keyboard.KeyIsPressed('F')) {
-			cam.Translate({ 0.0f,-dt,0.0f });
+			cameras.GetCurCamera().Translate({ 0.0f,-dt,0.0f });
 		}
 	}
 
 	while (const auto delta = wnd.mouse.ReadRawDelta()) {
 		if (!wnd.CursorEnabled()) {
-			cam.Rotate((float)delta->x, (float)delta->y);
+			cameras.GetCurCamera().Rotate((float)delta->x, (float)delta->y);
 		}
 	}
 }

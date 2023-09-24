@@ -9,6 +9,7 @@
 #include "TestCube.h"
 #include "Model.h"
 #include "BlurOutlineRenderGraph.h"
+#include "CameraContainer.h"
 #include <set>
 #include <vector>
 
@@ -25,7 +26,7 @@ private:
 	ImguiManager imgui;
 	Window wnd;
 	Timer timer;
-	Camera cam;
+	CameraContainer cameras;
 	PointLight light;
 
 	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };

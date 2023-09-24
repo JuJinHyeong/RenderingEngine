@@ -162,6 +162,7 @@
     <ClCompile Include="BlurOutlineRenderGraph.cpp" />
     <ClCompile Include="BufferClearPass.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraContainer.cpp" />
     <ClCompile Include="ConstantBufferEx.cpp" />
     <ClCompile Include="CustomUtils.cpp" />
     <ClCompile Include="DataMacros.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="BufferClearPass.h" />
     <ClInclude Include="BufferResource.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraContainer.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstantBufferEx.h" />
     <ClInclude Include="ConstantBuffers.h" />
