@@ -30,6 +30,7 @@ App::App()
 	gobber.LinkTechniques(rg);
 	nano.LinkTechniques(rg);
 	sponza.LinkTechniques(rg);
+	cameras.LinkTechniques(rg);
 }
 
 
@@ -54,6 +55,7 @@ void App::DoFrame(float dt) {
 	sponza.Submit();
 	nano.Submit();
 	gobber.Submit();
+	cameras.Submit();
 
 	rg.Execute(wnd.Gfx());
 

@@ -1,6 +1,11 @@
 #pragma once
 #include "Graphics.h"
 #include "Projection.h"
+#include "CameraIndicator.h"
+
+namespace Rgph {
+	class RenderGraph;
+}
 
 class Camera {
 public:
@@ -14,6 +19,8 @@ public:
 	void Translate(DirectX::XMFLOAT3 translation) noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
 	const std::string& GetName() const noexcept;
+	void LinkTechniques(Rgph::RenderGraph& rg);
+	void Submit() const;
 
 private:
 	bool tethered;
@@ -28,4 +35,5 @@ private:
 	static constexpr float rotationSpeed = 0.004f;
 	std::string name;
 	Projection proj;
+	CameraIndicator indicator;
 };

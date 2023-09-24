@@ -163,6 +163,7 @@
     <ClCompile Include="BufferClearPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraContainer.cpp" />
+    <ClCompile Include="CameraIndicator.cpp" />
     <ClCompile Include="ConstantBufferEx.cpp" />
     <ClCompile Include="CustomUtils.cpp" />
     <ClCompile Include="DataMacros.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="DynamicConstant.cpp" />
     <ClCompile Include="ExtendedXMMath.cpp" />
+    <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullscreenPass.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GraphicsResource.cpp" />
@@ -248,6 +250,8 @@
     <ClInclude Include="BufferResource.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraContainer.h" />
+    <ClInclude Include="CameraIndicator.h" />
+    <ClInclude Include="Channels.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstantBufferEx.h" />
     <ClInclude Include="ConstantBuffers.h" />
@@ -262,6 +266,7 @@
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="DynamicConstant.h" />
     <ClInclude Include="ExtendedXMMath.h" />
+    <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullscreenPass.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsResource.h" />

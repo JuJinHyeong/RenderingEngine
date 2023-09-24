@@ -33,3 +33,16 @@ Camera& CameraContainer::GetCurCamera() {
 
 CameraContainer::~CameraContainer() {}
 
+void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {
+	for (auto& pCam : cameras) {
+		pCam->LinkTechniques(rg);
+	}
+}
+
+void CameraContainer::Submit() const {
+	for (size_t i = 0; i < cameras.size(); i++) {
+		if (i != selected) {
+			cameras[i]->Submit();
+		}
+	}
+}

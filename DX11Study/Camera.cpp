@@ -9,12 +9,14 @@ Camera::Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float
 	homePitch(homePitch),
 	homeYaw(homeYaw),
 	tethered(tethered),
-	proj(1.0f, 9.0f / 16.0f, 0.5f, 400.0f)
+	proj(gfx, 1.0f, 9.0f / 16.0f, 0.5f, 400.0f),
+	indicator(gfx)
 {
-	if (tethered) {
-		pos = homePos;
-	}
 	Reset();
+	indicator.SetPos(pos);
+	indicator.SetRotation({ pitch, yaw, 0.0f });
+	proj.SetPos(pos);
+	proj.SetRotation({ pitch, yaw, 0.0f });
 }
 
 void Camera::BindToGraphics(Graphics& gfx) const {
@@ -46,19 +48,22 @@ void Camera::SpawnControlWidgets(Graphics& gfx) noexcept {
 	if (ImGui::Button("Reset")) {
 		Reset();
 	}
-	proj.RenderWidgets();
+	proj.RenderWidgets(gfx);
 }
 
 void Camera::Reset() noexcept {
-	pos = { -13.5f, 6.0f, 3.5f };
-	pitch = 0.0f;
-	yaw = PI / 2.0f;
+	pos = homePos;
+	pitch = homePitch;
+	yaw = homeYaw;
 	roll = 0.0f;
 }
 
 void Camera::Rotate(float dx, float dy) noexcept {
 	yaw = wrap_angle(yaw + dx * rotationSpeed);
 	pitch = std::clamp(pitch + dy * rotationSpeed, 0.995f * -PI / 2.0f, 0.995f * PI / 2.0f);
+	const DirectX::XMFLOAT3 angles = { pitch, yaw, 0.0f };
+	indicator.SetRotation(angles);
+	proj.SetRotation(angles);
 }
 
 void Camera::Translate(DirectX::XMFLOAT3 translation) noexcept {
@@ -72,6 +77,8 @@ void Camera::Translate(DirectX::XMFLOAT3 translation) noexcept {
 		pos.y + translation.y,
 		pos.z + translation.z,
 	};
+	indicator.SetPos(pos);
+	proj.SetPos(pos);
 }
 
 DirectX::XMFLOAT3 Camera::GetPos() const noexcept {
@@ -80,4 +87,14 @@ DirectX::XMFLOAT3 Camera::GetPos() const noexcept {
 
 const std::string& Camera::GetName() const noexcept {
 	return name;
+}
+
+void Camera::LinkTechniques(Rgph::RenderGraph& rg) {
+	indicator.LinkTechniques(rg);
+	proj.LinkTechniques(rg);
+}
+
+void Camera::Submit() const {
+	indicator.Submit();
+	proj.Submit();
 }
