@@ -29,7 +29,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			only.AddBindable(Sampler::Resolve(gfx));
 
 			auto pvs = VertexShader::Resolve(gfx, "PhongDifVS.cso");
-			auto pvsbc = pvs->GetBytecode();
+			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 			only.AddBindable(std::move(pvs));
 
 			only.AddBindable(PixelShader::Resolve(gfx, "PhongDifPS.cso"));
@@ -44,7 +44,6 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			buf["specularGloss"] = 20.0f;
 			only.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
-			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 
 			only.AddBindable(Rasterizer::Resolve(gfx, false));
 
@@ -61,7 +60,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			Step mask("outlineMask");
 
 			// TODO: better sub-layout generation tech for future consideration maybe
-			mask.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), VertexShader::Resolve(gfx, "SolidVS.cso")->GetBytecode()));
+			mask.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *VertexShader::Resolve(gfx, "SolidVS.cso")));
 
 			mask.AddBindable(std::move(tcb));
 
@@ -79,7 +78,7 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
 			// TODO: better sub-layout generation tech for future consideration maybe
-			draw.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), VertexShader::Resolve(gfx, "SolidVS.cso")->GetBytecode()));
+			draw.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *VertexShader::Resolve(gfx, "SolidVS.cso")));
 
 			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
@@ -137,7 +136,7 @@ void TestCube::SpawnControlWindow(Graphics& gfx, const char* name) noexcept {
 				};
 
 				if (auto v = buf["scale"]; v.Exists()) {
-					dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f", 3.5f));
+					dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
 				}
 				if (auto v = buf["color"]; v.Exists()) {
 					dcheck(ImGui::ColorPicker4(tag("Color"), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT4&>(v))));
@@ -146,7 +145,7 @@ void TestCube::SpawnControlWindow(Graphics& gfx, const char* name) noexcept {
 					dcheck(ImGui::SliderFloat(tag("Spec. Intens."), &v, 0.0f, 1.0f));
 				}
 				if (auto v = buf["specularPower"]; v.Exists()) {
-					dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", 1.5f));
+					dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f"));
 				}
 				return dirty;
 			}

@@ -1,15 +1,18 @@
 #include "InputLayout.h"
 #include "GraphicsThrowMacros.h"
 #include "BindableCodex.h"
+#include "VertexShader.h"
 
 namespace Bind {
-	InputLayout::InputLayout(Graphics& gfx, custom::VertexLayout layout_in, ID3DBlob* pVertexShaderByteCode)
+	InputLayout::InputLayout(Graphics& gfx, custom::VertexLayout layout_in, const VertexShader& vs)
 		:
-		layout(layout_in)
+		layout(layout_in),
+		vertexShaderUID(vs.GetUID())
 	{
 		INFOMAN(gfx);
 
 		const auto d3dLayout = layout.GetD3DLayout();
+		const auto pVertexShaderByteCode = vs.GetBytecode();
 
 		GFX_THROW_INFO(
 			GetDevice(gfx)->CreateInputLayout(
@@ -30,16 +33,17 @@ namespace Bind {
 		return layout;
 	}
 
-	std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx, const custom::VertexLayout& layout, ID3DBlob* pVertexShaderByteCode) {
-		return Codex::Resolve<InputLayout>(gfx, layout, pVertexShaderByteCode);
+	std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx, const custom::VertexLayout& layout, const VertexShader& vs) {
+		return Codex::Resolve<InputLayout>(gfx, layout, vs);
 	}
 
-	std::string InputLayout::GenerateUID(const custom::VertexLayout& layout, ID3DBlob* pVertexShaderByteCode) {
+	std::string InputLayout::GenerateUID(const custom::VertexLayout& layout, const VertexShader& vs) {
 		using namespace std::string_literals;
-		return typeid(InputLayout).name() + "#"s + layout.GetCode();
+		return typeid(InputLayout).name() + "#"s + layout.GetCode() + "#"s + vs.GetUID();
 	}
 
 	std::string InputLayout::GetUID() const noexcept {
-		return GenerateUID(layout);
+		using namespace std::string_literals;
+		return typeid(InputLayout).name() + "#"s + layout.GetCode() + "#"s + vertexShaderUID;
 	}
 }

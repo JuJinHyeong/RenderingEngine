@@ -78,10 +78,9 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			step.AddBindable(std::make_shared<TransformCbuf>(gfx, 0u));
 			step.AddBindable(Blender::Resolve(gfx, false));
 			auto pvs = VertexShader::Resolve(gfx, shaderCode + "VS.cso");
-			auto pvsbc = pvs->GetBytecode();
+			step.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
 			step.AddBindable(std::move(pvs));
 			step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "PS.cso"));
-			step.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
 			if (hasTexture) {
 				step.AddBindable(Bind::Sampler::Resolve(gfx));
 			}
@@ -118,10 +117,9 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			Step mask("outlineMask");
 
 			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-			auto pvsbc = pvs->GetBytecode();
+			mask.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
 			mask.AddBindable(std::move(pvs));
 
-			mask.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
 			mask.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
 			outline.AddStep(std::move(mask));
@@ -131,7 +129,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 
 			// these can be pass-constant (tricky due to layout issues)
 			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-			auto pvsbc = pvs->GetBytecode();
+			draw.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
 			draw.AddBindable(std::move(pvs));
 
 			// this can be pass-constant
@@ -143,7 +141,6 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 				buf["materialColor"] = DirectX::XMFLOAT3{ 1.0f,0.4f,0.4f };
 				draw.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 			}
-			draw.AddBindable(InputLayout::Resolve(gfx, vertexLayout, pvsbc));
 
 			draw.AddBindable(std::make_shared<TransformCbuf>(gfx));
 			

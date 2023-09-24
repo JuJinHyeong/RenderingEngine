@@ -9,10 +9,11 @@
 #include <assimp/postprocess.h>
 #include <dxtex/DirectXTex.h>
 #include <vector>
-#include "Testing.h"
 #include "Material.h"
 #include "TestModelProbe.h"
 #include "ExtendedXMMath.h"
+
+#include "Testing.h"
 
 int width = 1280;
 int height = 720;
@@ -27,6 +28,8 @@ App::App()
 
 	cube1.LinkTechniques(rg);
 	cube2.LinkTechniques(rg);
+	gobber.LinkTechniques(rg);
+	nano.LinkTechniques(rg);
 	sponza.LinkTechniques(rg);
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, static_cast<float>(height) / static_cast<float>(width), 0.5f, 400.0f));
@@ -52,18 +55,24 @@ void App::DoFrame(float dt) {
 	cube1.Submit();
 	cube2.Submit();
 	sponza.Submit();
+	nano.Submit();
+	gobber.Submit();
 
 	rg.Execute(wnd.Gfx());
 
-	static MP modelProbe;
+	static MP sponzaProbe("sponza");
+	static MP nanoProbe("nano");
+	static MP gobberProbe("goblin");
 
 	if (showDemoWindow) {
 		cam.SpawnControlWindow();
 		light.SpawnControlWindow();
-		ShowModelDemoWindow();
-		modelProbe.SpawnWindow(sponza);
+		sponzaProbe.SpawnWindow(sponza);
+		nanoProbe.SpawnWindow(nano);
+		gobberProbe.SpawnWindow(gobber);
 		cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
 		cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
+		rg.RenderWidgets(wnd.Gfx());
 	}
 
 	wnd.Gfx().EndFrame();
@@ -119,22 +128,4 @@ void App::HandleInput(float dt) {
 			cam.Rotate((float)delta->x, (float)delta->y);
 		}
 	}
-}
-
-void App::ShowModelDemoWindow() {
-	//nano.ShowWindow("Nano");
-	//gobber.ShowWindow("Goblin");
-	//wall.ShowWindow("Wall");
-	//bluePlane.SpawnControlWindow(wnd.Gfx(), "blue plane");
-	//redPlane.SpawnControlWindow(wnd.Gfx(), "red plane");
-	//sponza.ShowWindow("Sponza");
-	//cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
-	//cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
-}
-
-void App::ShowFrameRateWindow() {
-	if (ImGui::Begin("Frame Rate")) {
-		ImGui::Text("%d fps", static_cast<int>(1.0f / timer.Mark()));
-	}
-	ImGui::End();
 }

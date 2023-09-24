@@ -10,7 +10,7 @@ namespace Bind {
 	{
 		INFOMAN(gfx);
 
-		GFX_THROW_INFO(D3DReadFileToBlob(ToWide(path).c_str(), &pByteCodeBlob));
+		GFX_THROW_INFO(D3DReadFileToBlob(ToWide("ShaderBins/" + path).c_str(), &pByteCodeBlob));
 		GFX_THROW_INFO(GetDevice(gfx)->CreatePixelShader(pByteCodeBlob->GetBufferPointer(), pByteCodeBlob->GetBufferSize(), nullptr, &pPixelShader));
 	}
 

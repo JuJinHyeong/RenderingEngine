@@ -7,6 +7,7 @@ namespace Dcb {
 
 class TechniqueProbe {
 public:
+	virtual ~TechniqueProbe() {};
 	void SetTechnique(class  Technique* pTech) noexcept;
 	void SetStep(class Step* pStep) noexcept;
 	bool VisitBuffer(Dcb::Buffer& buf);

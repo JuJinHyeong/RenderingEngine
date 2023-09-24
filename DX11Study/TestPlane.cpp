@@ -18,14 +18,13 @@ TestPlane::TestPlane(Graphics& gfx, float size, DirectX::XMFLOAT4 color)
 	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
 
 	auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-	auto pvsbc = pvs->GetBytecode();
+	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 	AddBind(std::move(pvs));
 
 	AddBind(PixelShader::Resolve(gfx, "SolidPS.cso"));
 
 	AddBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, pmc, 1u));
 
-	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
 
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 

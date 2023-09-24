@@ -34,10 +34,10 @@ public:
 		};
 
 		if (auto v = buf["scale"]; v.Exists()) {
-			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f", 3.5f));
+			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
 		}
 		if (auto v = buf["offset"]; v.Exists()) {
-			dcheck(ImGui::SliderFloat(tag("offset"), &v, 0.0f, 1.0f, "%.3f", 2.5f));
+			dcheck(ImGui::SliderFloat(tag("offset"), &v, 0.0f, 1.0f, "%.3f"));
 		}
 		if (auto v = buf["materialColor"]; v.Exists()) {
 			dcheck(ImGui::ColorPicker3(tag("Color"), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT3&>(v))));
@@ -46,7 +46,7 @@ public:
 			dcheck(ImGui::ColorPicker3(tag("Spec. Color"), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT3&>(v))));
 		}
 		if (auto v = buf["specularGloss"]; v.Exists()) {
-			dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f", 1.5f));
+			dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f"));
 		}
 		if (auto v = buf["specularWeight"]; v.Exists()) {
 			dcheck(ImGui::SliderFloat(tag("Spec. Weight"), &v, 0.0f, 2.0f));
@@ -66,8 +66,12 @@ public:
 
 class MP : ModelProbe {
 public:
+	MP(std::string name)
+		:
+		name(std::move(name)) 
+	{}
 	void SpawnWindow(Model& model) {
-		ImGui::Begin("Model");
+		ImGui::Begin(name.c_str());
 		ImGui::Columns(2, nullptr, true);
 		model.Accept(*this);
 
@@ -147,6 +151,7 @@ private:
 		float z = 0.0f;
 	};
 	std::unordered_map<int, TransformParameters> transformParams;
+	std::string name;
 private:
 	TransformParameters& ResolveTransform() noexcept {
 		const auto id = pSelectedNode->GetId();
