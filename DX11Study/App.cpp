@@ -30,8 +30,6 @@ App::App()
 	gobber.LinkTechniques(rg);
 	nano.LinkTechniques(rg);
 	sponza.LinkTechniques(rg);
-
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, static_cast<float>(height) / static_cast<float>(width), 0.5f, 400.0f));
 }
 
 
@@ -48,7 +46,7 @@ int App::Go() {
 
 void App::DoFrame(float dt) {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	wnd.Gfx().SetCamera(cameras.GetCurCamera().GetMatrix());
+	cameras.GetCurCamera().BindToGraphics(wnd.Gfx());
 	light.Bind(wnd.Gfx(), cameras.GetCurCamera().GetMatrix());
 
 	cube1.Submit();

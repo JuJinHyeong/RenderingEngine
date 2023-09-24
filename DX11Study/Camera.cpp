@@ -2,18 +2,24 @@
 #include "imgui/imgui.h"
 #include "CustomMath.h"
 
-Camera::Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, bool tethered) noexcept 
+Camera::Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, bool tethered) noexcept
 	:
 	name(std::move(name)),
 	homePos(homePos),
 	homePitch(homePitch),
 	homeYaw(homeYaw),
-	tethered(tethered)
+	tethered(tethered),
+	proj(1.0f, 9.0f / 16.0f, 0.5f, 400.0f)
 {
 	if (tethered) {
 		pos = homePos;
 	}
 	Reset();
+}
+
+void Camera::BindToGraphics(Graphics& gfx) const {
+	gfx.SetCamera(GetMatrix());
+	gfx.SetProjection(proj.GetMatrix());
 }
 
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept {
@@ -40,6 +46,7 @@ void Camera::SpawnControlWidgets(Graphics& gfx) noexcept {
 	if (ImGui::Button("Reset")) {
 		Reset();
 	}
+	proj.RenderWidgets();
 }
 
 void Camera::Reset() noexcept {
