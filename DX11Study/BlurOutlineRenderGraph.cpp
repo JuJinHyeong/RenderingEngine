@@ -11,6 +11,7 @@
 #include "DynamicConstant.h"
 #include "CustomMath.h"
 #include "imgui/imgui.h"
+#include "WireFramePass.h"
 
 namespace Rgph {
 	BlurOutlineRenderGraph::BlurOutlineRenderGraph(Graphics& gfx)
@@ -80,7 +81,13 @@ namespace Rgph {
 				pass->SetSinkLinkage("direction", "$.blurDirection");
 				AppendPass(std::move(pass));
 			}
-			SetSinkTarget("backbuffer", "vertical.renderTarget");
+			{
+				auto pass = std::make_unique<WireframePass>(gfx, "wireframe");
+				pass->SetSinkLinkage("renderTarget", "vertical.renderTarget");
+				pass->SetSinkLinkage("depthStencil", "vertical.depthStencil");
+				AppendPass(std::move(pass));
+			}
+			SetSinkTarget("backbuffer", "wireframe.renderTarget");
 
 			Finalize();
 	}

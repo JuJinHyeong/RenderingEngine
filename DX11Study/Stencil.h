@@ -7,7 +7,9 @@ namespace Bind {
 		enum class Mode {
 			Off,
 			Write,
-			Mask
+			Mask,
+			DepthOff,
+			DepthReversed
 		};
 		Stencil(Graphics& gfx, Mode mode);
 		void Bind(Graphics& gfx) noexcept override;

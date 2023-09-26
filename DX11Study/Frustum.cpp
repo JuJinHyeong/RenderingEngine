@@ -45,25 +45,39 @@ Frustum::Frustum(Graphics& gfx, float width, float height, float nearZ, float fa
 
 	{
 		Technique line;
-		Step only("lambertian");
+		{
+			Step unoccluded("lambertian");
+			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+			unoccluded.AddBindable(InputLayout::Resolve(gfx, pVertices->GetLayout(), *pvs));
+			unoccluded.AddBindable(std::move(pvs));
+			unoccluded.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+			struct PSColorConstant {
+				dx::XMFLOAT3 color = { 0.6f,0.2f,0.2f };
+				float padding;
+			} colorConst;
+			unoccluded.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+			unoccluded.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			unoccluded.AddBindable(Rasterizer::Resolve(gfx, false));
 
-		auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-		only.AddBindable(InputLayout::Resolve(gfx, pVertices->GetLayout(), *pvs));
-		only.AddBindable(std::move(pvs));
+			line.AddStep(std::move(unoccluded));
+		}
+		{
+			Step occluded("wireframe");
 
-		only.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+			occluded.AddBindable(InputLayout::Resolve(gfx, pVertices->GetLayout(), *pvs));
+			occluded.AddBindable(std::move(pvs));
+			occluded.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+			struct PSColorConstant2 {
+				dx::XMFLOAT3 color = { 0.25f,0.08f,0.08f };
+				float padding;
+			} colorConst;
+			occluded.AddBindable(PixelConstantBuffer<PSColorConstant2>::Resolve(gfx, colorConst, 1u));
+			occluded.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			occluded.AddBindable(Rasterizer::Resolve(gfx, false));
 
-		struct PSColorConstant {
-			dx::XMFLOAT3 color = { 0.6f,0.2f,0.2f };
-			float padding;
-		} colorConst;
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
-
-		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-		only.AddBindable(Rasterizer::Resolve(gfx, false));
-
-		line.AddStep(std::move(only));
+			line.AddStep(std::move(occluded));
+		}
 		AddTechnique(std::move(line));
 	}
 }
