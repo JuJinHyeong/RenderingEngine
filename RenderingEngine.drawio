@@ -1,9 +1,869 @@
-<mxfile host="app.diagrams.net" modified="2023-09-25T01:50:56.544Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200" version="21.8.2" etag="mlDKqOQBxStU_mVAqmmN" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-27T17:45:53.485Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200" etag="ofwMOk0jtYTA1a3imQf5" version="21.8.2" type="github">
   <diagram name="페이지-1" id="sZPuGg_SH_d918SeGX3l">
-    <mxGraphModel>
+    <mxGraphModel dx="2731" dy="2078" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="gl-GduZikpB11iDbJl_e-338" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;namespace Dcb&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;div style=&quot;height:2px;&quot;&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="960" y="2120" width="1260" height="1500" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-171" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;namespace custom&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;&gt;&lt;div style=&quot;height:2px;&quot;&gt;&lt;/div&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="970" y="1250" width="910" height="770" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-86" value="" style="endArrow=none;html=1;rounded=0;exitX=1.001;exitY=0.205;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=-0.007;entryY=0.046;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-7" target="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="700" y="341" as="sourcePoint" />
+            <mxPoint x="867" y="66" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="720" y="346" />
+              <mxPoint x="720" y="410" />
+              <mxPoint x="1140" y="410" />
+              <mxPoint x="1140" y="56" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-2" value="App&lt;br&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="300" width="230" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-3" value="- wnd: Window&lt;br&gt;- light: PointLight&lt;br&gt;- imgui: ImGuiManager&lt;br&gt;- timer: Timer&lt;br&gt;- cameras: CameraContainer&lt;br&gt;- light: PointLight&lt;br&gt;&lt;br&gt;- rg: BlurOutlineRenderGraph&lt;br&gt;- cube: TestCube&lt;br&gt;- nano: Model&lt;br&gt;..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-2">
+          <mxGeometry y="26" width="230" height="184" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-4" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-2">
+          <mxGeometry y="210" width="230" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-5" value="+ Go() // 루프로 frame 실행&lt;br&gt;- DoFrame(float dt)&lt;br&gt;- HandleInput(float dt)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-2">
+          <mxGeometry y="218" width="230" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-27" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-2">
+          <mxGeometry y="280" width="230" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-29" value="실제 프로그램이 실행되는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-2">
+          <mxGeometry y="288" width="230" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-14" value="Window::WindowClass" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="440" y="90" width="240" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-15" value="- wndClassName: static const char*&lt;br&gt;- wndClass: static WindowClass&lt;br&gt;- hInst: HINSTANCE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="26" width="240" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-16" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="90" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-17" value="+ GetName(): static const char*&lt;br&gt;+ GetInstance(): static HINSTANCE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="98" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-41" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="140" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-42" value="윈도우 창을 singleton 으로 관리하기 위한 class 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="148" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-6" value="Window" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-14">
+          <mxGeometry y="190" width="240" height="470" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-7" value="+ keyboard: Keyboard&lt;br&gt;+ mouse: Mouse&lt;br&gt;&lt;br&gt;- cursorEnabled: bool&lt;br&gt;- width: int&lt;br&gt;- height: int&lt;br&gt;- hWnd: HWND&lt;br&gt;- pGfx: up&amp;lt;Graphics&amp;gt;&lt;br&gt;- rwaBuffer: vector&amp;lt;char&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry y="26" width="240" height="144" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-8" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry y="170" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-9" value="+ SetTitle(string&amp;amp; title)&lt;br&gt;+ EnableCursor()&lt;br&gt;+ DisableCursor()&lt;br&gt;+ ProcessMessage(): int&lt;br&gt;+ Gfx(): Graphics&amp;amp;&lt;br&gt;&lt;br&gt;- FreeCursor()&lt;br&gt;- ShowCursor()&lt;br&gt;- HideCursor()&lt;br&gt;- HandleMsg(HWND, UINT msg, WPARAM, LPARAM) : LRESULT&lt;br&gt;- static HandleMsgSetup(HWND, UINT msg, WPARAM, LPARAM): LRESULT&lt;br&gt;- static HandleMsgThunk(HWND, UINT msg, WPARAM, LPARAM): LRESULT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry y="178" width="240" height="242" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-32" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry y="420" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-38" value="Window 프로그램이 실행되는 창을 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry y="428" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-18" value="Graphics" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="440" width="220" height="436" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-19" value="- width: UINT&lt;br&gt;- height: UINT&lt;br&gt;- imguiEnabled: bool&lt;br&gt;- projection: XMMATRIX&lt;br&gt;- camera: XMMATRIX&lt;br&gt;&lt;br&gt;- infoManager: DxgiInfoManager&lt;br&gt;&lt;br&gt;- pDevice: cp&amp;lt;ID3D11Device&amp;gt;&lt;br&gt;- pSwap: cp&amp;lt;IDXGISwapChain&amp;gt;&lt;br&gt;- pContext: cp&amp;lt;ID3D11DeviceContext&amp;gt;&lt;br&gt;- pTarget: sp&amp;lt;RenderTarget&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry y="26" width="220" height="184" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-20" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry y="210" width="220" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-21" value="+ BeginFrame()&lt;br&gt;+ EndFrame()&lt;br&gt;+ SetProjection()&lt;br&gt;+ GetProjection(): XMMATRIX&lt;br&gt;+ EnableImgui()&lt;br&gt;+ DisableImgui()&lt;br&gt;+ IsImguiEnabled(): bool&lt;br&gt;+ GetWidth(): UINT&lt;br&gt;+ GetHeight(): UINT&lt;br&gt;+ GetTarget(): sp&amp;lt;RenderTarget&amp;gt;&lt;br&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry y="218" width="220" height="162" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-23" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry y="380" width="220" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-26" value="렌더링에 필요한 DirectX11의 리소스와 데이터를 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry y="388" width="220" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-52" value="" style="endArrow=none;html=1;rounded=0;exitX=0.999;exitY=0.055;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.017;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-3" target="gl-GduZikpB11iDbJl_e-6">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="810" y="530" as="sourcePoint" />
+            <mxPoint x="430" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-53" value="" style="endArrow=none;html=1;rounded=0;exitX=1.001;exitY=0.104;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=-0.011;entryY=0.05;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-7" target="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="346" as="sourcePoint" />
+            <mxPoint x="770" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-54" value="" style="endArrow=none;html=1;rounded=0;entryX=0.004;entryY=0.036;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;exitX=1.008;exitY=0.806;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-7" target="gl-GduZikpB11iDbJl_e-18">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="410" as="sourcePoint" />
+            <mxPoint x="460" y="318" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-56" value="Keyboard::Event" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="-150" width="250" height="500" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-57" value="type: enum Type(Press, Release)&lt;br&gt;code: unsigned char" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="26" width="250" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-58" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="70" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-59" value="+ IsPress(): bool&lt;br&gt;+ IsRelease(): bool&lt;br&gt;+ GetCode(): unsigned char" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="78" width="250" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-60" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="140" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-61" value="키보드의 입력 이벤트 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="148" width="250" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-43" value="Keyboard" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-56">
+          <mxGeometry y="180" width="250" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-44" value="- nKeys: static constexpr unsigned int&lt;br&gt;- bufferSize: static constexpr unsigned int&lt;br&gt;- autorepeatEnabled: bool&lt;br&gt;- keystates: bitset&amp;lt;nKeys&amp;gt;&lt;br&gt;- keybuffer: queue&amp;lt;Event&amp;gt;&lt;br&gt;- charBuffer: queue&amp;lt;char&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry y="26" width="250" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-45" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry y="130" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-46" value="+ KeyIsPressed(unsigned char keycode)&lt;br&gt;+ ReadKey(): Event&lt;br&gt;+ ReadChar(): char&lt;br&gt;+ EnableAutorepeat()&lt;br&gt;+ DisableAutoRepeat()&lt;br&gt;&lt;br&gt;- OnKeyPressed(unsigned char keycode)&lt;br&gt;- OnKeyReleased(unsigned char keycode)&lt;br&gt;- OnChar(char character)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry y="138" width="250" height="142" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-47" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry y="280" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-48" value="윈도우 keyboard 입력을 처리하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-43">
+          <mxGeometry y="288" width="250" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-79" value="Mouse::Event" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1210" y="-240" width="250" height="610" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-80" value="- type: enum Type (LPress,&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;LRelease,&amp;nbsp;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;RPress,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;RRelease,&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;WheelUp,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;WheelDown,&amp;nbsp;&lt;br&gt;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Move,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Enter,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Leave,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Invalid)&lt;br&gt;- leftIsPressed: bool&lt;br&gt;- rightIsPressed: bool&lt;br&gt;- x: int // event 가 일어난 x 위치&lt;br&gt;- y: int // event 가 일어난 y 위치&lt;br&gt;&lt;/span&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="26" width="250" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-81" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="150" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-82" value="+ GetType(): Type&lt;br&gt;+ GetPos(): pair&amp;lt;int, int&amp;gt;&lt;br&gt;+ LefIsPressed(): bool&lt;br&gt;+ RightIsPressed(): bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="158" width="250" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-83" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="230" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-84" value="마우스의 이벤트를 저장하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="238" width="250" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-73" value="Mouse" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-79">
+          <mxGeometry y="270" width="250" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-74" value="- buffserSize: static constexpr unsigned int&lt;br&gt;- x: int&lt;br&gt;- y: int&lt;br&gt;- leftIsPressed: bool&lt;br&gt;- rightIsPressed: bool&lt;br&gt;- isInWindow: bool&lt;br&gt;- whellDetlaCarray: int&lt;br&gt;- rawEnabled: bool&lt;br&gt;- buffer: queue&amp;lt;Event&amp;gt;&lt;br&gt;- rawDeltaBuffer: queue&amp;lt;RawDelta&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry y="26" width="250" height="164" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-75" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry y="190" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-76" value="+ GetPos(): pair&amp;lt;int, int&amp;gt;&lt;br&gt;+ ReadRawDelta(): RawDelta&lt;br&gt;+ IsInWindow(): bool&lt;br&gt;+ LeftIsPressed(): bool&lt;br&gt;+ RightIsPressed(): bool&lt;br&gt;+ Read(): Event" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry y="198" width="250" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-77" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry y="300" width="250" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-78" value="윈도우 keyboard 입력을 처리하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-73">
+          <mxGeometry y="308" width="250" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-87" value="DxgiInfoManager" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1131" y="430" width="280" height="196" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-88" value="- next: unsigned long long&lt;br&gt;- pDxgiInfoQueue: queue&amp;lt;cp&amp;lt;IDXGIInfoQueue&amp;gt;&amp;gt;&lt;br&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry y="26" width="280" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-89" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry y="80" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-90" value="+ Set()&lt;br&gt;+ GetMessages(): vector&amp;lt;string&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry y="88" width="280" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-91" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry y="140" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-92" value="DirectX 에서 일어나는 에러들을 보기 쉽게 정리해주는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry y="148" width="280" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-95" value="" style="endArrow=none;html=1;rounded=0;exitX=0.999;exitY=0.583;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;curved=1;entryX=0.01;entryY=0.077;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-19" target="gl-GduZikpB11iDbJl_e-87">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="990" y="775" as="sourcePoint" />
+            <mxPoint x="1117" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-96" value="GraphicsResource" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="1020" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-98" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-96">
+          <mxGeometry y="26" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-99" value="+ GetContext(): static ID3D11DeviceContext*&lt;br&gt;+ GetDevice(): static ID3D11Device*&lt;br&gt;+ GetInfoManager(): static DxgiInfoManager&amp;amp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-96">
+          <mxGeometry y="34" width="280" height="62" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-100" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-96">
+          <mxGeometry y="96" width="280" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-101" value="Graphics Resource를 사용하는 경우 사용할 수 있게 해주는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-96">
+          <mxGeometry y="104" width="280" height="46" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-102" value="Bind::Bindable" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1260" width="360" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-104" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-102">
+          <mxGeometry y="26" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-105" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;// transform constant buffer 에 필요한 함수이다.&lt;br&gt;+ InitializeParentReference(const Drawable&amp;amp; parent)&lt;br&gt;// codex system 에서 tag로 이용할 UID이다.&lt;br&gt;+ GetUID(): string&lt;br&gt;// Technique 의 정보를 가져올 때 필요한 함수이다.&lt;br&gt;+ Accept(TechniqueProbe&amp;amp; probe)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-102">
+          <mxGeometry y="34" width="360" height="116" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-106" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-102">
+          <mxGeometry y="150" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-107" value="Graphics 에 Bind 할 수 있는 개체들의 abstract class 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-102">
+          <mxGeometry y="158" width="360" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-112" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.536;entryY=1.013;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-102" target="gl-GduZikpB11iDbJl_e-101">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-120" value="Bind::VertexShader" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1530" width="350" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-121" value="- pVertexShader: cp&amp;lt;ID3D11VertexShader&amp;gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;- pByteCode: cp&amp;lt;ID3DBlob&amp;gt;&lt;br style=&quot;border-color: var(--border-color);&quot;&gt;- path: string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-120">
+          <mxGeometry y="26" width="350" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-122" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-120">
+          <mxGeometry y="80" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-123" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ GetByteCode(): ID3DBlob*&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, const string&amp;amp; path): &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;VertexShader&amp;gt;&lt;br&gt;+ GenerateUID(const string&amp;amp; path): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-120">
+          <mxGeometry y="88" width="350" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-124" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-120">
+          <mxGeometry y="190" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-125" value="DX11 VertexShader를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-120">
+          <mxGeometry y="198" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-126" value="Bind::PixelShader" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="477" y="1530" width="350" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-127" value="- path: string&lt;br&gt;- pPixelShader: sp&amp;lt;ID3D11PixelShader&amp;gt;&lt;br&gt;- pByteCodeBlob: sp&amp;lt;ID3D11Blob&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-126">
+          <mxGeometry y="26" width="350" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-128" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-126">
+          <mxGeometry y="90" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-129" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ GetByteCode(): ID3DBlob*&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, string&amp;amp; path): &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;PixelShader&amp;gt;&lt;br&gt;+ GenerateUID(const string&amp;amp; path): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-126">
+          <mxGeometry y="98" width="350" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-130" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-126">
+          <mxGeometry y="190" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-131" value="DX11 PixelShader를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-126">
+          <mxGeometry y="198" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-132" value="Bind::Codex" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="497" y="1260" width="330" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-133" value="- binds: unordered_map&amp;lt;string, sp&amp;lt;Bindable&amp;gt;&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-132">
+          <mxGeometry y="26" width="330" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-134" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-132">
+          <mxGeometry y="60" width="330" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-135" value="// 각 bindable 개체들이 Resolve 를 가진 이유는 intellisense를 위함이다.&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, Params&amp;amp;&amp;amp;...p): sp&amp;lt;T&amp;gt;&lt;br&gt;- Get(): static Codex&amp;amp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-132">
+          <mxGeometry y="68" width="330" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-136" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-132">
+          <mxGeometry y="140" width="330" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-137" value="같은 Bindable 개체들은 재사용 할 수 있게 관리하는 클래스이다.&lt;br&gt;singleton 으로 관리된다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-132">
+          <mxGeometry y="148" width="330" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-145" value="custom::VertexLayout::Map" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="1295" width="350" height="690" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-146" value="+ SysType // 미리 정의 되어 있는 타입.&lt;br&gt;+ dxgiFormat: static constexpr DXGI_FORMAT&lt;br&gt;+ semantic: static constexpr const char*&lt;br&gt;+ code: static constexpr const char*" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="26" width="350" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-147" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="100" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-148" value="// mesh에서 layout 데이터를 추출하는 기능을 한다.&lt;br&gt;+ Extract(const aiMesh&amp;amp; mesh, size_t i): SysType" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="108" width="350" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-149" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="160" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-150" value="각 LayoutElement 마다 필요한 데이터를 template 으로 저장한다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="168" width="350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-152" value="custom::VertexLayout::Element" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-145">
+          <mxGeometry y="210" width="350" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-153" value="- type: ElementType&lt;br&gt;- offset: size_t" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="26" width="350" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-154" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="70" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-155" value="+ GetOffsetAfter(): size_t&lt;br&gt;+ GetOffset(): size_t&lt;br&gt;+ Size() size_t&lt;br&gt;+ SizeOf(ElementType type): static constexpr size_t&lt;br&gt;+ GetType() ElementType&lt;br&gt;+ GetCode() const char*&lt;br&gt;+ GetDesc() D3D11_INPUT_ELEMENT_DESC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="78" width="350" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-156" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="190" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-157" value="각 VertexLayout 에 저장하는 각 Element 에 대한 정보를 저장하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="198" width="350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-139" value="custom::VertexLayout" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-152">
+          <mxGeometry y="240" width="350" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-140" value="- struct Map&amp;lt;T&amp;gt;&lt;br&gt;- elements:&amp;nbsp;vector&amp;lt;Element&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-139">
+          <mxGeometry y="26" width="350" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-141" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-139">
+          <mxGeometry y="60" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-142" value="+ Resolve&amp;lt;ElementType&amp;gt;: const Element&amp;amp;&lt;br&gt;+ ResolveByIndex(size_t i): const Element&amp;amp;&lt;br&gt;+ Size() size_t&lt;br&gt;+ GetCode(): string&lt;br&gt;+ GetElementCount(): size_t&lt;br&gt;+ GetD3DLayout(): vector&amp;lt;D3D11_INPUT_ELEMENT_DESC&amp;gt;&lt;br&gt;+ Has(ElementType type): bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-139">
+          <mxGeometry y="68" width="350" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-143" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-139">
+          <mxGeometry y="190" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-144" value="DirectX11의 VertexLayout 에 필요한 데이터를 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-139">
+          <mxGeometry y="198" width="350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-158" value="custom::Vertex" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1665" width="450" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-159" value="- pData: char*&lt;br&gt;- layout: const VertexLayout&amp;amp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-158">
+          <mxGeometry y="26" width="450" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-160" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-158">
+          <mxGeometry y="70" width="450" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-161" value="+ Attr&amp;lt;VertexLayout::ElementType type&amp;gt;(): type&lt;br&gt;+ SetAttributeByIndex&amp;lt;T&amp;gt;(size_t i,T&amp;amp;&amp;amp; val)&lt;br&gt;&lt;br&gt;- SetAttributeByIndex&amp;lt;First, ...Rest&amp;gt;(size_t i,First&amp;amp;&amp;amp;, Rest&amp;amp;&amp;amp;... rest)&amp;nbsp;&lt;br&gt;- SetAttribute&amp;lt;ElementType, SrcType&amp;gt;(char* pAttribute, SrcType&amp;amp;&amp;amp; val)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-158">
+          <mxGeometry y="78" width="450" height="92" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-162" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-158">
+          <mxGeometry y="170" width="450" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-163" value="VertexBuffer에서 사용하는 각 Vertex 를 정의하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-158">
+          <mxGeometry y="178" width="450" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-164" value="custom::VertexBuffer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1295" width="330" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-165" value="- buffer: vector&amp;lt;char&amp;gt;&lt;br&gt;- layout: VertexLayout" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-164">
+          <mxGeometry y="26" width="330" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-166" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-164">
+          <mxGeometry y="70" width="330" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-167" value="+ GetData(): const char*&lt;br&gt;+ GetLayout(): VertexLayout&amp;amp;&lt;br&gt;+ Resize(size_t newSize)&lt;br&gt;+ Size(): size_t&lt;br&gt;+ SizeBytes(): size_t&lt;br&gt;+ EmplaceBack&amp;lt;...Params&amp;gt;(Params&amp;amp;&amp;amp;... params)&lt;br&gt;+ Back(): Vertex&lt;br&gt;+ Front(): Vertex&lt;br&gt;+ operator[](size_t i): Vertex&lt;br&gt;&lt;br&gt;+ Back(): ConstVertex&lt;br&gt;+ Front(): ConstVertex&lt;br&gt;+ operator[](size_t i): ConstVertex" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-164">
+          <mxGeometry y="78" width="330" height="202" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-168" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-164">
+          <mxGeometry y="280" width="330" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-169" value="VertexBuffer 를 정리하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-164">
+          <mxGeometry y="288" width="330" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-172" value="Bind::IndexBuffer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="1780" width="360" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-173" value="- tag: string&lt;br&gt;- count: UINT&lt;br&gt;- pIndexBuffer: cp&amp;lt;ID3D11Buffer&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-172">
+          <mxGeometry y="26" width="360" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-174" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-172">
+          <mxGeometry y="80" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-175" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ GetCount(): UINT&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, const string&amp;amp; tag, const vector&amp;lt;UINT&amp;gt;):&lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;IndexBuffer&amp;gt;&lt;br&gt;+ GenerateUID(const string&amp;amp; tag): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-172">
+          <mxGeometry y="88" width="360" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-176" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-172">
+          <mxGeometry y="190" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-177" value="DX11 IndexBuffer를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-172">
+          <mxGeometry y="198" width="360" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-178" value="Bind::Rasterizer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-310" y="1740" width="350" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-179" value="# twoSlided: bool // 두 면을 전부 렌더링 할 때 참으로 설정한다.&lt;br&gt;# pRasterizer: cp&amp;lt;ID3D11RasterizerState&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-178">
+          <mxGeometry y="26" width="350" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-180" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-178">
+          <mxGeometry y="70" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-181" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, bool twoSlided): &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;RasterizerState&amp;gt;&lt;br&gt;+ GenerateUID(bool twoSlided): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-178">
+          <mxGeometry y="78" width="350" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-182" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-178">
+          <mxGeometry y="160" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-183" value="DX11의 RasterizerState를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-178">
+          <mxGeometry y="168" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-185" value="Bind::Sampler" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="2030" width="360" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-186" value="- type: enum Type(Anisotropic, Bilinear, Point)&lt;br&gt;- reflect: bool&lt;br&gt;- pSampler: cp&amp;lt;ID3D11SamplerState&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-185">
+          <mxGeometry y="26" width="360" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-187" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-185">
+          <mxGeometry y="90" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-188" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, Type type, bool reflect): &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;Sampler&amp;gt;&lt;br&gt;+ GenerateUID(Type type, bool reflect): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-185">
+          <mxGeometry y="98" width="360" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-189" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-185">
+          <mxGeometry y="180" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-190" value="DX11의 SamplerState를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-185">
+          <mxGeometry y="188" width="360" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-191" value="Bind::Texture" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-310" y="1960" width="353" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-192" value="- slot: unsigned int&lt;br&gt;# hasAlpha: bool&lt;br&gt;# path: string&lt;br&gt;# pTextureView: cp&amp;lt;ID3D11ShaderResourceView&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-191">
+          <mxGeometry y="26" width="353" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-193" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-191">
+          <mxGeometry y="90" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-194" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, const string&amp;amp; path, UINT slot): &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;static sp&amp;lt;Texture&amp;gt;&lt;br&gt;+ GenerateUID(Type type, bool reflect): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-191">
+          <mxGeometry y="98" width="353" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-195" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-191">
+          <mxGeometry y="180" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-196" value="DX11의 Shader Resource View를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-191">
+          <mxGeometry y="188" width="353" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-197" value="Bind::Topology" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-320" y="1534" width="370" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-198" value="# type: D3D11_PRIMITIVE_TOPOLOGY&lt;br&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-197">
+          <mxGeometry y="26" width="370" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-199" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-197">
+          <mxGeometry y="50" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-200" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx): static sp&amp;lt;Topology&amp;gt;&lt;br&gt;+ GenerateUID(D3D11_PRIMITIVE_TOPOLOGY type): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-197">
+          <mxGeometry y="58" width="370" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-201" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-197">
+          <mxGeometry y="130" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-202" value="DX11의 primitive topology를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-197">
+          <mxGeometry y="138" width="370" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-203" value="Bind::InputLayout" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="477" y="1790" width="370" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-204" value="# vertexShaderUID: string&lt;br&gt;# layout: custom::VertexLayout&lt;br&gt;# pInputLayout: cp&amp;lt;ID3D11InputLayout&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-203">
+          <mxGeometry y="26" width="370" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-205" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-203">
+          <mxGeometry y="80" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-206" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ GetLayout() const custom::VertexLayout&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, custom::VertexLayout&amp;amp; layout, &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;const VertexShader&amp;amp; vs): static sp&amp;lt;InputLayout&amp;gt;&lt;br&gt;+ GenerateUID(custom::VertexLayout&amp;amp; layout, &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;const VertexShader&amp;amp; vs): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-203">
+          <mxGeometry y="88" width="370" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-207" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-203">
+          <mxGeometry y="200" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-208" value="DX11의 InputLayout를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-203">
+          <mxGeometry y="208" width="370" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-209" value="Bind::VertexBuffer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="477" y="2060" width="370" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-210" value="- tag: string&lt;br&gt;- stride: const UINT&lt;br&gt;- layout: custom::VertexLayout&lt;br&gt;- pVertexBuffer: cp&amp;lt;ID3D11Buffer&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-209">
+          <mxGeometry y="26" width="370" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-211" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-209">
+          <mxGeometry y="100" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-212" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ GetLayout(): const custom::VertexLayout&amp;amp;&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, const string&amp;amp; tag, &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;custom::VertexBuffer&amp;amp; vbuf): static sp&amp;lt;VertexBuffer&amp;gt;&lt;br&gt;+ GenerateUID(const string&amp;amp; tag, &lt;br&gt;&lt;span style=&quot;white-space: pre;&quot;&gt;&#x9;&lt;/span&gt;custom::VertexBuffer&amp;amp; vbuf): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-209">
+          <mxGeometry y="108" width="370" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-213" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-209">
+          <mxGeometry y="230" width="370" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-214" value="DX11의 VertexBuffer를 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-209">
+          <mxGeometry y="238" width="370" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-216" value="" style="endArrow=none;html=1;rounded=0;entryX=-0.002;entryY=0.8;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;curved=1;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-203" target="gl-GduZikpB11iDbJl_e-171">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="890" y="2060" as="sourcePoint" />
+            <mxPoint x="940" y="2010" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-217" value="" style="endArrow=none;html=1;rounded=0;entryX=-0.003;entryY=0.894;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.005;exitY=0.617;exitDx=0;exitDy=0;edgeStyle=orthogonalEdgeStyle;curved=1;exitPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-210" target="gl-GduZikpB11iDbJl_e-171">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="847" y="2004.03" as="sourcePoint" />
+            <mxPoint x="968" y="1960.03" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="849" y="2130" />
+              <mxPoint x="910" y="2130" />
+              <mxPoint x="910" y="1938" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-218" value="Bind::Stencil" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-311.5" y="2220" width="353" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-219" value="- mode: enum Mode(Off, Write, Mask, DepthOff, DepthReversed)&lt;br&gt;- pStencil: cp&amp;lt;ID3D11DepthStencilState&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-218">
+          <mxGeometry y="26" width="353" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-220" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-218">
+          <mxGeometry y="90" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-221" value="+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Resolve(Graphics&amp;amp; gfx, Mode mode): static sp&amp;lt;Stencil&amp;gt;&lt;br&gt;+ GenerateUID(Mode mode): static string&lt;br&gt;+ GetUID(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-218">
+          <mxGeometry y="98" width="353" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-222" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-218">
+          <mxGeometry y="180" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-223" value="DX11의 DepthStencilState을 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-218">
+          <mxGeometry y="188" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-230" value="Bind::TransformCbuf::Transforms" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-313" y="2490" width="353" height="340" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-231" value="+ modelView: XMMATRIX&lt;br&gt;+ modelViewProj: XMMATRIX" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-230">
+          <mxGeometry y="26" width="353" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-264" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-230">
+          <mxGeometry y="70" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-263" value="각 Drawable의 view matrix 와 projection matrix를 저장하는 구조체이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-230">
+          <mxGeometry y="78" width="353" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-224" value="Bind::TransformCbuf" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-230">
+          <mxGeometry y="120" width="353" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-225" value="- pParent: const Drawable*&lt;br&gt;- pVcbuf: static up&amp;lt;VertexConstantBuffer&amp;lt;Transforms&amp;gt;&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-224">
+          <mxGeometry y="26" width="353" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-226" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-224">
+          <mxGeometry y="90" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-227" value="+ InitializeParentReference(const Drawable&amp;amp; parent)&lt;br&gt;+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;# UpdateBindImpl(Graphics&amp;amp; gfx, const Transforms&amp;amp; tf)&lt;br&gt;# GetTransforms(Graphics&amp;amp; gfx): Transforms" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-224">
+          <mxGeometry y="98" width="353" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-228" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-224">
+          <mxGeometry y="180" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-229" value="DX11의 DepthStencilState을 생성하고 관리하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-224">
+          <mxGeometry y="188" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-249" value="Dcb::Type" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="2170" width="310" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-250" value="&lt;div&gt;Float,&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;Float2,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Float3,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Float4,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Matrix,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;Bool,&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;Integer,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Struct,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Array,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Empty&lt;/span&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-249">
+          <mxGeometry y="26" width="310" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-253" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-249">
+          <mxGeometry y="70" width="310" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-254" value="Dynamic Constant Buffer에서 사용하는 타입의 정의다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-249">
+          <mxGeometry y="78" width="310" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-255" value="Dcb::Map" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="2170" width="390" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-256" value="+ SysType: hlsl 타입에 대응되는 system type&lt;br&gt;+ hlslSize: static constexpr size_t&lt;br&gt;+ code: static constexpr const char*&lt;br&gt;+ valid: static constexpr bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-255">
+          <mxGeometry y="26" width="390" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-257" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-255">
+          <mxGeometry y="100" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-260" value="Dynamic Constant Buffer에서 사용하는 데이터들을 저장하는 Map이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-255">
+          <mxGeometry y="108" width="390" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-265" value="Dcb::ReverseMap" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1760" y="2170" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-266" value="+ type: static constexpr Dcb::Type&lt;br&gt;+ valid: static constexpr bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-265">
+          <mxGeometry y="26" width="240" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-267" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-265">
+          <mxGeometry y="70" width="240" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-268" value="system 에서 쓰는 type 에서 Dcb::Type을 매핑해주는 Mapping struct 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-265">
+          <mxGeometry y="78" width="240" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-275" value="Dcb::ExtraData::Struct" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1500" y="2348" width="390" height="210" as="geometry">
+            <mxRectangle x="1320" y="2320" width="170" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-276" value="+ layoutElements: vector&amp;lt;pair&amp;lt;string, Dcb::LayoutElement&amp;gt;&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-275">
+          <mxGeometry y="26" width="390" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-277" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-275">
+          <mxGeometry y="50" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-278" value="ConstantBuffer에 Struct를 저장하는 방식을 정의하는 struct이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-275">
+          <mxGeometry y="58" width="390" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-289" value="Dcb::ExtraData::Array" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-275">
+          <mxGeometry y="90" width="390" height="120" as="geometry">
+            <mxRectangle x="1320" y="2320" width="170" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-290" value="+ layoutElement: LayoutElement*&lt;br&gt;+ element_size: size_t&lt;br&gt;+ size: size_t" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-289">
+          <mxGeometry y="26" width="390" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-291" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-289">
+          <mxGeometry y="80" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-292" value="ConstantBuffer에 Array를 저장하는 방식을 정의하는 struct이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-289">
+          <mxGeometry y="88" width="390" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-293" value="Dcb::LayoutElement::ExtraDataBase" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="2338" width="390" height="718" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-296" value="ExtraData의 parent struct 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-293">
+          <mxGeometry y="26" width="390" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-269" value="Dcb::LayoutElement" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-293">
+          <mxGeometry y="58" width="390" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-270" value="- offset size_t*&lt;br&gt;- type: Dcb::Type = Empty&lt;br&gt;- pExtraData: up&amp;lt;ExtraDataBase&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-269">
+          <mxGeometry y="26" width="390" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-271" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-269">
+          <mxGeometry y="80" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-272" value="// recursive 하게 모든 LayoutElement 에 대해서 signature를 만든다.&lt;br&gt;+ GetSignature(): string&lt;br&gt;- GetSignatureForStruct(): string&lt;br&gt;- GetSignatureForArray(): string&lt;br&gt;+ Exists(): bool&lt;br&gt;+ CalculateIndexingOffset(size_t offset, size_t index): &lt;br&gt;&lt;span style=&quot;&quot;&gt;&lt;span style=&quot;&quot;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;/span&gt;pair&amp;lt;size_t, const LayoutElement*&amp;gt;&lt;br&gt;// buffer[&quot;car&quot;][&quot;handle&quot;] 처럼 recursive 하게 들어갈 때 사용된다.&lt;br&gt;+ operator[](const string&amp;amp; key): LayoutElement&amp;amp;&lt;br&gt;&lt;br&gt;+ GetOffsetBegin(): size_t&lt;br&gt;+ GetOffsetEnd(): size_t&lt;br&gt;+ GetSizeInBytes: size_t&lt;br&gt;&lt;br&gt;+ Add(Type addedType, string name): LayoutElement&amp;amp;&lt;br&gt;+ Add&amp;lt;Type&amp;gt;(string key): LayoutElement&amp;amp;&lt;br&gt;&lt;br&gt;+ Set(Type addedType, size_t size): LayoutElement&amp;amp;&lt;br&gt;+ Set&amp;lt;Type&amp;gt;(size_t size): LayoutElement&amp;amp;&lt;br&gt;&lt;br&gt;// get offset of leaf types&lt;br&gt;+ Resolve&amp;lt;T&amp;gt;(): size_t&lt;br&gt;&lt;br&gt;// hlsl 에서 정의하는 padding 을 추가해서 offset을 정렬하는 함수이다.&lt;br&gt;- Finalize(size_t offset): size_t&lt;br&gt;- FinalizeForStruct(size_t offset): size_t&lt;br&gt;- FinalizeForArray(size_t offset): size_t&lt;br&gt;&lt;br&gt;- GetEmptyElement(): static LayoutElement&amp;amp;&lt;br&gt;- AdvanceToBoundary(size_t offset): static size_t&lt;br&gt;- CrossesBoundary(size_t offse, size_t size)&lt;br&gt;- AdvanceIfCrossesBoundary(size_t offset, size_t size)&lt;br&gt;- ValidateSymbolName(const string&amp;amp; name): static bool" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-269">
+          <mxGeometry y="88" width="390" height="492" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-273" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-269">
+          <mxGeometry y="580" width="390" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-274" value="ConstantBuffer의 Layout을 정의할 때 각 element에 대한 클래스이다. hlsl 에서 정의하는 struct align에 맞춰 element 들의 offset을 계산해준다. VertexLayout 과 비슷하게 작동한다.&lt;br&gt;처음은 extradata는 무조건 struct로 작동한다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-269">
+          <mxGeometry y="588" width="390" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-297" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0.996;entryY=0.034;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-275" target="gl-GduZikpB11iDbJl_e-293">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-299" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1.005;entryY=0.281;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-289" target="gl-GduZikpB11iDbJl_e-296">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1440" y="2468" />
+              <mxPoint x="1440" y="2373" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-300" value="Dcb::Layout" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="2628" width="350" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-301" value="# pRoot: sp&amp;lt;LayoutElement&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry y="26" width="350" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-302" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry y="60" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-303" value="+ GetSIzeInBytes(): size_t&lt;br&gt;+ GetSignature(): string" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry y="68" width="350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-304" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry y="110" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-305" value="VertexBuffer에서 사용하는 각 Vertex 를 정의하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry y="118" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-312" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.265;entryY=1.008;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-306" target="gl-GduZikpB11iDbJl_e-305">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-306" value="Dcb::RawLayout" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="2878" width="350" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-309" value="+ operator[](const string&amp;amp; key): LayoutElement&amp;amp;&lt;br&gt;+ Add&amp;lt;Type&amp;gt;(const string&amp;amp; key): LayoutElement&amp;amp;&lt;br&gt;- ClearRoot()&lt;br&gt;// 현재 root 의 데이터를 초기화 하고 root 는 넘겨준다.&lt;br&gt;- DeliverRoot(): sp&amp;lt;LayoutElement&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-306">
+          <mxGeometry y="26" width="350" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-310" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-306">
+          <mxGeometry y="110" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-311" value="일반 Layout 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-306">
+          <mxGeometry y="118" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-314" value="Dcb::CookedLayout" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="2878" width="350" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-315" value="+ operator[](const string&amp;amp; key): LayoutElement&amp;amp;&lt;br&gt;+ ShareRoot(): sp&amp;lt;LayoutElement&amp;gt;&lt;br&gt;- ClearRoot()&lt;br&gt;// root 데이터를 넘겨준다.&lt;br&gt;- RelinquishRoot(): sp&amp;lt;LayoutElement&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-314">
+          <mxGeometry y="26" width="350" height="84" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-316" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-314">
+          <mxGeometry y="110" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-317" value="Layout 에서 Finalize가 끝난 layout 이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-314">
+          <mxGeometry y="118" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-318" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.642;entryY=0.969;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-314" target="gl-GduZikpB11iDbJl_e-305">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-325" value="Dcb::ElementRef::Ptr" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="3130" width="350" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-326" value="- ref: ElementRef*" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="26" width="350" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-327" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="60" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-328" value="// casting 시 validation후 형변환 진행한다.&lt;br&gt;+ &amp;lt;T&amp;gt;operator T*()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="68" width="350" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-329" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="110" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-330" value="ElementRef에서 pointer 역할을 하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="118" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-319" value="Dcb::ElementRef" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-325">
+          <mxGeometry y="150" width="350" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-320" value="- offset: size_t&lt;br&gt;- pLayout: const LayoutElement*&lt;br&gt;- pBytes: char*" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-319">
+          <mxGeometry y="26" width="350" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-321" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-319">
+          <mxGeometry y="80" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-322" value="+ Exists(): bool&lt;br&gt;// buffer[&quot;car&quot;][&quot;handle&quot;]&lt;br&gt;+ operator[](const string&amp;amp; key): ElementRef&lt;br&gt;+ operator[](size_t index): ElementRef&lt;br&gt;&lt;br&gt;+ SetifExists&amp;lt;T&amp;gt;(const T&amp;amp; val): bool&lt;br&gt;+ operator&amp;amp;(): Ptr&lt;br&gt;// validation과 T로 변환할 때 필요한 pointer 위치를 가져온다.&lt;br&gt;+ &amp;lt;T&amp;gt; operator T&amp;amp;()&lt;br&gt;// 위의 T&amp;amp; operator를 사용해서 변환 후 저장한다.&lt;br&gt;+ operator=(const T&amp;amp; rhs): T&amp;amp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-319">
+          <mxGeometry y="88" width="350" height="172" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-323" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-319">
+          <mxGeometry y="260" width="350" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-324" value="Buffer에서 각 Element의 Reference 할 수 있게 하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-319">
+          <mxGeometry y="268" width="350" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-331" value="Dcb::Buffer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="3130" width="450" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-332" value="- pLayoutRoot: sp&amp;lt;LayoutElement&amp;gt;&lt;br&gt;- bytes: vector&amp;lt;char&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry y="26" width="450" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-333" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry y="70" width="450" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-334" value="+ operator[](const string&amp;amp; key): ElementRef&lt;br&gt;+ GetData(): const char*&lt;br&gt;+ GetSizeInBytes(): size_t&lt;br&gt;&lt;br&gt;+ GetRootLayoutElement(): const LayoutElement&amp;amp;&lt;br&gt;+ CopyFrom(const Buffer&amp;amp; src)&lt;br&gt;+ ShareLayoutRoot(): sp&amp;lt;LayoutElement&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry y="78" width="450" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-335" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry y="200" width="450" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-336" value="VertexBuffer에서 사용하는 각 Vertex 를 정의하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry y="208" width="450" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-340" value="Bind::ConstantBufferEx" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="2368" width="353" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-341" value="# slot: UINT&lt;br&gt;# pConstantBuffer: cp&amp;lt;ID3D11Buffer&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-340">
+          <mxGeometry y="26" width="353" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-342" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-340">
+          <mxGeometry y="70" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-343" value="+ Update(Graphics&amp;amp; gfx, Dcb::Buffer&amp;amp; buf)&lt;br&gt;+ GetRootLayoutElement(): const Dcb::LayoutElement&amp;amp;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-340">
+          <mxGeometry y="78" width="353" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-344" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-340">
+          <mxGeometry y="130" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-345" value="ConstantBuffer를 런타임에 설정할 수 있게 하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-340">
+          <mxGeometry y="138" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-346" value="Bind::CachingConstantBufferEx&amp;lt;T&amp;gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="2800" width="353" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-347" value="- dirty: bool&lt;br&gt;- buf: Dcb::Buffer" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-346">
+          <mxGeometry y="26" width="353" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-348" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-346">
+          <mxGeometry y="70" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-349" value="+ GetRootLayoutElement(): Dcb::LayoutElement&amp;amp;&lt;br&gt;+ GetBuffer(): Dcb::Buffer&amp;amp;&lt;br&gt;+ SetBuffer(const Dcb::Buffer&amp;amp; buf)&lt;br&gt;// if dirty, update and bind&lt;br&gt;+ Bind(Graphics&amp;amp; gfx)&lt;br&gt;+ Accept(TechniqueProbe&amp;amp; probe)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-346">
+          <mxGeometry y="78" width="353" height="102" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-350" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" vertex="1" parent="gl-GduZikpB11iDbJl_e-346">
+          <mxGeometry y="180" width="353" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-351" value="변하지 않으면 그대로 쓸 수 있게 caching을 하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-346">
+          <mxGeometry y="188" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-352" value="Bind::PixelConstantBufferEx" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="110" y="2610" width="353" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-357" value="CachingConstantBuffer을 상속받게 할 수 있게 하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-352">
+          <mxGeometry y="26" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-358" value="Bind::VertexConstantBufferEx" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="510" y="2610" width="353" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-359" value="CachingConstantBuffer을 상속받게 할 수 있게 하는 클래스다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="gl-GduZikpB11iDbJl_e-358">
+          <mxGeometry y="26" width="353" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-360" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.328;entryY=0.991;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-352" target="gl-GduZikpB11iDbJl_e-345">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-361" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.617;entryY=1.013;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-358" target="gl-GduZikpB11iDbJl_e-345">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-362" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.283;entryY=0.969;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-346" target="gl-GduZikpB11iDbJl_e-357">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-363" value="CachingPixelConstantBufferEx" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="gl-GduZikpB11iDbJl_e-362">
+          <mxGeometry x="0.0335" y="2" relative="1" as="geometry">
+            <mxPoint x="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-364" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.678;entryY=0.991;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-346" target="gl-GduZikpB11iDbJl_e-359">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-365" value="CachingVertexConstantBufferEx" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="gl-GduZikpB11iDbJl_e-364">
+          <mxGeometry x="-0.2147" y="4" relative="1" as="geometry">
+            <mxPoint x="33" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-368" value="" style="endArrow=none;html=1;rounded=0;exitX=0.995;exitY=0.301;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-343" target="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="790" y="2510" as="sourcePoint" />
+            <mxPoint x="840" y="2460" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="2462" />
+              <mxPoint x="900" y="3100" />
+              <mxPoint x="1685" y="3100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-369" value="" style="endArrow=none;html=1;rounded=0;entryX=0.004;entryY=0.147;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="gl-GduZikpB11iDbJl_e-300">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1400" y="2650" as="sourcePoint" />
+            <mxPoint x="1540" y="2660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
