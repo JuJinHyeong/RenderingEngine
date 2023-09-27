@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-27T17:45:53.485Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200" etag="ofwMOk0jtYTA1a3imQf5" version="21.8.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-27T17:47:43.981Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Edg/115.0.1901.200" etag="DepP5MW4KpU7ZVU9QyO2" version="21.8.2" type="github">
   <diagram name="페이지-1" id="sZPuGg_SH_d918SeGX3l">
-    <mxGraphModel dx="2731" dy="2078" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4160" dy="2759" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -613,7 +613,7 @@
           <mxGeometry y="78" width="240" height="42" as="geometry" />
         </mxCell>
         <mxCell id="gl-GduZikpB11iDbJl_e-275" value="Dcb::ExtraData::Struct" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1500" y="2348" width="390" height="210" as="geometry">
+          <mxGeometry x="1590" y="2348" width="390" height="210" as="geometry">
             <mxRectangle x="1320" y="2320" width="170" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
@@ -862,6 +862,23 @@
           <mxGeometry width="50" height="50" relative="1" as="geometry">
             <mxPoint x="1400" y="2650" as="sourcePoint" />
             <mxPoint x="1540" y="2660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-370" value="" style="endArrow=none;html=1;rounded=0;exitX=0.996;exitY=0.9;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.174;entryY=-0.001;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-272" target="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1500" y="3120" as="sourcePoint" />
+            <mxPoint x="1550" y="3070" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1440" y="2927" />
+              <mxPoint x="1440" y="3080" />
+              <mxPoint x="1538" y="3080" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="gl-GduZikpB11iDbJl_e-371" value="" style="endArrow=none;html=1;rounded=0;exitX=0.995;exitY=0.038;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.007;entryY=0.068;entryDx=0;entryDy=0;entryPerimeter=0;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="gl-GduZikpB11iDbJl_e-319" target="gl-GduZikpB11iDbJl_e-331">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1520" y="3480" as="sourcePoint" />
+            <mxPoint x="1570" y="3430" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
