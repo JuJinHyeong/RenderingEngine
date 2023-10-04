@@ -13,7 +13,8 @@ namespace Rgph {
 	public:
 		LambertianPass(Graphics& gfx, std::string name)
 			:
-			RenderQueuePass(std::move(name)) {
+			RenderQueuePass(std::move(name)) 
+		{
 			using namespace Bind;
 			RegisterSink(DirectBufferSink<RenderTarget>::Make("renderTarget", renderTarget));
 			RegisterSink(DirectBufferSink<Bind::DepthStencil>::Make("depthStencil", depthStencil));

@@ -5,7 +5,7 @@
 #include "RenderQueuePass.h"
 
 void Step::Submit(const Drawable& drawable) const {
-	pTargetPass->Accept(Rgph::Job{ this, & drawable });
+	pTargetPass->Accept(Rgph::Job{ this, &drawable });
 }
 
 void Step::InitializeParentReferences(const Drawable& parent) noexcept {
@@ -20,7 +20,8 @@ Step::Step(std::string targetPassName)
 
 Step::Step(const Step& src) noexcept
 	:
-	targetPassName(src.targetPassName) {
+	targetPassName(src.targetPassName) 
+{
 	bindables.reserve(src.bindables.size());
 	for (auto& pb : src.bindables) {
 		if (auto* pCloning = dynamic_cast<const Bind::CloningBindable*>(pb.get())) {

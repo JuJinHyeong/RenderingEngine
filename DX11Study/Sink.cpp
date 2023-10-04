@@ -10,7 +10,8 @@
 namespace Rgph {
 	Sink::Sink(std::string registeredNameIn)
 		:
-		registeredName(std::move(registeredNameIn)) {
+		registeredName(std::move(registeredNameIn)) 
+	{
 		if (registeredName.empty()) {
 			throw RGC_EXCEPTION("Empty output name");
 		}

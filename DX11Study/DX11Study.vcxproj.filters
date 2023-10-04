@@ -545,9 +545,6 @@
     <ClInclude Include="GraphicsResource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="RenderTarget.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="BufferClearPass.h">
       <Filter>헤더 파일\Jobber\Passlib</Filter>
     </ClInclude>
@@ -571,9 +568,6 @@
     </ClInclude>
     <ClInclude Include="BlurOutlineDrawingPass.h">
       <Filter>헤더 파일\Jobber\Passlib</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferResource.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="HorizontalBlurPass.h">
       <Filter>헤더 파일\Jobber\Passlib</Filter>
@@ -647,8 +641,14 @@
     <ClInclude Include="Vertex.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="WireFramePass.h">
+    <ClInclude Include="BufferResource.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="WireFramePass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
