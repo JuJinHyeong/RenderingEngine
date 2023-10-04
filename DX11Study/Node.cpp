@@ -40,16 +40,16 @@ std::string Node::GetName() const noexcept {
 	return name;
 }
 
-void Node::Submit(DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
 	const auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
 		* DirectX::XMLoadFloat4x4(&transform)
 		* accumulatedTransform;
 
 	for (const auto pm : meshPtrs) {
-		pm->Submit(built);
+		pm->Submit(channel, built);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(built);
+		pc->Submit(channel, built);
 	}
 }
 

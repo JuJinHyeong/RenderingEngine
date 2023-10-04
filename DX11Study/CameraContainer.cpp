@@ -34,7 +34,7 @@ void CameraContainer::Bind(Graphics& gfx) {
 	gfx.SetCamera((*this)->GetMatrix());
 }
 
-void CameraContainer::AddCamera(std::unique_ptr<Camera> pCam) {
+void CameraContainer::AddCamera(std::shared_ptr<Camera> pCam) {
 	cameras.push_back(std::move(pCam));
 }
 
@@ -50,10 +50,10 @@ void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {
 	}
 }
 
-void CameraContainer::Submit() const {
+void CameraContainer::Submit(size_t channel) const {
 	for (size_t i = 0; i < cameras.size(); i++) {
 		if (i != actived) {
-			cameras[i]->Submit();
+			cameras[i]->Submit(channel);
 		}
 	}
 }

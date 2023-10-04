@@ -3,7 +3,7 @@
 #include "GraphicsThrowMacros.h"
 #include "Sphere.h"
 #include "Stencil.h"
-
+#include "Channels.h"
 
 SolidSphere::SolidSphere(Graphics& gfx, float radius) {
 	using namespace Bind;
@@ -19,7 +19,7 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius) {
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	{
-		Technique solid;
+		Technique solid{ channel::main };
 		Step only("lambertian");
 
 		auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");

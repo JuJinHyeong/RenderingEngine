@@ -32,7 +32,7 @@ public:
 	Drawable(const Drawable&) = delete;
 	virtual ~Drawable() = default;
 	
-	void Submit() const noexcept;
+	void Submit(size_t channels) const noexcept;
 	void AddTechnique(Technique tech) noexcept;
 	void Bind(Graphics& gfx) const noexcept;
 	UINT GetIndexCount() const noexcept(!IS_DEBUG);

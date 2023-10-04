@@ -8,7 +8,7 @@ class Node {
 public:
 	Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
-	void Submit(DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept;
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;

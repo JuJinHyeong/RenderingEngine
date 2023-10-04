@@ -40,5 +40,7 @@ private:
 
 	TestCube cube1{ wnd.Gfx(), 4.0f };
 	TestCube cube2{ wnd.Gfx(), 4.0f };
+
+	bool savingDepth = false;
 };
  

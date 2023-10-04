@@ -44,7 +44,7 @@ Frustum::Frustum(Graphics& gfx, float width, float height, float nearZ, float fa
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	{
-		Technique line;
+		Technique line{ channel::main };
 		{
 			Step unoccluded("lambertian");
 			auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");

@@ -46,9 +46,9 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 //	pWindow->Show(windowName, *pRoot);
 //}
 
-void Model::Submit() const noexcept(!IS_DEBUG) {
+void Model::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	//pWindow->ApplyParameters();
-	pRoot->Submit(DirectX::XMMatrixIdentity());
+	pRoot->Submit(channel, DirectX::XMMatrixIdentity());
 }
 
 void Model::Accept(ModelProbe& probe) {

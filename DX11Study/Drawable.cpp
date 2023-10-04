@@ -17,9 +17,9 @@ Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float
 	}
 }
 
-void Drawable::Submit() const noexcept {
+void Drawable::Submit(size_t channels) const noexcept {
 	for (const auto& tech : techniques) {
-		tech.Submit(*this);
+		tech.Submit(*this, channels);
 	}
 }
 

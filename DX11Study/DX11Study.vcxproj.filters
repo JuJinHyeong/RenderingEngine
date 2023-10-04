@@ -611,9 +611,6 @@
     <ClInclude Include="CameraIndicator.h">
       <Filter>헤더 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Channels.h">
-      <Filter>헤더 파일\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="CustomUtils.h">
       <Filter>헤더 파일\Utils</Filter>
     </ClInclude>
@@ -649,6 +646,9 @@
     </ClInclude>
     <ClInclude Include="WireFramePass.h">
       <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Channels.h">
+      <Filter>헤더 파일\Jobber</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

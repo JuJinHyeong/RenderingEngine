@@ -12,6 +12,8 @@
 #include "Material.h"
 #include "TestModelProbe.h"
 #include "ExtendedXMMath.h"
+#include "Camera.h"
+#include "Channels.h"
 
 constexpr static int width = 1280;
 constexpr static int height = 720;
@@ -19,12 +21,16 @@ constexpr static int height = 720;
 App::App()
 	:
 	wnd(width, height, "First App"),
-	light(wnd.Gfx()) {
+	light(wnd.Gfx(), { 10.0f, 5.0f, 0.0f })
+{
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "First", DirectX::XMFLOAT3{ -13.5f, 6.0f, 3.5f }, 0.0f, PI / 2.0f, false));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{ -13.5f, 28.0f, -3.5f }, 0.0f, PI / 2.0f, false));
+	cameras.AddCamera(light.ShareCamera());
+
 	cube1.SetPos({ 4.0f, 0.0f, 0.0f });
 	cube2.SetPos({ 0.0f, 4.0f, 0.0f });
 
+	light.LinkTechniques(rg);
 	cube1.LinkTechniques(rg);
 	cube2.LinkTechniques(rg);
 	gobber.LinkTechniques(rg);
@@ -50,12 +56,13 @@ void App::DoFrame(float dt) {
 	cameras->BindToGraphics(wnd.Gfx());
 	light.Bind(wnd.Gfx(), cameras->GetMatrix());
 
-	cube1.Submit();
-	cube2.Submit();
-	sponza.Submit();
-	nano.Submit();
-	gobber.Submit();
-	cameras.Submit();
+	light.Submit(channel::main);
+	cube1.Submit(channel::main);
+	cube2.Submit(channel::main);
+	sponza.Submit(channel::main);
+	nano.Submit(channel::main);
+	gobber.Submit(channel::main);
+	cameras.Submit(channel::main);
 
 	rg.Execute(wnd.Gfx());
 
@@ -76,6 +83,11 @@ void App::DoFrame(float dt) {
 
 	wnd.Gfx().EndFrame();
 	rg.Reset();
+
+	if (savingDepth) {
+		rg.StoreDepth(wnd.Gfx(), "depth.png");
+		savingDepth = false;
+	}
 }
 
 void App::HandleInput(float dt) {
@@ -97,6 +109,9 @@ void App::HandleInput(float dt) {
 			break;
 		case VK_F1:
 			showDemoWindow = true;
+			break;
+		case VK_RETURN:
+			savingDepth = true;
 			break;
 		}
 	}

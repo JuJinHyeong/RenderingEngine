@@ -9,7 +9,7 @@ namespace Rgph {
 
 class Camera {
 public:
-	Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, bool tethered) noexcept;
+	Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float homePitch, float homeYaw, bool tethered = false) noexcept;
 	~Camera() = default;
 	void BindToGraphics(Graphics& gfx) const;
 	DirectX::XMMATRIX GetMatrix() const noexcept;
@@ -17,10 +17,11 @@ public:
 	void Reset(Graphics& gfx) noexcept;
 	void Rotate(float dx, float dy) noexcept;
 	void Translate(DirectX::XMFLOAT3 translation) noexcept;
+	void SetPos(const DirectX::XMFLOAT3& pos) noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
 	const std::string& GetName() const noexcept;
 	void LinkTechniques(Rgph::RenderGraph& rg);
-	void Submit() const;
+	void Submit(size_t channel) const;
 
 private:
 	bool tethered;

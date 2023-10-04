@@ -1,21 +1,39 @@
 #include "PointLight.h"
 #include "imgui/imgui.h"
+#include "Camera.h"
 
-PointLight::PointLight(Graphics& gfx, float radius) 
+PointLight::PointLight(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius) 
 	:
 	mesh(gfx, radius),
 	cbuf(gfx)
 {
+	home = {
+		pos,
+		{ 0.05f,0.05f,0.05f },
+		{ 1.0f,1.0f,1.0f },
+		1.0f,
+		1.0f,
+		0.045f,
+		0.0075f,
+	};
 	Reset();
+	pCamera = std::make_shared<Camera>(gfx, "Light", cbData.pos, 0.0f, 0.0f, true);
 }
 
 void PointLight::SpawnControlWindow() noexcept {
 	using namespace ImGui;
 	if (Begin("Light")) {
+		bool dirtyPos = false;
+		const auto dcheck = [&dirtyPos](bool dirty) {dirtyPos = dirtyPos || dirty; };
+
 		Text("Position");
-		SliderFloat("X", &cbData.pos.x, -60.0f, 60.0f, "%.1f");
-		SliderFloat("Y", &cbData.pos.y, -60.0f, 60.0f, "%.1f");
-		SliderFloat("Z", &cbData.pos.z, -60.0f, 60.0f, "%.1f");
+		dcheck(SliderFloat("X", &cbData.pos.x, -60.0f, 60.0f, "%.1f"));
+		dcheck(SliderFloat("Y", &cbData.pos.y, -60.0f, 60.0f, "%.1f"));
+		dcheck(SliderFloat("Z", &cbData.pos.z, -60.0f, 60.0f, "%.1f"));
+
+		if (dirtyPos) {
+			pCamera->SetPos(cbData.pos);
+		}
 
 		Text("Intensity/Color");
 		SliderFloat("Intensity", &cbData.diffuseIntensity, 0.01f, 2.0f, "%.2f");
@@ -46,9 +64,9 @@ void PointLight::Reset() noexcept {
 	};
 }
 
-void PointLight::Submit(FrameCommander& frame) const noexcept(!IS_DEBUG) {
+void PointLight::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	mesh.SetPos(cbData.pos);
-	mesh.Submit();
+	mesh.Submit(channel);
 }
 
 void PointLight::Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept {
@@ -61,4 +79,8 @@ void PointLight::Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept {
 
 void PointLight::LinkTechniques(Rgph::RenderGraph& rg) {
 	mesh.LinkTechniques(rg);
+}
+
+std::shared_ptr<Camera> PointLight::ShareCamera() const noexcept {
+	return pCamera;
 }

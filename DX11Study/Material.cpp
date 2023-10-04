@@ -1,5 +1,6 @@
 #include "Material.h"
 #include "BindableCommon.h"
+#include "Channels.h"
 
 Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG) 
 	:
@@ -13,7 +14,8 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		name = aiStringName.C_Str();
 	}
 	{
-		Technique phong{ "Phong" };
+		Technique phong{ "Phong", channel::main };
+
 		Step step("lambertian");
 		std::string shaderCode = "Phong";
 		aiString texFileName;
@@ -112,7 +114,7 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		techniques.push_back(std::move(phong));
 	}
 	{
-		Technique outline("Outline", false);
+		Technique outline("Outline", channel::main, false);
 		{
 			Step mask("outlineMask");
 

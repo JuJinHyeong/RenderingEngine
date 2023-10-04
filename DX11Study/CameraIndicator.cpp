@@ -1,5 +1,6 @@
 #include "CameraIndicator.h"
 #include "BindableCommon.h"
+#include "Channels.h"
 
 CameraIndicator::CameraIndicator(Graphics& gfx) {
 	using namespace Bind;
@@ -55,7 +56,7 @@ CameraIndicator::CameraIndicator(Graphics& gfx) {
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	{
-		Technique line;
+		Technique line{ channel::main };
 		{
 			Step only("lambertian");
 
