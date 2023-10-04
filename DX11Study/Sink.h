@@ -63,7 +63,8 @@ namespace Rgph {
 		DirectBufferSink(std::string registeredName, std::shared_ptr<T>& bind)
 			:
 			Sink(std::move(registeredName)),
-			target(bind) {}
+			target(bind) 
+		{}
 	private:
 		std::shared_ptr<T>& target;
 		bool linked = false;
@@ -71,7 +72,7 @@ namespace Rgph {
 
 	template<class T>
 	class ContainerBindableSink : public Sink {
-		static_assert(std::is_base_of_v<Bind::Bindable, T>, "DirectBindableSink target type must be a Bindable type");
+		static_assert(std::is_base_of_v<Bind::Bindable, T>, "ContainerBindableSink target type must be a Bindable type");
 	public:
 		void PostLinkValidate() const override {
 			if (!linked) {
@@ -93,7 +94,8 @@ namespace Rgph {
 			:
 			Sink(std::move(registeredName)),
 			container(container),
-			index(index) {}
+			index(index) 
+		{}
 	private:
 		std::vector<std::shared_ptr<Bind::Bindable>>& container;
 		size_t index;

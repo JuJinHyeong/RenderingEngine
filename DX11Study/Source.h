@@ -54,7 +54,8 @@ namespace Rgph {
 		DirectBindableSource(std::string name, std::shared_ptr<T>& bind)
 			:
 			Source(std::move(name)),
-			bind(bind) {}
+			bind(bind) 
+		{}
 		void PostLinkValidate() const {}
 		std::shared_ptr<Bind::Bindable> YieldBindable() override {
 			return bind;
