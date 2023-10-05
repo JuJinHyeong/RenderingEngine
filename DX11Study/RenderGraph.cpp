@@ -165,4 +165,5 @@ namespace Rgph {
 	void Rgph::RenderGraph::StoreDepth(Graphics& gfx, const std::string& path) {
 		masterDepth->ToSurface(gfx).Save(path);
 	}
+
 }

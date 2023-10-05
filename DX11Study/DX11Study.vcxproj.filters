@@ -650,6 +650,9 @@
     <ClInclude Include="Channels.h">
       <Filter>헤더 파일\Jobber</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowMappingPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">

@@ -315,6 +315,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
+    <ClInclude Include="ShadowMappingPass.h" />
     <ClInclude Include="Sink.h" />
     <ClInclude Include="SolidSphere.h" />
     <ClInclude Include="Source.h" />

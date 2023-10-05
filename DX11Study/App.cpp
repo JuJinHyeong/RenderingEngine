@@ -37,6 +37,8 @@ App::App()
 	nano.LinkTechniques(rg);
 	sponza.LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
+
+	rg.BindShadowCamera(*light.ShareCamera());
 }
 
 
@@ -53,8 +55,8 @@ int App::Go() {
 
 void App::DoFrame(float dt) {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	cameras->BindToGraphics(wnd.Gfx());
 	light.Bind(wnd.Gfx(), cameras->GetMatrix());
+	rg.BindMainCamera(cameras.GetActiveCamera());
 
 	light.Submit(channel::main);
 	cube1.Submit(channel::main);
@@ -64,7 +66,19 @@ void App::DoFrame(float dt) {
 	gobber.Submit(channel::main);
 	cameras.Submit(channel::main);
 
+	sponza.Submit(channel::shadow);
+	cube1.Submit(channel::shadow);
+	sponza.Submit(channel::shadow);
+	cube2.Submit(channel::shadow);
+	gobber.Submit(channel::shadow);
+	nano.Submit(channel::shadow);
+
 	rg.Execute(wnd.Gfx());
+
+	if (savingDepth) {
+		rg.DumpShadowMap(wnd.Gfx(), "shadow.png");
+		savingDepth = false;
+	}
 
 	static MP sponzaProbe("sponza");
 	static MP nanoProbe("nano");
@@ -83,11 +97,6 @@ void App::DoFrame(float dt) {
 
 	wnd.Gfx().EndFrame();
 	rg.Reset();
-
-	if (savingDepth) {
-		rg.StoreDepth(wnd.Gfx(), "depth.png");
-		savingDepth = false;
-	}
 }
 
 void App::HandleInput(float dt) {
