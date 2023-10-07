@@ -18,6 +18,7 @@ public:
 	void Rotate(float dx, float dy) noexcept;
 	void Translate(DirectX::XMFLOAT3 translation) noexcept;
 	void SetPos(const DirectX::XMFLOAT3& pos) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
 	const std::string& GetName() const noexcept;
 	void LinkTechniques(Rgph::RenderGraph& rg);

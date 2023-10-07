@@ -70,8 +70,14 @@ namespace Bind {
 		));
 	}
 
+	void DepthStencil::UnbindResource(Graphics& gfx, UINT slot, UINT size) {
+		INFOMAN_NOHR(gfx);
+		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, size, null));
+	}
+
 	void DepthStencil::BindAsBuffer(Graphics& gfx) noexcept(!IS_DEBUG) {
 		INFOMAN_NOHR(gfx);
+		UnbindResource(gfx, 0u, 4u);
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->OMSetRenderTargets(0, nullptr, pDepthStencilView.Get()));
 	}
 

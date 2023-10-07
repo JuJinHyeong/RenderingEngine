@@ -33,6 +33,7 @@ namespace Rgph {
 			renderTarget->BindAsBuffer(gfx, depthStencil.get());
 		}
 		else {
+			// TODO: unbind resource
 			depthStencil->BindAsBuffer(gfx);
 		}
 	}

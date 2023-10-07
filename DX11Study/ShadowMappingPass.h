@@ -18,10 +18,10 @@ namespace Rgph
 	class ShadowMappingPass : public RenderQueuePass
 	{
 	public:
-		void BindShadowCamera(const Camera& cam) noexcept
-		{
+		void BindShadowCamera(const Camera& cam) noexcept {
 			pShadowCamera = &cam;
 		}
+
 		ShadowMappingPass(Graphics& gfx, std::string name)
 			:
 			RenderQueuePass(std::move(name))
@@ -32,16 +32,16 @@ namespace Rgph
 			AddBind(NullPixelShader::Resolve(gfx));
 			AddBind(Stencil::Resolve(gfx, Stencil::Mode::Off));
 			AddBind(Blender::Resolve(gfx, false));
-			RegisterSource(DirectBindableSource<Bind::DepthStencil>::Make("shadowMap", depthStencil));
+			RegisterSource(DirectBindableSource<Bind::DepthStencil>::Make("map", depthStencil));
 		}
-		void Execute(Graphics& gfx) const noexcept(!IS_DEBUG) override
-		{
+
+		void Execute(Graphics& gfx) const noexcept(!IS_DEBUG) override {
 			depthStencil->Clear(gfx);
 			pShadowCamera->BindToGraphics(gfx);
 			RenderQueuePass::Execute(gfx);
 		}
-		void DumpShadowMap(Graphics& gfx, const std::string& path) const
-		{
+
+		void DumpShadowMap(Graphics& gfx, const std::string& path) const {
 			depthStencil->ToSurface(gfx).Save(path);
 		}
 	private:

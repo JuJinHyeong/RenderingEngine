@@ -114,6 +114,10 @@ void Camera::SetPos(const DirectX::XMFLOAT3& pos) noexcept {
 	proj.SetPos(pos);
 }
 
+DirectX::XMMATRIX Camera::GetProjection() const noexcept {
+	return proj.GetMatrix();
+}
+
 DirectX::XMFLOAT3 Camera::GetPos() const noexcept {
 	return pos;
 }

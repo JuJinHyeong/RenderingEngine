@@ -339,6 +339,12 @@
     <ClCompile Include="WireFramePass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="ShadowCameraCBuf.cpp">
+      <Filter>소스 파일\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowSampler.cpp">
+      <Filter>소스 파일\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -653,6 +659,12 @@
     <ClInclude Include="ShadowMappingPass.h">
       <Filter>헤더 파일\Jobber\Passlib</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowCameraCBuf.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowSampler.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">
@@ -691,7 +703,7 @@
     <FxCompile Include="ShaderOps.hlsl">
       <Filter>Shaders\Common</Filter>
     </FxCompile>
-    <FxCompile Include="Transform.hlsl">
+    <FxCompile Include="Transform.hlsli">
       <Filter>Shaders\Common</Filter>
     </FxCompile>
     <FxCompile Include="OffsetVS.hlsl">
@@ -779,6 +791,12 @@
       <Filter>Shaders\Test</Filter>
     </FxCompile>
     <FxCompile Include="TestPS.hlsl">
+      <Filter>Shaders\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowTestPS.hlsl">
+      <Filter>Shaders\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowTestVS.hlsl">
       <Filter>Shaders\Test</Filter>
     </FxCompile>
   </ItemGroup>

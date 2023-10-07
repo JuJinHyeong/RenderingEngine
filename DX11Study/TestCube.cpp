@@ -29,20 +29,20 @@ TestCube::TestCube(Graphics& gfx, float size) {
 			only.AddBindable(Texture::Resolve(gfx, "Images/brickwall.jpg"));
 			only.AddBindable(Sampler::Resolve(gfx));
 
-			auto pvs = VertexShader::Resolve(gfx, "PhongDifVS.cso");
+			auto pvs = VertexShader::Resolve(gfx, "ShadowTestVS.cso");
 			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 			only.AddBindable(std::move(pvs));
 
-			only.AddBindable(PixelShader::Resolve(gfx, "PhongDifPS.cso"));
+			only.AddBindable(PixelShader::Resolve(gfx, "ShadowTestPS.cso"));
 
 			Dcb::RawLayout lay;
 			lay.Add<Dcb::Float3>("specularColor");
 			lay.Add<Dcb::Float>("specularWeight");
 			lay.Add<Dcb::Float>("specularGloss");
 			auto buf = Dcb::Buffer(std::move(lay));
-			buf["specularColor"] = dx::XMFLOAT3{ 1.0f,1.0f,1.0f };
-			buf["specularWeight"] = 0.1f;
-			buf["specularGloss"] = 20.0f;
+			buf["specularColor"] = dx::XMFLOAT3{ 1.0f,0.3f,0.3f };
+			buf["specularWeight"] = 0.001f;
+			buf["specularGloss"] = 1.0f;
 			only.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
 
@@ -154,16 +154,16 @@ void TestCube::SpawnControlWindow(Graphics& gfx, const char* name) noexcept {
 				};
 
 				if (auto v = buf["scale"]; v.Exists()) {
-					dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
+					dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f));
 				}
-				if (auto v = buf["color"]; v.Exists()) {
-					dcheck(ImGui::ColorPicker4(tag("Color"), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT4&>(v))));
+				if (auto v = buf["specularColor"]; v.Exists()) {
+					dcheck(ImGui::ColorPicker4(tag("Spec. Color."), reinterpret_cast<float*>(&static_cast<dx::XMFLOAT3&>(v))));
 				}
-				if (auto v = buf["specularIntensity"]; v.Exists()) {
+				if (auto v = buf["specularWeight"]; v.Exists()) {
 					dcheck(ImGui::SliderFloat(tag("Spec. Intens."), &v, 0.0f, 1.0f));
 				}
-				if (auto v = buf["specularPower"]; v.Exists()) {
-					dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f, "%.1f"));
+				if (auto v = buf["specularGloss"]; v.Exists()) {
+					dcheck(ImGui::SliderFloat(tag("Glossiness"), &v, 1.0f, 100.0f));
 				}
 				return dirty;
 			}

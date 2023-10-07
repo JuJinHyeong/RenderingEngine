@@ -11,7 +11,7 @@ cbuffer ObjectCBuf
     float normalMapWeight;
 };
 
-#include "Transform.hlsl"
+#include "Transform.hlsli"
 
 Texture2D tex;
 // specular map is register to slot 1

@@ -27,8 +27,8 @@ App::App()
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{ -13.5f, 28.0f, -3.5f }, 0.0f, PI / 2.0f, false));
 	cameras.AddCamera(light.ShareCamera());
 
-	cube1.SetPos({ 4.0f, 0.0f, 0.0f });
-	cube2.SetPos({ 0.0f, 4.0f, 0.0f });
+	cube1.SetPos({ 10.0f,5.0f,6.0f });
+	cube2.SetPos({ 10.0f,5.0f,14.0f });
 
 	light.LinkTechniques(rg);
 	cube1.LinkTechniques(rg);
@@ -68,7 +68,6 @@ void App::DoFrame(float dt) {
 
 	sponza.Submit(channel::shadow);
 	cube1.Submit(channel::shadow);
-	sponza.Submit(channel::shadow);
 	cube2.Submit(channel::shadow);
 	gobber.Submit(channel::shadow);
 	nano.Submit(channel::shadow);

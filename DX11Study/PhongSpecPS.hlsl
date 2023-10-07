@@ -11,7 +11,7 @@ cbuffer ObjectCBuf
     float padding;
 };
 
-#include "Transform.hlsl"
+#include "Transform.hlsli"
 
 Texture2D tex;
 Texture2D normalMap;

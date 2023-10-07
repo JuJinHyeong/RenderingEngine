@@ -25,9 +25,11 @@ namespace Bind {
 		unsigned int GetHeight() const;
 	protected:
 		DepthStencil(Graphics& gfx, UINT width, UINT height, bool canBindShaderInput, Usage usage);
+		void UnbindResource(Graphics& gfx, UINT slot, UINT size);
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
 		unsigned int width;
 		unsigned int height;
+		static constexpr ID3D11ShaderResourceView* null[] = { nullptr, nullptr, nullptr, nullptr };
 	};
 
 	class ShaderInputDepthStencil : public DepthStencil {
