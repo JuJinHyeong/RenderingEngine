@@ -3,7 +3,7 @@ cbuffer ShadowTransformCBuf : register(b1)
     matrix shadowViewProj;
 };
 
-float4 ToShadowScreenSpace(const in float3 pos, uniform matrix modelTransform)
+float4 ToShadowHomoSpace(const in float3 pos, uniform matrix modelTransform)
 {
     const float4 world = mul(float4(pos, 1.0f), modelTransform);
     const float4 shadowHomo = mul(world, shadowViewProj);
