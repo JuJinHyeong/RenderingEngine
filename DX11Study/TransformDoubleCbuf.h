@@ -12,5 +12,3 @@ namespace Bind {
 		static std::unique_ptr<PixelConstantBuffer<Transforms>> pPcbuf;
 	};
 }
-
-

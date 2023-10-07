@@ -1,10 +1,12 @@
 #include "Transform.hlsli"
+#include "VSShadow.hlsli"
 
 struct VSOut
 {
 	float3 viewPos : Position;
     float3 viewNormal : Normal;
     float2 tc : Texcoord;
+    float4 shadowCamScreen : ShadowPosition;
     float4 pos: SV_POSITION;
 };
 
@@ -14,6 +16,7 @@ VSOut main( float3 pos : Position, float3 normal: Normal, float2 tc: Texcoord )
     vso.viewPos = (float3) mul(float4(pos, 1.0f), modelView);
     vso.viewNormal = mul(normal, (float3x3) modelView);
     vso.pos = mul(float4(pos, 1.0f), modelViewProj);
-    vso.tc = tc;    
+    vso.tc = tc;
+    vso.shadowCamScreen = ToShadowScreenSpace(pos, model);
     return vso;
 }

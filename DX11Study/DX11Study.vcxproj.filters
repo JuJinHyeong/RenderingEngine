@@ -37,9 +37,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{e0b64f41-d065-4aa5-87ba-dd19feab5f25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders\Common">
-      <UniqueIdentifier>{758a1f98-dbc4-44a9-b4a6-d1dcaaa4f2b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\Jobber">
       <UniqueIdentifier>{2834a8cf-cc6f-49e0-b3a4-6d79a51fa340}</UniqueIdentifier>
     </Filter>
@@ -87,6 +84,9 @@
     </Filter>
     <Filter Include="헤더 파일\Camera">
       <UniqueIdentifier>{69bed4c7-966b-443a-b9f4-6b283b8f372f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\includes">
+      <UniqueIdentifier>{758a1f98-dbc4-44a9-b4a6-d1dcaaa4f2b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -686,6 +686,24 @@
     <None Include="DXGetErrorDescription.inl">
       <Filter>소스 파일</Filter>
     </None>
+    <None Include="Transform.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="LightVectorData.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="PointLight.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="ShaderOps.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="VSShadow.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="PSShadow.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SolidVS.hlsl">
@@ -693,18 +711,6 @@
     </FxCompile>
     <FxCompile Include="SolidPS.hlsl">
       <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="LightVectorData.hlsl">
-      <Filter>Shaders\Common</Filter>
-    </FxCompile>
-    <FxCompile Include="PointLight.hlsl">
-      <Filter>Shaders\Common</Filter>
-    </FxCompile>
-    <FxCompile Include="ShaderOps.hlsl">
-      <Filter>Shaders\Common</Filter>
-    </FxCompile>
-    <FxCompile Include="Transform.hlsli">
-      <Filter>Shaders\Common</Filter>
     </FxCompile>
     <FxCompile Include="OffsetVS.hlsl">
       <Filter>Shaders</Filter>
