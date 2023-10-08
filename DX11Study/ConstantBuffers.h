@@ -62,7 +62,7 @@ namespace Bind {
 		using ConstantBuffer<T>::slot;
 	public:
 		using ConstantBuffer<T>::ConstantBuffer;
-		void Bind(Graphics& gfx) noexcept override {
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override {
 			Bindable::GetContext(gfx)->VSSetConstantBuffers(slot, 1u, ConstantBuffer<T>::pConstantBuffer.GetAddressOf());
 		}
 		static std::shared_ptr<VertexConstantBuffer> Resolve(Graphics& gfx, const T& consts, UINT slot = 0) {
@@ -89,7 +89,7 @@ namespace Bind {
 		using ConstantBuffer<T>::pConstantBuffer;
 	public:
 		using ConstantBuffer<T>::ConstantBuffer;
-		void Bind(Graphics& gfx) noexcept override {
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override {
 			Bindable::GetContext(gfx)->PSSetConstantBuffers(slot, 1u, ConstantBuffer<T>::pConstantBuffer.GetAddressOf());
 		}
 		static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, const T& consts, UINT slot = 0u) {

@@ -17,7 +17,7 @@ namespace Bind {
 		GFX_THROW_INFO(GetDevice(gfx)->CreateSamplerState(&samplerDesc, &pSampler));
 	}
 
-	void ShadowSampler::Bind(Graphics& gfx) noexcept {
+	void ShadowSampler::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		INFOMAN_NOHR(gfx);
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetSamplers(1u, 1u, pSampler.GetAddressOf()));
 	}

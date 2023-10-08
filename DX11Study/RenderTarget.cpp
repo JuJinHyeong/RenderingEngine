@@ -127,7 +127,7 @@ namespace Bind {
 		));
 	}
 
-	void ShaderInputRenderTarget::Bind(Graphics& gfx) noexcept {
+	void ShaderInputRenderTarget::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		INFOMAN_NOHR(gfx);
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1, pShaderResourceView.GetAddressOf()));
 	}
@@ -174,7 +174,7 @@ namespace Bind {
 	}
 
 
-	void OutputOnlyRenderTarget::Bind(Graphics& gfx) noexcept {
+	void OutputOnlyRenderTarget::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		assert("Cannot bind OuputOnlyRenderTarget as shader input" && false);
 	}
 

@@ -30,7 +30,7 @@ namespace Bind {
 	class ShaderInputRenderTarget : public RenderTarget {
 	public:
 		ShaderInputRenderTarget(Graphics& gfx, UINT width, UINT height, UINT slot);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 		Surface ToSurface(Graphics& gfx) const;
 	private:
 		UINT slot;
@@ -41,7 +41,7 @@ namespace Bind {
 	class OutputOnlyRenderTarget : public RenderTarget {
 		friend Graphics;
 	public:
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	private:
 		OutputOnlyRenderTarget(Graphics& gfx, ID3D11Texture2D* pTexture);
 	};

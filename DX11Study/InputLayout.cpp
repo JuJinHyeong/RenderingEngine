@@ -25,7 +25,7 @@ namespace Bind {
 		);
 	}
 
-	void InputLayout::Bind(Graphics& gfx) noexcept {
+	void InputLayout::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		GetContext(gfx)->IASetInputLayout(pInputLayout.Get());
 	}
 

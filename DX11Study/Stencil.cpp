@@ -37,7 +37,7 @@ namespace Bind {
 		}
 		GetDevice(gfx)->CreateDepthStencilState(&dsDesc, &pStencil);
 	}
-	void Stencil::Bind(Graphics& gfx) noexcept {
+	void Stencil::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		GetContext(gfx)->OMSetDepthStencilState(pStencil.Get(), 0xFF);
 	}
 	std::shared_ptr<Stencil> Stencil::Resolve(Graphics& gfx, Mode mode) {

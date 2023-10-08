@@ -13,7 +13,7 @@ namespace Bind {
 	class InputLayout : public Bindable {
 	public:
 		InputLayout(Graphics& gfx, custom::VertexLayout layout, const VertexShader& vs);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 		const custom::VertexLayout GetLayout() const noexcept;
 		static std::shared_ptr<InputLayout> Resolve(Graphics& gfx, const custom::VertexLayout& layout, const VertexShader& vs);
 		static std::string GenerateUID(const custom::VertexLayout& layout, const VertexShader& vs);

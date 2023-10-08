@@ -29,7 +29,7 @@ namespace Bind {
 		VertexBuffer(gfx, "not in codex system", vbuf)
 	{}
 
-	void VertexBuffer::Bind(Graphics& gfx) noexcept {
+	void VertexBuffer::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		const UINT offset = 0u;
 		GetContext(gfx)->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 	}

@@ -15,7 +15,7 @@ public:
 	{
 		SetKernelGauss(gfx, radius, sigma);
 	}
-	void Bind(Graphics& gfx) noexcept {
+	void Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		shader.Bind(gfx);
 		pcb.Bind(gfx);
 		ccb.Bind(gfx);

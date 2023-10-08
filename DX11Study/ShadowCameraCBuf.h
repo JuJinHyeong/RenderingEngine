@@ -12,7 +12,7 @@ namespace Bind {
 		};
 	public:
 		ShadowCameraCBuf(Graphics& gfx, UINT slot = 1u);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 		void Update(Graphics& gfx);
 		void SetCamera(const Camera* pCamera) noexcept;
 	private:

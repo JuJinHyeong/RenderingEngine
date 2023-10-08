@@ -30,7 +30,7 @@ namespace Bind {
 		GFX_THROW_INFO(GetDevice(gfx)->CreateBlendState(&blendDesc, &pBlender));
 	}
 
-	void Blender::Bind(Graphics& gfx) noexcept {
+	void Blender::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		INFOMAN_NOHR(gfx);
 		const float* data = factors ? factors->data() : nullptr;
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->OMSetBlendState(pBlender.Get(), data, 0xFFFFFFFFu));

@@ -36,7 +36,7 @@ namespace Bind {
 	public:
 		ShaderInputDepthStencil(Graphics& gfx, UINT slot, Usage usage = Usage::DepthStencil);
 		ShaderInputDepthStencil(Graphics& gfx, UINT width, UINT height, UINT slot, Usage usage = Usage::DepthStencil);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	private:
 		UINT slot;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
@@ -46,6 +46,6 @@ namespace Bind {
 	public:
 		OutputOnlyDepthStencil(Graphics& gfx);
 		OutputOnlyDepthStencil(Graphics& gfx, UINT width, UINT height);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	};
 }

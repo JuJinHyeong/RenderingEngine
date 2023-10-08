@@ -19,13 +19,13 @@ namespace Bind {
 	class PixelConstantBufferEx : public ConstantBufferEx {
 	public:
 		using ConstantBufferEx::ConstantBufferEx;
-		void Bind(Graphics& gfx) noexcept override;		
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;		
 	};
 
 	class VertexConstantBufferEx : public ConstantBufferEx {
 	public:
 		using ConstantBufferEx::ConstantBufferEx;
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	};
 
 	template<class T>
@@ -51,7 +51,7 @@ namespace Bind {
 			buf.CopyFrom(buf_in);
 			dirty = true;
 		}
-		void Bind(Graphics& gfx) noexcept override {
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override {
 			if (dirty) {
 				T::Update(gfx, buf);
 				dirty = false;

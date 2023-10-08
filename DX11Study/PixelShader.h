@@ -6,7 +6,7 @@ namespace Bind {
 	class PixelShader : public Bindable {
 	public:
 		PixelShader(Graphics& gfx, const std::string& path);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 		ID3DBlob* GetByteCode() const noexcept;
 
 		static std::shared_ptr<PixelShader> Resolve(Graphics& gfx, const std::string& path);

@@ -14,7 +14,7 @@ namespace Bind {
 		GFX_THROW_INFO(GetDevice(gfx)->CreatePixelShader(pByteCodeBlob->GetBufferPointer(), pByteCodeBlob->GetBufferSize(), nullptr, &pPixelShader));
 	}
 
-	void PixelShader::Bind(Graphics& gfx) noexcept {
+	void PixelShader::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		GetContext(gfx)->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 	}
 

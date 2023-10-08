@@ -5,7 +5,7 @@ namespace Bind {
 	class Rasterizer : public Bindable {
 	public:
 		Rasterizer(Graphics& gfx, bool twoSlided);
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 		static std::shared_ptr<Rasterizer> Resolve(Graphics& gfx, bool twoSlided);
 		static std::string GenerateUID(bool twoSlided);
 		std::string GetUID() const noexcept override;

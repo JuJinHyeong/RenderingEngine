@@ -9,7 +9,7 @@ namespace Bind {
 		}
 	}
 
-	void TransformDoubleCbuf::Bind(Graphics& gfx) noexcept {
+	void TransformDoubleCbuf::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		const Transforms tf = GetTransforms(gfx);
 		// vertex shader
 		TransformCbuf::UpdateBindImpl(gfx, tf);

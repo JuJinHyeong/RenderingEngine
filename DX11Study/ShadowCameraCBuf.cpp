@@ -9,7 +9,7 @@ namespace Bind {
 		pVcbuf{ std::make_unique<VertexConstantBuffer<Transform>>(gfx,slot) } 
 	{}
 
-	void ShadowCameraCBuf::Bind(Graphics& gfx) noexcept {
+	void ShadowCameraCBuf::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		pVcbuf->Bind(gfx);
 	}
 	

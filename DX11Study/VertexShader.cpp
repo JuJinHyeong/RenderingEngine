@@ -15,7 +15,7 @@ namespace Bind {
 		GFX_THROW_INFO(GetDevice(gfx)->CreateVertexShader(pBytecodeBlob->GetBufferPointer(), pBytecodeBlob->GetBufferSize(), nullptr, &pVertexShader));
 	}
 
-	void VertexShader::Bind(Graphics& gfx) noexcept {
+	void VertexShader::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		GetContext(gfx)->VSSetShader(pVertexShader.Get(), nullptr, 0);
 	}
 

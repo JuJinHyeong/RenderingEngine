@@ -18,7 +18,7 @@ namespace Bind {
 		pParent = &parent;
 	}
 
-	void TransformCbuf::Bind(Graphics& gfx) noexcept {
+	void TransformCbuf::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		UpdateBindImpl(gfx, GetTransforms(gfx));
 	}
 

@@ -199,7 +199,7 @@ namespace Bind {
 		));
 	}
 
-	void ShaderInputDepthStencil::Bind(Graphics& gfx) noexcept {
+	void ShaderInputDepthStencil::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		INFOMAN_NOHR(gfx);
 		GFX_THROW_INFO_ONLY(GetContext(gfx)->PSSetShaderResources(slot, 1u, pShaderResourceView.GetAddressOf()));
 	}
@@ -215,7 +215,7 @@ namespace Bind {
 		DepthStencil(gfx, width, height, false, Usage::DepthStencil) 
 	{}
 
-	void OutputOnlyDepthStencil::Bind(Graphics& gfx) noexcept {
+	void OutputOnlyDepthStencil::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		assert("OutputOnlyDepthStencil cannot be bound as shader input" && false);
 	}
 }

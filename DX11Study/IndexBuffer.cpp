@@ -28,7 +28,7 @@ namespace Bind {
 		IndexBuffer(gfx, "not in codex system", indices)
 	{}
 
-	void IndexBuffer::Bind(Graphics& gfx) noexcept {
+	void IndexBuffer::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 		GetContext(gfx)->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
 	}
 

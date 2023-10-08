@@ -15,7 +15,7 @@ namespace Bind {
 		TransformCbuf(Graphics& gfx, UINT slot = 0u);
 		TransformCbuf(Graphics& gfx, const Drawable& parent, UINT slot = 0u);
 		void InitializeParentReference(const Drawable& parent) noexcept override;
-		void Bind(Graphics& gfx) noexcept override;
+		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	protected:
 		void UpdateBindImpl(Graphics& gfx, const Transforms& tf) noexcept;
 		Transforms GetTransforms(Graphics& gfx) noexcept;

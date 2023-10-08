@@ -41,12 +41,12 @@ namespace Bind {
 		}
 	}
 
-	void PixelConstantBufferEx::Bind(Graphics& gfx) noexcept
+	void PixelConstantBufferEx::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
 	{
 		GetContext(gfx)->PSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
 	}
 
-	void VertexConstantBufferEx::Bind(Graphics& gfx) noexcept
+	void VertexConstantBufferEx::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
 	{
 		GetContext(gfx)->VSSetConstantBuffers(slot, 1u, pConstantBuffer.GetAddressOf());
 	}
