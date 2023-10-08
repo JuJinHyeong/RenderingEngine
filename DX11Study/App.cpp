@@ -91,7 +91,7 @@ void App::DoFrame(float dt) {
 		gobberProbe.SpawnWindow(gobber);
 		cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
 		cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
-		rg.RenderWidgets(wnd.Gfx());
+		rg.RenderWindows(wnd.Gfx());
 	}
 
 	wnd.Gfx().EndFrame();
