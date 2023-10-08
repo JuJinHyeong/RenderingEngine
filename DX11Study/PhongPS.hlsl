@@ -16,16 +16,17 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float4 spos :
     float3 diffuse;
     float3 specular;
     
-    if (ShadowUnoccluded(spos))
+    const float shadowLevel = Shadow(spos);
+    if (shadowLevel > 0.0f)
     {
         viewNormal = normalize(viewNormal);
         const LightVectorData lv = CalculateLightVectorData(viewLightPos, viewPos);
         const float att = Attenuate(attConst, attLin, attQuad, lv.distToLight);
-        diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lv.dirToLight, viewNormal);
+        diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lv.dirToLight, viewNormal) * shadowLevel;
         specular = Speculate(
             diffuseColor * diffuseIntensity * specularColor, specularWeight, viewNormal,
             lv.vectorToLight, viewPos, att, specularGloss
-        );
+        ) * shadowLevel;
     }
     else
     {

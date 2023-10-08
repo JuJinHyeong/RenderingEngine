@@ -30,7 +30,8 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTa
         viewNormal = -viewNormal;
     }
 #endif
-    if (ShadowUnoccluded(spos))
+    const float shadowLevel = Shadow(spos);
+    if (shadowLevel > 0.0f)
     {
         viewNormal = normalize(viewNormal);
         if (useNormalMap)
@@ -40,11 +41,11 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTa
     
         const LightVectorData lightData = CalculateLightVectorData(viewLightPos, viewPos);
         const float att = Attenuate(attConst, attLin, attQuad, lightData.distToLight);
-        diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal);
+        diffuse = Diffuse(diffuseColor, diffuseIntensity, att, lightData.dirToLight, viewNormal) * shadowLevel;
         const float4 specularSample = spec.Sample(splr, tc);
         float3 specularReflectionColor = useSpecularMap ? specularSample.rgb : specularColor;
         float specularGlossLoaded = useGlossAlpha ? pow(2.0f, specularSample.a * 13.0f) : specularGloss;
-        specular = Speculate(diffuseColor * specularReflectionColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGlossLoaded);
+        specular = Speculate(diffuseColor * specularReflectionColor, specularWeight, viewNormal, lightData.dirToLight, viewPos, att, specularGlossLoaded) * shadowLevel;
     }
     else
     {
