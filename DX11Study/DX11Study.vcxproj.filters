@@ -710,6 +710,12 @@
     <None Include="PSShadow.hlsli">
       <Filter>Shaders\includes</Filter>
     </None>
+    <None Include="PSShadow_Dynamic.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
+    <None Include="PSShadow_Static.hlsli">
+      <Filter>Shaders\includes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="SolidVS.hlsl">

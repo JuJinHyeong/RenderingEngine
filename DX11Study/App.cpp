@@ -21,14 +21,16 @@ constexpr static int height = 720;
 App::App()
 	:
 	wnd(width, height, "First App"),
-	light(wnd.Gfx(), { 10.0f, 5.0f, 0.0f })
+	light(wnd.Gfx(), { 10.0f, 4.0f, 0.0f })
 {
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "First", DirectX::XMFLOAT3{ -13.5f, 6.0f, 3.5f }, 0.0f, PI / 2.0f, false));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{ -13.5f, 28.0f, -3.5f }, 0.0f, PI / 2.0f, false));
 	cameras.AddCamera(light.ShareCamera());
 
-	cube1.SetPos({ 10.0f,5.0f,6.0f });
+	cube1.SetPos({ 23.0f,5.0f,6.0f });
 	cube2.SetPos({ 10.0f,5.0f,14.0f });
+
+	nano.SetRootTransform(DirectX::XMMatrixRotationY(PI / 2) * DirectX::XMMatrixTranslation(25.0f, 0.0f, 0.0f));
 
 	light.LinkTechniques(rg);
 	cube1.LinkTechniques(rg);

@@ -360,6 +360,8 @@
     <None Include="DXGetErrorString.inl" />
     <None Include="DXTrace.inl" />
     <None Include="PSShadow.hlsli" />
+    <None Include="PSShadow_Dynamic.hlsli" />
+    <None Include="PSShadow_Static.hlsli" />
     <None Include="VSShadow.hlsli" />
   </ItemGroup>
   <ItemGroup>
