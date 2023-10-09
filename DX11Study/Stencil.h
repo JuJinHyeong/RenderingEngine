@@ -9,7 +9,8 @@ namespace Bind {
 			Write,
 			Mask,
 			DepthOff,
-			DepthReversed
+			DepthReversed,
+			DepthFirst,
 		};
 		Stencil(Graphics& gfx, Mode mode);
 		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;

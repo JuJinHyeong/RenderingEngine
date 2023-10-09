@@ -34,6 +34,10 @@ namespace Bind {
 		case Mode::DepthReversed:
 			dsDesc.DepthFunc = D3D11_COMPARISON_GREATER;
 			break;
+		case Mode::DepthFirst:
+			dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+			dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+			break;
 		}
 		GetDevice(gfx)->CreateDepthStencilState(&dsDesc, &pStencil);
 	}
@@ -57,6 +61,8 @@ namespace Bind {
 				return "depth-off"s;
 			case Mode::DepthReversed:
 				return "depth-reversed"s;
+			case Mode::DepthFirst:
+				return "depth-first"s;
 			}
 			return "ERROR"s;
 		};

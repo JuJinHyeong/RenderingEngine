@@ -348,6 +348,12 @@
     <ClCompile Include="ShadowRasterizer.cpp">
       <Filter>소스 파일\Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="SkyboxTransformCbuf.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTexture.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -671,6 +677,15 @@
     <ClInclude Include="ShadowRasterizer.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="SkyboxPass.h">
+      <Filter>헤더 파일\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyboxTransformCbuf.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTexture.h">
+      <Filter>소스 파일\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">
@@ -816,6 +831,12 @@
     </FxCompile>
     <FxCompile Include="ShadowTestVS.hlsl">
       <Filter>Shaders\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyboxVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="SkyboxPS.hlsl">
+      <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
