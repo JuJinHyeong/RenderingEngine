@@ -14,6 +14,7 @@
 #include "WireFramePass.h"
 #include "ShadowMappingPass.h"
 #include "Camera.h"
+#include "ShadowRasterizer.h"
 
 namespace Rgph {
 	BlurOutlineRenderGraph::BlurOutlineRenderGraph(Graphics& gfx)
@@ -30,8 +31,15 @@ namespace Rgph {
 				pass->SetSinkLinkage("buffer", "$.masterDepth");
 				AppendPass(std::move(pass));
 			}
+
+			// setup shadow rasterizer
+			{
+				shadowRasterizer = std::make_shared<Bind::ShadowRasterizer>(gfx, 10000, 0.0005f, 1.0f);
+				AddGlobalSource(DirectBindableSource<Bind::ShadowRasterizer>::Make("shadowRasterizer", shadowRasterizer));
+			}
 			{
 				auto pass = std::make_unique<ShadowMappingPass>(gfx, "shadowMap");
+				pass->SetSinkLinkage("shadowRasterizer", "$.shadowRasterizer");
 				AppendPass(std::move(pass));
 			}
 			// setup shadow control buffer
@@ -131,12 +139,26 @@ namespace Rgph {
 			bool bilin = shadowSampler->GetBilinear();
 
 			bool pcfChange = ImGui::SliderInt("PCF Level", &ctrl["pcfLevel"], 0, 4);
-			bool biasChange = ImGui::SliderFloat("Depth Bias", &ctrl["depthBias"], 0.0f, 0.1f);
+			bool biasChange = ImGui::SliderFloat("Post Bias", &ctrl["depthBias"], 0.0f, 0.1f);
 			bool hwPcfChange = ImGui::Checkbox("HW PCF", &ctrl["hwPcf"]);
 			ImGui::Checkbox("Bilinear", &bilin);
 
 			if (pcfChange || biasChange || hwPcfChange) {
 				shadowControl->SetBuffer(ctrl);
+			}
+
+			{
+				auto bias = shadowRasterizer->GetDepthBias();
+				auto slope = shadowRasterizer->GetSlopeBias();
+				auto clamp = shadowRasterizer->GetClamp();
+
+				bool biasChange = ImGui::SliderInt("Pre Bias", &bias, 0, 100000);
+				bool slopeChange = ImGui::SliderFloat("Slope Bias", &slope, 0.0f, 100.0f, "%.4f");
+				bool clampChange = ImGui::SliderFloat("Clamp", &clamp, 0.0001f, 0.5f, "%.4f");
+
+				if (biasChange || slopeChange || clampChange) {
+					shadowRasterizer->ChangeDepthBiasParameters(gfx, bias, slope, clamp);
+				}
 			}
 
 			shadowSampler->SetHwPcf(ctrl["hwPcf"]);
