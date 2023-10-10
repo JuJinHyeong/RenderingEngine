@@ -14,8 +14,8 @@ Camera::Camera(Graphics& gfx, std::string name, DirectX::XMFLOAT3 homePos, float
 {
 	if (tethered) {
 		pos = homePos;
-		indicator.SetPos(pos);
-		proj.SetPos(pos);
+		enableCameraIndicator = false;
+		enableFrustumIndicator = false;
 	}
 	Reset(gfx);
 }

@@ -31,10 +31,12 @@ namespace Rgph {
 				pass->SetSinkLinkage("buffer", "$.masterDepth");
 				AppendPass(std::move(pass));
 			}
+			// get depth box map data, save to "map"
 			{
 				auto pass = std::make_unique<ShadowMappingPass>(gfx, "shadowMap");
 				AppendPass(std::move(pass));
 			}
+			// draw model
 			{
 				auto pass = std::make_unique<LambertianPass>(gfx, "lambertian");
 				pass->SetSinkLinkage("shadowMap", "shadowMap.map");
@@ -42,12 +44,14 @@ namespace Rgph {
 				pass->SetSinkLinkage("depthStencil", "clearDS.buffer");
 				AppendPass(std::move(pass));
 			}
+			// add skybox with depth test
 			{
 				auto pass = std::make_unique<SkyboxPass>(gfx, "skybox");
 				pass->SetSinkLinkage("renderTarget", "lambertian.renderTarget");
 				pass->SetSinkLinkage("depthStencil", "lambertian.depthStencil");
 				AppendPass(std::move(pass));
 			}
+			// generate mask to make outline
 			{
 				auto pass = std::make_unique<OutlineMaskGenerationPass>(gfx, "outlineMask");
 				pass->SetSinkLinkage("depthStencil", "skybox.depthStencil");
@@ -74,11 +78,12 @@ namespace Rgph {
 					AddGlobalSource(DirectBindableSource<Bind::CachingPixelConstantBufferEx>::Make("blurDirection", blurDirection));
 				}
 			}
-
+			// draw solid color model that want to draw outline
 			{
 				auto pass = std::make_unique<BlurOutlineDrawingPass>(gfx, "outlineDraw", gfx.GetWidth(), gfx.GetHeight());
 				AppendPass(std::move(pass));
 			}
+			// blur horizontal
 			{
 				auto pass = std::make_unique<HorizontalBlurPass>("horizontal", gfx, gfx.GetWidth(), gfx.GetHeight());
 				pass->SetSinkLinkage("scratchIn", "outlineDraw.scratchOut");
@@ -86,6 +91,7 @@ namespace Rgph {
 				pass->SetSinkLinkage("direction", "$.blurDirection");
 				AppendPass(std::move(pass));
 			}
+			// blur vertical
 			{
 				auto pass = std::make_unique<VerticalBlurPass>("vertical", gfx);
 				pass->SetSinkLinkage("renderTarget", "skybox.renderTarget");
@@ -95,14 +101,15 @@ namespace Rgph {
 				pass->SetSinkLinkage("direction", "$.blurDirection");
 				AppendPass(std::move(pass));
 			}
+			// add wireframe in camera
 			{
 				auto pass = std::make_unique<WireframePass>(gfx, "wireframe");
 				pass->SetSinkLinkage("renderTarget", "vertical.renderTarget");
 				pass->SetSinkLinkage("depthStencil", "vertical.depthStencil");
 				AppendPass(std::move(pass));
 			}
+			// check rendertarget is $.backbuffer
 			SetSinkTarget("backbuffer", "wireframe.renderTarget");
-
 			Finalize();
 	}
 
