@@ -24,6 +24,7 @@ namespace Rgph
 		void BindShadowCamera(const Camera& cam) noexcept {
 			pShadowCamera = &cam;
 		}
+
 		ShadowMappingPass(Graphics& gfx, std::string name)
 			:
 			RenderQueuePass(std::move(name)) {
@@ -49,10 +50,10 @@ namespace Rgph
 			DirectX::XMStoreFloat3(&cameraUps[1], DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 			// +y
 			DirectX::XMStoreFloat3(&cameraDirections[2], DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
-			DirectX::XMStoreFloat3(&cameraUps[2], DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
+			DirectX::XMStoreFloat3(&cameraUps[2], DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f));
 			// -y
 			DirectX::XMStoreFloat3(&cameraDirections[3], DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f));
-			DirectX::XMStoreFloat3(&cameraUps[3], DirectX::XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f));
+			DirectX::XMStoreFloat3(&cameraUps[3], DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
 			// +z
 			DirectX::XMStoreFloat3(&cameraDirections[4], DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
 			DirectX::XMStoreFloat3(&cameraUps[4], DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
@@ -63,6 +64,7 @@ namespace Rgph
 			// set the depth buffer to *something* so that the rg validation doesn't scream
 			SetDepthBuffer(pDepthCube->GetDepthBuffer(0));
 		}
+
 		void Execute(Graphics& gfx) const noexcept(!IS_DEBUG) override {
 			using namespace DirectX;
 
@@ -79,6 +81,7 @@ namespace Rgph
 				RenderQueuePass::Execute(gfx);
 			}
 		}
+
 		void DumpShadowMap(Graphics& gfx, const std::string& path) const {
 			for (size_t i = 0; i < 6; i++) {
 				auto d = pDepthCube->GetDepthBuffer(i);
