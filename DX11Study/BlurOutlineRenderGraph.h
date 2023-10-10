@@ -22,6 +22,7 @@ namespace Rgph {
 		void BindShadowCamera(Camera& cam);
 	private:
 		void RenderKernelWindow(Graphics& gfx);
+		void RenderShadowWindow(Graphics& gfx);
 		// private functions
 		void SetKernelGauss(int radius, float sigma) noexcept(!IS_DEBUG);
 		void SetKernelBox(int radius) noexcept(!IS_DEBUG);

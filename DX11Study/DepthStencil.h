@@ -25,6 +25,7 @@ namespace Bind {
 		unsigned int GetHeight() const;
 	protected:
 		DepthStencil(Graphics& gfx, UINT width, UINT height, bool canBindShaderInput, Usage usage);
+		DepthStencil(Graphics& gfx, Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture, UINT face);
 		void UnbindResource(Graphics& gfx, UINT slot, UINT size);
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
 		unsigned int width;
@@ -46,6 +47,7 @@ namespace Bind {
 	public:
 		OutputOnlyDepthStencil(Graphics& gfx);
 		OutputOnlyDepthStencil(Graphics& gfx, UINT width, UINT height);
+		OutputOnlyDepthStencil(Graphics& gfx, Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture, UINT face);
 		void Bind(Graphics& gfx) noexcept(!IS_DEBUG) override;
 	};
 }

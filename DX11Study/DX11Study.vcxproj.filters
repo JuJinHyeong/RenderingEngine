@@ -686,6 +686,9 @@
     <ClInclude Include="CubeTexture.h">
       <Filter>소스 파일\Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">
@@ -836,6 +839,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="SkyboxPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
