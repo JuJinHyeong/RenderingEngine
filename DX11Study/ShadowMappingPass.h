@@ -13,6 +13,7 @@
 #include "ShadowRasterizer.h"
 #include "CubeTexture.h"
 #include "Viewport.h"
+#include "CustomMath.h"
 
 class Graphics;
 
@@ -38,7 +39,7 @@ namespace Rgph
 
 			DirectX::XMStoreFloat4x4(
 				&projection,
-				DirectX::XMMatrixPerspectiveLH(1.0f, 1.0f, 0.5f, 100.0f)
+				DirectX::XMMatrixPerspectiveFovLH(PI / 2.0f, 1.0f, 0.5f, 100.0f)
 			);
 			// +x
 			DirectX::XMStoreFloat3(&cameraDirections[0], DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
