@@ -29,17 +29,19 @@ private:
 	CameraContainer cameras;
 	PointLight light;
 
-	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
-	Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
+	// TODO: add model group
+	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
+	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
-	Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
+	//Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
+	Model testModel{wnd.Gfx(), "models/boblampclean/boblampclean.md5mesh", 0.1f};
 
 	Rgph::BlurOutlineRenderGraph rg{wnd.Gfx()};
 
-	TestCube cube1{ wnd.Gfx(), 4.0f };
-	TestCube cube2{ wnd.Gfx(), 4.0f };
+	//TestCube cube1{ wnd.Gfx(), 4.0f };
+	//TestCube cube2{ wnd.Gfx(), 4.0f };
 
 	bool savingDepth = false;
 };

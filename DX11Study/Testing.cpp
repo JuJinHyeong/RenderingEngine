@@ -4,6 +4,13 @@
 #include "BindableCommon.h"
 #include "RenderTarget.h"
 #include "Surface.h"
+#include <sstream>
+#include <map>
+#include <vector>
+#include <string>
+#include <assimp/Importer.hpp>  // C++ importer interface
+#include <assimp/scene.h>       // Output data structure
+#include <assimp/postprocess.h> // Post processing flags
 
 void TestDynamicMeshLoading() {
 	using namespace custom;
@@ -90,4 +97,131 @@ void D3DTestScratchPad(Window& wnd) {
 
 	RenderWithVS("Test1VS.cso");
 	RenderWithVS("Test2VS.cso");
+}
+
+// testing assimp
+
+// bone testing
+class VertexBone {
+public:
+	VertexBone() {};
+	void AddBoneData(unsigned int boneId, float weight) {
+		for (unsigned int i = 0; i < 4; i++) {
+			// find the first empty slot
+			if (weights[i] == 0.0f) {
+				boneIds[i] = boneId;
+				weights[i] = weight;
+				std::stringstream ss;
+				ss << "Bone " << boneId << " weight " << weight << " index " << i << "\n";
+				OutputDebugString(ss.str().c_str());
+				return;
+			}
+		}
+		assert(0 && "Too many bones!");
+	}
+
+private:
+	unsigned int boneIds[4] = { 0 };
+	float weights[4] = { 0.0f };
+};
+
+std::vector<VertexBone> vertexToBones;
+std::vector<int> meshBaseVertex;
+std::map<std::string, unsigned int> boneNameToIndexMap;
+
+int GetBoneId(const aiBone* pBone) {
+	unsigned int boneId = 0;
+	std::string boneName(pBone->mName.C_Str());
+
+	if (boneNameToIndexMap.find(boneName) == boneNameToIndexMap.end()) {
+		boneId = boneNameToIndexMap.size();
+		boneNameToIndexMap[boneName] = boneId;
+	}
+	else {
+		boneId = boneNameToIndexMap[boneName];
+	}
+	return boneId;
+}
+
+void ParseSingleBone(int meshIndex, const aiBone* pBone) {
+	std::stringstream ss;
+	printf("      Bone '%s': num vertices affected by this bone: %d\n", pBone->mName.C_Str(), pBone->mNumWeights);
+	int boneId = GetBoneId(pBone);
+	ss << "Mesh  " << meshIndex << ": " << "Bone " << pBone->mName.C_Str() << ", " << boneId << " affect to " << pBone->mNumWeights << " number of vertices";
+	OutputDebugString(ss.str().c_str());
+
+	for (unsigned int i = 0; i < pBone->mNumWeights; i++) {
+		if (i == 0) OutputDebugString("\n");
+		const aiVertexWeight& vw = pBone->mWeights[i];
+
+		unsigned int globalVertexId = meshBaseVertex[meshIndex] + vw.mVertexId;
+
+		std::stringstream ss2;
+		ss2 << "global Vertex id: " << globalVertexId << " Weight: " << vw.mWeight << " ";
+		OutputDebugString(ss2.str().c_str());
+
+		vertexToBones[globalVertexId].AddBoneData(boneId, vw.mWeight);
+	}
+	OutputDebugString("\n");
+}
+
+void ParseMeshBones(int meshIndex, const aiMesh* pMesh) {
+	for (unsigned int i = 0; i < pMesh->mNumBones; i++) {
+		ParseSingleBone(meshIndex, pMesh->mBones[i]);
+	}
+}
+
+void ParseMesh(const aiScene* pScene) {
+	OutputDebugString("*******************************************************\n");
+	std::stringstream ss;
+	ss << "Parsing " << pScene->mNumMeshes << " meshes\n";
+	OutputDebugString(ss.str().c_str());
+	ss.flush();
+
+	unsigned int totalVerticesCount = 0;
+	unsigned int totalIndicesCount = 0;
+	unsigned int totalBonesCount = 0;
+
+	meshBaseVertex.resize(pScene->mNumMeshes);
+
+	for (unsigned int i = 0; i < pScene->mNumMeshes; i++) {
+		const aiMesh* pMesh = pScene->mMeshes[i];
+		unsigned int numVertices = pMesh->mNumVertices;
+		unsigned int numIndices = pMesh->mNumFaces * 3;
+		unsigned int numBones = pMesh->mNumBones;
+
+		meshBaseVertex[i] = totalVerticesCount;
+
+		std::stringstream ss2;
+		ss2 << "  Mesh " << i << " '" << pMesh->mName.C_Str() << "': vertices " << numVertices << " indices " << numIndices << " bones " << numBones << "\n\n";
+		OutputDebugString(ss2.str().c_str());
+		totalVerticesCount += numVertices;
+		totalIndicesCount += numIndices;
+		totalBonesCount += numBones;
+
+		vertexToBones.resize(totalVerticesCount);
+
+		if (pMesh->HasBones()) {
+			ParseMeshBones(i, pMesh);
+		}
+	}
+
+	ss << "Total vertices: " << totalVerticesCount << " total indices: " << totalIndicesCount << " total bones: " << totalBonesCount << "\n";
+	OutputDebugString(ss.str().c_str());
+}
+
+void AssimpTest(const std::string& filename) {
+	Assimp::Importer imp;
+	const aiScene* pScene = imp.ReadFile(filename, 
+		aiProcess_Triangulate 
+		| aiProcess_GenNormals 
+		| aiProcess_JoinIdenticalVertices 
+		| aiProcess_ConvertToLeftHanded
+	);
+
+	if (!pScene) {
+		OutputDebugString("Read File Failed\n");
+		return;
+	}
+	ParseMesh(pScene);
 }

@@ -13,6 +13,29 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		material.Get(AI_MATKEY_NAME, aiStringName);
 		name = aiStringName.C_Str();
 	}
+	//{
+	//	Technique solid{ "Solid", channel::test };
+	//	Step step("solid");
+	//	vertexLayout.Append(custom::VertexLayout::Position3D);
+
+	//	auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
+	//	step.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
+	//	step.AddBindable(std::move(pvs));
+	//	step.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
+
+	//	Dcb::RawLayout pscLayout;
+	//	pscLayout.Add<Dcb::Float3>("color");
+	//	Dcb::Buffer buf{ std::move(pscLayout) };
+	//	buf["color"] = DirectX::XMFLOAT3{ 0.45f, 0.45f, 0.85f };
+	//	step.AddBindable(std::make_unique<Bind::CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
+
+	//	step.AddBindable(std::make_shared<TransformCbuf>(gfx));
+	//	step.AddBindable(Blender::Resolve(gfx, false));
+	//	step.AddBindable(Rasterizer::Resolve(gfx, false));
+	//	
+	//	solid.AddStep(std::move(step));
+	//	techniques.push_back(std::move(solid));
+	//}
 	{
 		Technique phong{ "Phong", channel::main };
 
@@ -31,15 +54,21 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		{
 			bool hasAlpha = false;
 			if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS) {
-				hasTexture = true;
-				shaderCode += "Dif";
-				vertexLayout.Append(custom::VertexLayout::Texture2D);
-				auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 0u);
-				if (tex->HasAlpha()) {
-					hasAlpha = true;
-					shaderCode += "Msk";
+				// TODO: remove try catch
+				try {
+					auto tex = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 0u);
+					hasTexture = true;
+					shaderCode += "Dif";
+					vertexLayout.Append(custom::VertexLayout::Texture2D);
+					if (tex->HasAlpha()) {
+						hasAlpha = true;
+						shaderCode += "Msk";
+					}
+					step.AddBindable(std::move(tex));
 				}
-				step.AddBindable(std::move(tex));
+				catch (BasicException e) {
+					pscLayout.Add<Dcb::Float3>("materialColor");
+				}
 			}
 			else {
 				pscLayout.Add<Dcb::Float3>("materialColor");
