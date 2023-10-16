@@ -12,7 +12,7 @@ namespace Rgph {
 
 class Model {
 public:
-	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f);
+	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f, const bool test = false);
 	~Model() noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx) const;
 	void Submit(size_t channel) const noexcept(!IS_DEBUG);

@@ -14,4 +14,5 @@ public:
 	void Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
+	std::string tag;
 };

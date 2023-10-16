@@ -12,7 +12,7 @@
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
 
-Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
+Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const bool test)
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(pathStr.c_str(),
@@ -27,15 +27,28 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
 	}
 
-	std::vector<Material> materials;
-	materials.reserve(pScene->mNumMaterials);
-	for (size_t i = 0; i < pScene->mNumMaterials; i++) {
-		materials.emplace_back(gfx, *(pScene->mMaterials[i]), pathStr);
-	}
+	if (test) {
+		std::vector<Material> materials;
+		materials.reserve(pScene->mNumMaterials);
+		for (size_t i = 0; i < pScene->mNumMaterials; i++) {
+			materials.emplace_back(gfx, *(pScene->mMaterials[i]), pathStr);
+		}
 
-	for (size_t i = 0; i < pScene->mNumMeshes; i++) {
-		const auto& mesh = *pScene->mMeshes[i];
-		meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
+			const auto& mesh = *pScene->mMeshes[i];
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+		}
+	}
+	else {
+		std::vector<Material2> materials;
+		materials.reserve(pScene->mNumMaterials);
+		for (size_t i = 0; i < pScene->mNumMaterials; i++) {
+			materials.emplace_back(gfx, *(pScene->mMaterials[i]), pathStr);
+		}
+		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
+			const auto& mesh = *pScene->mMeshes[i];
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+		}
 	}
 
 	int nextId = 0;

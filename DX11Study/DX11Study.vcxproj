@@ -193,6 +193,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="LayoutCodex.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Material2.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelException.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="LambertianPass.h" />
     <ClInclude Include="LayoutCodex.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Material2.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelException.h" />

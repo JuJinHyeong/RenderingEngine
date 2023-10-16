@@ -7,6 +7,10 @@
 #include "BindableCodex.h"
 #include "Material.h"
 
+Drawable::Drawable(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept {
+
+}
+
 Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept {
 	pVertices = mat.MakeVertexBindable(gfx, mesh, scale);
 	pIndices = mat.MakeIndexBindable(gfx, mesh);

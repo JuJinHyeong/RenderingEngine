@@ -23,4 +23,7 @@ Material2::Material2(Graphics& gfx, const aiMaterial& material, const std::files
 			nrmTexture = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2u);
 		}
 	}
+	material.Get(AI_MATKEY_COLOR_DIFFUSE, materialColor);
+	material.Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
+	material.Get(AI_MATKEY_SHININESS, gloss);
 }

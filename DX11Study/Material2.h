@@ -16,4 +16,8 @@ public:
 	std::optional<std::shared_ptr<Bind::Texture>> difTexture;
 	std::optional<std::shared_ptr<Bind::Texture>> specTexture;
 	std::optional<std::shared_ptr<Bind::Texture>> nrmTexture;
+	
+	aiColor3D materialColor = { 0.45f, 0.45f, 0.85f };
+	aiColor3D specularColor = { 0.18f, 0.18f, 0.18f };
+	float gloss = 8.0f;
 };
