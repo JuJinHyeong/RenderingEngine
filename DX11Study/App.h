@@ -36,7 +36,7 @@ private:
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
 	//Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
-	Model testModel{wnd.Gfx(), "models/boblampclean/boblampclean.md5mesh", 0.1f};
+	Model testModel{wnd.Gfx(), "models/sample.fbx", 0.1f};
 
 	Rgph::BlurOutlineRenderGraph rg{wnd.Gfx()};
 

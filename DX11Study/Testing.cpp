@@ -212,11 +212,12 @@ void ParseMesh(const aiScene* pScene) {
 
 void AssimpTest(const std::string& filename) {
 	Assimp::Importer imp;
-	const aiScene* pScene = imp.ReadFile(filename, 
-		aiProcess_Triangulate 
-		| aiProcess_GenNormals 
-		| aiProcess_JoinIdenticalVertices 
-		| aiProcess_ConvertToLeftHanded
+	const aiScene* pScene = imp.ReadFile(filename,
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
 	);
 
 	if (!pScene) {

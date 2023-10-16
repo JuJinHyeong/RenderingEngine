@@ -1,4 +1,21 @@
 #include "Mesh.h"
+#include "Channels.h"
+#include "Vertex.h"
+
+Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
+{
+	using namespace Bind;
+	custom::VertexLayout vertexLayout;
+	{
+		Technique phong{ "Phong", channel::main };
+
+		Step step("lambertian");
+		std::string shaderCode = "Phong";
+		vertexLayout.Append(custom::VertexLayout::Position3D);
+		vertexLayout.Append(custom::VertexLayout::Normal);
+		
+	}
+}
 
 Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
 	:

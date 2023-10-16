@@ -13,29 +13,6 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		material.Get(AI_MATKEY_NAME, aiStringName);
 		name = aiStringName.C_Str();
 	}
-	//{
-	//	Technique solid{ "Solid", channel::test };
-	//	Step step("solid");
-	//	vertexLayout.Append(custom::VertexLayout::Position3D);
-
-	//	auto pvs = VertexShader::Resolve(gfx, "SolidVS.cso");
-	//	step.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
-	//	step.AddBindable(std::move(pvs));
-	//	step.AddBindable(PixelShader::Resolve(gfx, "SolidPS.cso"));
-
-	//	Dcb::RawLayout pscLayout;
-	//	pscLayout.Add<Dcb::Float3>("color");
-	//	Dcb::Buffer buf{ std::move(pscLayout) };
-	//	buf["color"] = DirectX::XMFLOAT3{ 0.45f, 0.45f, 0.85f };
-	//	step.AddBindable(std::make_unique<Bind::CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
-
-	//	step.AddBindable(std::make_shared<TransformCbuf>(gfx));
-	//	step.AddBindable(Blender::Resolve(gfx, false));
-	//	step.AddBindable(Rasterizer::Resolve(gfx, false));
-	//	
-	//	solid.AddStep(std::move(step));
-	//	techniques.push_back(std::move(solid));
-	//}
 	{
 		Technique phong{ "Phong", channel::main };
 
@@ -49,7 +26,6 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 		Dcb::RawLayout pscLayout;
 		bool hasTexture = false;
 		bool hasGlossAlpha = false;
-
 		// has diffuse texture
 		{
 			bool hasAlpha = false;

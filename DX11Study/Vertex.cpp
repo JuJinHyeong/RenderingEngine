@@ -119,7 +119,8 @@ namespace custom {
 
 	VertexBuffer::VertexBuffer(VertexLayout layout, size_t size) noexcept(!IS_DEBUG)
 		:
-		layout(std::move(layout)) {
+		layout(std::move(layout)) 
+	{
 		Resize(size);
 	}
 
