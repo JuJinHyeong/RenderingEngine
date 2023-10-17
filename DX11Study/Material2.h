@@ -13,9 +13,9 @@ public:
 	std::string rootPath;
 	std::string name;
 
-	std::optional<std::shared_ptr<Bind::Texture>> difTexture;
-	std::optional<std::shared_ptr<Bind::Texture>> specTexture;
-	std::optional<std::shared_ptr<Bind::Texture>> nrmTexture;
+	std::optional<std::shared_ptr<Bind::Texture>> difTexture = std::nullopt;
+	std::optional<std::shared_ptr<Bind::Texture>> specTexture = std::nullopt;
+	std::optional<std::shared_ptr<Bind::Texture>> nrmTexture = std::nullopt;
 	
 	aiColor3D materialColor = { 0.45f, 0.45f, 0.85f };
 	aiColor3D specularColor = { 0.18f, 0.18f, 0.18f };

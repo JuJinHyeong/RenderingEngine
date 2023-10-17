@@ -7,6 +7,17 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 	Drawable(gfx, mat, mesh, scale),
 	tag(mat.rootPath + "%" + mesh.mName.C_Str())
 {
+	SetBones(mesh);
+	SetTechnique(gfx, mat, mesh, scale);
+}
+
+void Mesh::SetBones(const aiMesh& mesh) noexcept(!IS_DEBUG) {
+	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
+		bones.emplace_back(std::make_unique<Bone>(*mesh.mBones[i]));
+	}
+}
+
+void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG) {
 	using namespace Bind;
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
@@ -18,6 +29,7 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 			vertexLayout.Append(custom::VertexLayout::Position3D);
 			vertexLayout.Append(custom::VertexLayout::Normal);
 			bool hasTexture = false;
+			bool hasAlpha = false;
 			bool hasGlossAlpha = false;
 			{
 				if (mat.difTexture.has_value()) {
@@ -26,12 +38,15 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 					vertexLayout.Append(custom::VertexLayout::Texture2D);
 					if ((*mat.difTexture)->HasAlpha()) {
 						shaderCode += "Msk";
+						hasAlpha = true;
 					}
+
+					step.AddBindable(*mat.difTexture);
 				}
 				else {
 					pscLayout.Add<Dcb::Float3>("materialColor");
 				}
-				step.AddBindable(std::move(*mat.difTexture));
+				step.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
 			}
 			{
 				if (mat.specTexture.has_value()) {
@@ -39,7 +54,7 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 					hasGlossAlpha = (*mat.specTexture)->HasAlpha();
 					shaderCode += "Spc";
 
-					step.AddBindable(std::move(*mat.specTexture));
+					step.AddBindable(*mat.specTexture);
 
 					vertexLayout.Append(custom::VertexLayout::Texture2D);
 
@@ -54,7 +69,7 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 				if (mat.nrmTexture.has_value()) {
 					hasTexture = true;
 					shaderCode += "Nrm";
-					step.AddBindable(std::move(*mat.nrmTexture));
+					step.AddBindable(*mat.nrmTexture);
 
 					vertexLayout.Append(custom::VertexLayout::Texture2D);
 					vertexLayout.Append(custom::VertexLayout::Tangent);
@@ -155,7 +170,7 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 	// set drawables
 	{
 		auto v = custom::VertexBuffer{ vertexLayout, mesh };
-		if (scale > 1.0f) {
+		if (scale != 1.0f) {
 			for (size_t i = 0u; i < v.Size(); i++) {
 				DirectX::XMFLOAT3& pos = v[i].Attr<custom::VertexLayout::ElementType::Position3D>();
 				pos.x *= scale;
@@ -181,6 +196,7 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 		pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 }
+
 
 Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
 	:

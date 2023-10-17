@@ -357,6 +357,9 @@
     <ClCompile Include="Material2.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Bone.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -693,6 +696,9 @@
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Material2.h">
+      <Filter>헤더 파일\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bone.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
   </ItemGroup>

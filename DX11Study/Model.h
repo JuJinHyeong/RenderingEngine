@@ -29,5 +29,4 @@ private:
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;
-	//std::unique_ptr<class ModelWindow> pWindow;
 };
