@@ -1,4 +1,5 @@
 #include "Vertex.h"
+#include "Mesh.h"
 #include <string>
 
 namespace custom {
@@ -139,6 +140,24 @@ namespace custom {
 		Resize(mesh.mNumVertices);
 		for (size_t i = 0, end = layout.GetElementCount(); i < end; i++) {
 			VertexLayout::Bridge<AttributeAiMeshFill>(layout.ResolveByIndex(i).GetType(), this, mesh);
+		}
+	}
+
+	template<VertexLayout::ElementType type>
+	struct AttributeAiMeshFill2 {
+		static constexpr void Exec(VertexBuffer* pBuf, const Mesh& mesh) noexcept(!IS_DEBUG) {
+			for (size_t i = 0u, end = mesh.GetVertices().size(); i < end; i++) {
+				(*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract2(mesh, i);
+			}
+		};
+	};
+	VertexBuffer::VertexBuffer(VertexLayout layout_in, const Mesh& mesh)
+		:
+		layout(std::move(layout_in)) 
+	{
+		Resize(mesh.GetVertices().size());
+		for (size_t i = 0, end = layout.GetElementCount(); i < end; i++) {
+			VertexLayout::Bridge<AttributeAiMeshFill2>(layout.ResolveByIndex(i).GetType(), this, mesh);
 		}
 	}
 

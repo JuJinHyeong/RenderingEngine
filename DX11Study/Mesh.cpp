@@ -1,19 +1,67 @@
 #include "Mesh.h"
 #include "Channels.h"
 #include "Vertex.h"
+#include "DynamicConstant.h"
+#include "Rasterizer.h"
+#include "TransformCbuf.h"
+#include "Blender.h"
+#include "VertexShader.h"
+#include "PixelShader.h"
+#include "Sampler.h"
+#include "InputLayout.h"
+#include "ConstantBufferEx.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "Topology.h"
+#include "Vertex.h"
+#include <array>
 
 Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
-	tag(mat.rootPath + "%" + mesh.mName.C_Str())
+	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
+	vertices(mesh.mVertices, mesh.mNumVertices),
+	textureCoords(mesh.mTextureCoords[0], mesh.mNumVertices),
+	normals(mesh.mNormals, mesh.mNumVertices),
+	tangents(mesh.mTangents, mesh.mNumVertices),
+	bitangents(mesh.mBitangents, mesh.mNumVertices),
+	colors(mesh.mColors[0], mesh.mNumVertices),
+	faces(mesh.mFaces, mesh.mNumFaces),
+	boneIndex(mesh.mNumVertices, {0, 0, 0, 0}),
+	boneWeight(mesh.mNumVertices, {0.0f, 0.0f, 0.0f, 0.0f})
 {
 	SetBones(mesh);
 	SetTechnique(gfx, mat, mesh, scale);
 }
 
 void Mesh::SetBones(const aiMesh& mesh) noexcept(!IS_DEBUG) {
+	// add unique bones
+	std::unordered_set<std::string> boneNameSet;
 	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
-		bones.emplace_back(std::make_unique<Bone>(*mesh.mBones[i]));
+		if (boneNameSet.find(mesh.mBones[i]->mName.C_Str()) == boneNameSet.end()) {
+			bonePtrs.emplace_back(std::make_unique<Bone>(*mesh.mBones[i]));
+			boneNameSet.insert(mesh.mBones[i]->mName.C_Str());
+		}
+	}
+	// set vertex bone index and weights
+	for (size_t boneIdx = 0; boneIdx < bonePtrs.size(); boneIdx++) {
+		const auto& bonePtr = bonePtrs[boneIdx];
+		const auto& vws = bonePtr->GetVertexWeight();
+		for (size_t vwIdx = 0; vwIdx < vws.size(); vwIdx++) {
+			auto vertexId = vws[vwIdx].first;
+			auto weight = vws[vwIdx].second;
+			for (int i = 0; i < 5; i++) {
+				if (i == 4) {
+					assert(false && "bone error!");
+				}
+				// if bone weight is 0, then we can use this slot
+				if (boneWeight[vertexId][i] == 0.0f) {
+					boneIndex[vertexId][i] = (unsigned int)boneIdx;
+					boneWeight[vertexId][i] = weight;
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -21,6 +69,7 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 	using namespace Bind;
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
+	Dcb::RawLayout vscLayout;
 	{
 		Technique phong{ "Phong", channel::main };
 		{
@@ -31,6 +80,7 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 			bool hasTexture = false;
 			bool hasAlpha = false;
 			bool hasGlossAlpha = false;
+			bool hasSkinned = false;
 			{
 				if (mat.difTexture.has_value()) {
 					hasTexture = true;
@@ -80,6 +130,18 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 				}
 			}
 			{
+				if (!bonePtrs.empty()) {
+					hasSkinned = true;
+					shaderCode += "Skin";
+
+					vertexLayout.Append(custom::VertexLayout::BoneIndex);
+					vertexLayout.Append(custom::VertexLayout::BoneWeight);
+
+					vscLayout.Add<Dcb::Array>("boneTransforms");
+					vscLayout["boneTransforms"].Set<Dcb::Matrix>(bonePtrs.size());
+				}
+			}
+			{
 				step.AddBindable(std::make_unique<TransformCbuf>(gfx));
 				step.AddBindable(Blender::Resolve(gfx, false));
 				auto pvs = VertexShader::Resolve(gfx, shaderCode + "VS.cso");
@@ -89,6 +151,14 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 				if (hasTexture) {
 					step.AddBindable(Bind::Sampler::Resolve(gfx));
 				}
+
+				Dcb::Buffer vcBuf{ std::move(vscLayout) };
+				if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
+					for (size_t i = 0; i < bonePtrs.size(); i++) {
+						r[i] = bonePtrs[i]->GetOffsetMatrix();
+					}
+				}
+				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 1u));
 
 				Dcb::Buffer buf{ std::move(pscLayout) };
 				if (auto r = buf["materialColor"]; r.Exists()) {
@@ -219,4 +289,40 @@ DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
 void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
 	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
 	Drawable::Submit(channels);
+}
+
+const std::span<aiVector3D>& Mesh::GetVertices() const noexcept {
+	return vertices;
+}
+
+const std::span<aiVector3D>& Mesh::GetTextureCoords() const noexcept {
+	return textureCoords;
+}
+
+const std::span<aiVector3D>& Mesh::GetNormals() const noexcept {
+	return normals;
+}
+
+const std::span<aiVector3D>& Mesh::GetTangents() const noexcept {
+	return tangents;
+}
+
+const std::span<aiVector3D>& Mesh::GetBitangents() const noexcept {
+	return bitangents;
+}
+
+const std::span<aiColor4D>& Mesh::GetColors() const noexcept {
+	return colors;
+}
+
+const std::span<aiFace>& Mesh::GetFaces() const noexcept {
+	return faces;
+}
+
+const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexcept {
+	return boneIndex;
+}
+
+const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {
+	return boneWeight;
 }

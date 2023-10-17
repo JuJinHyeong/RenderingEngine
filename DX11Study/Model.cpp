@@ -5,7 +5,6 @@
 #include "assimp/postprocess.h"
 #include "ModelException.h"
 #include "Material.h"
-#include "ModelWindow.h"
 #include "ExtendedXMMath.h"
 #include "ModelProbe.h"
 

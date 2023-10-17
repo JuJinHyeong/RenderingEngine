@@ -249,9 +249,6 @@
     <ClCompile Include="ModelException.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="ModelWindow.cpp">
-      <Filter>소스 파일\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="ModelProbe.cpp">
       <Filter>소스 파일\Drawable</Filter>
     </ClCompile>
@@ -557,9 +554,6 @@
     <ClInclude Include="ModelException.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="ModelWindow.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="ModelProbe.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
@@ -858,6 +852,18 @@
     </FxCompile>
     <FxCompile Include="ShadowPS.hlsl">
       <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongSkinVS.hlsl">
+      <Filter>Shaders\Phong</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongSkinPS.hlsl">
+      <Filter>Shaders\Phong</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDifSkinVS.hlsl">
+      <Filter>Shaders\Phong</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDifSkinPS.hlsl">
+      <Filter>Shaders\Phong</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
