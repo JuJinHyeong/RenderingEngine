@@ -1,9 +1,9 @@
 #include "Transform.hlsli"
 #include "VSShadow.hlsli"
 
-cbuffer BoneOffset : register(b1)
+cbuffer BoneOffset : register(b4)
 {
-    const matrix boneTransforms[1000];
+    matrix boneTransforms[28];
 };
 
 struct VSOut
@@ -18,7 +18,15 @@ struct VSOut
 VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, float4 boneIndex : BoneIndex, float4 boneWeight : BoneWeight)
 {
     VSOut vso;
-    vso.viewPos = (float3) mul(float4(pos, 1.0f), modelView);
+    
+    matrix boneTransform = (matrix)0.0f;
+    [unroll]
+    for (int i = 0; i < 4; i++)
+    {
+        boneTransform += boneTransforms[boneIndex[i]] * boneWeight[i];
+    }
+    float4 bonePos = mul(boneTransform, float4(pos, 1.0f));
+    vso.viewPos = (float3) mul(bonePos, modelView);
     vso.viewNormal = mul(normal, (float3x3) modelView);
     vso.pos = mul(float4(pos, 1.0f), modelViewProj);
     vso.tc = tc;

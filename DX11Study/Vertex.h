@@ -111,7 +111,7 @@ namespace custom {
 			static constexpr const char* semantic = "BoneIndex";
 			static constexpr const char* code = "BI";
 			// TODO: fix extractor
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces)
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
 			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBoneIndex());
 		};
 		template<> struct Map<BoneWeight> {

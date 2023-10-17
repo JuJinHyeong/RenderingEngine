@@ -2,9 +2,9 @@
 #include "Drawable.h"
 #include "Material2.h"
 #include "Bone.h"
-#include <unordered_set>
 #include <span>
 #include <array>
+#include <unordered_map>
 
 class Mesh : public Drawable {
 public:
@@ -24,12 +24,14 @@ public:
 	const std::span<aiFace>& GetFaces() const noexcept;
 	const std::vector<std::array<unsigned int, 4>>& GetBoneIndex() const noexcept;
 	const std::vector<std::array<float, 4>>& GetBoneWeight() const noexcept;
+	const std::unordered_map<std::string, unsigned int>& GetBoneNameIndexMap() const noexcept;
 
 private:
 	void SetBones(const aiMesh& mesh) noexcept(!IS_DEBUG);
 	void SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
 	std::string tag;
+	std::unordered_map<std::string, unsigned int> boneNameIndexMap;
 	std::vector<std::unique_ptr<Bone>> bonePtrs;
 
 	std::span<aiVector3D> vertices;

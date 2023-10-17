@@ -60,28 +60,7 @@ const DirectX::XMFLOAT4X4& Node::GetAppliedTransform() const noexcept {
 void Node::SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {
 	DirectX::XMStoreFloat4x4(&appliedTransform, transform);
 }
-//void Node::ShowTree(Node*& pSelectedNode) const noexcept(!IS_DEBUG) {
-//	// compare with this can't be??
-//	const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
-//	const int nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow
-//		| (pSelectedNode == this ? ImGuiTreeNodeFlags_Selected : 0)
-//		| (childPtrs.empty() ? ImGuiTreeNodeFlags_Leaf : 0);
-//
-//	// create expandable node
-//	const auto expanded = ImGui::TreeNodeEx((void*)(intptr_t)GetId(), nodeFlags, name.c_str());
-//
-//	if (ImGui::IsItemClicked()) {
-//		// future need to modify
-//		pSelectedNode = const_cast<Node*>(this);
-//	}
-//	// int to void* need to cast.
-//	if (expanded) {
-//		for (const auto& pChild : childPtrs) {
-//			pChild->ShowTree(pSelectedNode);
-//		}
-//		ImGui::TreePop();
-//	}
-//}
+
 void Node::AddChild(std::unique_ptr<Node> pChild) noexcept(!IS_DEBUG) {
 	assert(pChild);
 	childPtrs.push_back(std::move(pChild));

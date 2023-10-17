@@ -36,11 +36,10 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 
 void Mesh::SetBones(const aiMesh& mesh) noexcept(!IS_DEBUG) {
 	// add unique bones
-	std::unordered_set<std::string> boneNameSet;
 	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
-		if (boneNameSet.find(mesh.mBones[i]->mName.C_Str()) == boneNameSet.end()) {
+		if (boneNameIndexMap.find(mesh.mBones[i]->mName.C_Str()) == boneNameIndexMap.end()) {
+			boneNameIndexMap.insert({ mesh.mBones[i]->mName.C_Str(), bonePtrs.size() });
 			bonePtrs.emplace_back(std::make_unique<Bone>(*mesh.mBones[i]));
-			boneNameSet.insert(mesh.mBones[i]->mName.C_Str());
 		}
 	}
 	// set vertex bone index and weights
@@ -155,10 +154,12 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 				Dcb::Buffer vcBuf{ std::move(vscLayout) };
 				if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
 					for (size_t i = 0; i < bonePtrs.size(); i++) {
-						r[i] = bonePtrs[i]->GetOffsetMatrix();
+						DirectX::XMFLOAT4X4 transposedBoneOffsetMat;
+						DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&bonePtrs[i]->GetOffsetMatrix())));
+						r[i] = transposedBoneOffsetMat;
 					}
 				}
-				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 1u));
+				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 4u));
 
 				Dcb::Buffer buf{ std::move(pscLayout) };
 				if (auto r = buf["materialColor"]; r.Exists()) {
@@ -325,4 +326,8 @@ const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexc
 
 const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {
 	return boneWeight;
+}
+
+const std::unordered_map<std::string, unsigned int>& Mesh::GetBoneNameIndexMap() const noexcept {
+	return boneNameIndexMap;
 }
