@@ -7,7 +7,13 @@
 
 int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int mCmdShow) {
 	try {
-		//AssimpTest("models/sample.fbx");
+		AllocConsole();
+		FILE* stream;
+		errno_t err = freopen_s(&stream, "CONOUT$", "wt", stdout);
+		if (err != 0) {
+			throw std::exception("Failed to redirect stdout to console");
+		}
+		AssimpTest("models/boblampclean/boblampclean.md5mesh");
 		App app;
 		return app.Go();
 	}

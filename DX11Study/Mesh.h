@@ -13,6 +13,7 @@ public:
 		Graphics& gfx,
 		const Material2& mat,
 		const aiMesh& mesh,
+		const unsigned int meshIndex,
 		const std::vector<std::shared_ptr<Bone>>& bonePtrs,
 		const std::unordered_map<std::string, unsigned int>& boneNameIndexMap,
 		const std::vector<DirectX::XMFLOAT4X4>& boneOffsetMatrixes,

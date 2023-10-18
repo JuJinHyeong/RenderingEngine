@@ -51,9 +51,9 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 			const auto& mesh = *pScene->mMeshes[i];
 			for (size_t j = 0; j < mesh.mNumBones; j++) {
 				const auto& bone = *mesh.mBones[j];
-				bonePtrs.emplace_back(std::make_shared<Bone>(mesh.mName.C_Str(), bone));
+				bonePtrs.emplace_back(std::make_shared<Bone>(i, bone));
 				if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
-					boneNameIndexMap[bone.mName.C_Str()] = boneOffsetMatrixes.size();
+					boneNameIndexMap[bone.mName.C_Str()] = (unsigned int)boneOffsetMatrixes.size();
 					boneOffsetMatrixes.push_back(bonePtrs.back()->GetOffsetMatrix());
 				}
 			}
@@ -62,7 +62,7 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, bonePtrs, boneNameIndexMap, boneOffsetMatrixes, scale));
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, i, bonePtrs, boneNameIndexMap, boneOffsetMatrixes, scale));
 		}
 	}
 

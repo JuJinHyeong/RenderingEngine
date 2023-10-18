@@ -22,6 +22,7 @@ Mesh::Mesh(
 	Graphics& gfx,
 	const Material2& mat,
 	const aiMesh& mesh,
+	const unsigned int meshIndex,
 	const std::vector<std::shared_ptr<Bone>>& bonePtrs,
 	const std::unordered_map<std::string, unsigned int>& boneNameIndexMap,
 	const std::vector<DirectX::XMFLOAT4X4>& boneOffsetMatrixes,
@@ -41,11 +42,14 @@ Mesh::Mesh(
 	boneWeight(mesh.mNumVertices, {0.0f, 0.0f, 0.0f, 0.0f})
 {
 	{
-
+		std::vector<std::shared_ptr<Bone>> matchingBones;
+		std::copy_if(bonePtrs.begin(), bonePtrs.end(), std::back_inserter(matchingBones),
+			[meshIndex=meshIndex](const std::shared_ptr<Bone>& bone) {
+				return bone->GetMeshIndex() == meshIndex;
+			});
 		// set vertex bone index and weights
-		for (size_t boneIdx = 0; boneIdx < bonePtrs.size(); boneIdx++) {
-			const auto& bonePtr = bonePtrs[boneIdx];
-			if (bonePtr->GetMeshName() != name) continue;
+		for (size_t boneIdx = 0; boneIdx < matchingBones.size(); boneIdx++) {
+			const auto& bonePtr = matchingBones[boneIdx];
 
 			const auto& vws = bonePtr->GetVertexWeight();
 			for (size_t vwIdx = 0; vwIdx < vws.size(); vwIdx++) {
@@ -65,7 +69,6 @@ Mesh::Mesh(
 			}
 		}
 	}
-
 
 	using namespace Bind;
 	custom::VertexLayout vertexLayout;
@@ -131,7 +134,7 @@ Mesh::Mesh(
 				}
 			}
 			{
-				if (!bonePtrs.empty()) {
+				if (!boneOffsetMatrixes.empty()) {
 					hasSkinned = true;
 					shaderCode += "Skin";
 
@@ -139,7 +142,7 @@ Mesh::Mesh(
 					vertexLayout.Append(custom::VertexLayout::BoneWeight);
 
 					vscLayout.Add<Dcb::Array>("boneTransforms");
-					vscLayout["boneTransforms"].Set<Dcb::Matrix>(bonePtrs.size());
+					vscLayout["boneTransforms"].Set<Dcb::Matrix>(boneOffsetMatrixes.size());
 				}
 			}
 			{
@@ -153,15 +156,18 @@ Mesh::Mesh(
 					step.AddBindable(Bind::Sampler::Resolve(gfx));
 				}
 
-				Dcb::Buffer vcBuf{ std::move(vscLayout) };
-				if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
-					for (size_t i = 0; i < boneOffsetMatrixes.size(); i++) {
-						DirectX::XMFLOAT4X4 transposedBoneOffsetMat;
-						DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneOffsetMatrixes[i])));
-						r[i] = transposedBoneOffsetMat;
+				if (hasSkinned) {
+					Dcb::Buffer vcBuf{ std::move(vscLayout) };
+					if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
+						for (size_t i = 0; i < boneOffsetMatrixes.size(); i++) {
+							DirectX::XMFLOAT4X4 transposedBoneOffsetMat;
+							DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneOffsetMatrixes[i])));
+							r[i] = transposedBoneOffsetMat;
+							//r[i] = boneOffsetMatrixes[i];
+						}
 					}
+					step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 2u));
 				}
-				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 4u));
 
 				Dcb::Buffer buf{ std::move(pscLayout) };
 				if (auto r = buf["materialColor"]; r.Exists()) {

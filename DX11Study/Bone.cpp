@@ -3,15 +3,16 @@
 #include <assimp/scene.h>
 #include <assimp/mesh.h>
 
-Bone::Bone(const std::string& meshName, const aiBone& bone)
+Bone::Bone(const unsigned int meshIndex, const aiBone& bone)
 	:
 	name(bone.mName.C_Str()),
-	meshName(meshName),
-	offset(ConvertToDirectXMatrix(bone.mOffsetMatrix))
+	meshIndex(meshIndex),
+	offset(ConvertToDirectXMatrix(bone.mOffsetMatrix)),
+	vertexWeights(bone.mNumWeights)
 {
 	for (unsigned int i = 0; i < bone.mNumWeights; i++) {
 		aiVertexWeight vw = bone.mWeights[i];
-		vertexWeights.push_back(std::make_pair(vw.mVertexId, vw.mWeight));
+		vertexWeights[i] = std::move(std::make_pair(vw.mVertexId, vw.mWeight));
 	}
 }
 
@@ -23,9 +24,9 @@ const std::string& Bone::GetName() const noexcept {
 	return name;
 }
 
-const std::string& Bone::GetMeshName() const noexcept
+const unsigned int Bone::GetMeshIndex() const noexcept
 {
-	return meshName;
+	return meshIndex;
 }
 
 const std::vector<std::pair<unsigned int, float>>& Bone::GetVertexWeight() const noexcept {
