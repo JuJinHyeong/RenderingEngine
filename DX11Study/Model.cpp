@@ -7,6 +7,7 @@
 #include "Material.h"
 #include "ExtendedXMMath.h"
 #include "ModelProbe.h"
+#include "Bone.h"
 
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
@@ -44,9 +45,24 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		for (size_t i = 0; i < pScene->mNumMaterials; i++) {
 			materials.emplace_back(gfx, *(pScene->mMaterials[i]), pathStr);
 		}
+
+
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+			for (size_t j = 0; j < mesh.mNumBones; j++) {
+				const auto& bone = *mesh.mBones[j];
+				bonePtrs.emplace_back(std::make_shared<Bone>(mesh.mName.C_Str(), bone));
+				if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
+					boneNameIndexMap[bone.mName.C_Str()] = boneOffsetMatrixes.size();
+					boneOffsetMatrixes.push_back(bonePtrs.back()->GetOffsetMatrix());
+				}
+			}
+		}
+
+
+		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
+			const auto& mesh = *pScene->mMeshes[i];
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, bonePtrs, boneNameIndexMap, boneOffsetMatrixes, scale));
 		}
 	}
 

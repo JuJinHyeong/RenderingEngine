@@ -15,10 +15,20 @@
 #include "Topology.h"
 #include "Vertex.h"
 #include <array>
+#include <algorithm>
+#include <unordered_map>
 
-Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
+Mesh::Mesh(
+	Graphics& gfx,
+	const Material2& mat,
+	const aiMesh& mesh,
+	const std::vector<std::shared_ptr<Bone>>& bonePtrs,
+	const std::unordered_map<std::string, unsigned int>& boneNameIndexMap,
+	const std::vector<DirectX::XMFLOAT4X4>& boneOffsetMatrixes,
+	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
+	name(mesh.mName.C_Str()),
 	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
 	vertices(mesh.mVertices, mesh.mNumVertices),
 	textureCoords(mesh.mTextureCoords[0], mesh.mNumVertices),
@@ -27,44 +37,36 @@ Mesh::Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale)
 	bitangents(mesh.mBitangents, mesh.mNumVertices),
 	colors(mesh.mColors[0], mesh.mNumVertices),
 	faces(mesh.mFaces, mesh.mNumFaces),
-	boneIndex(mesh.mNumVertices, {0, 0, 0, 0}),
+	boneOffsetIndex(mesh.mNumVertices, {0, 0, 0, 0}),
 	boneWeight(mesh.mNumVertices, {0.0f, 0.0f, 0.0f, 0.0f})
 {
-	SetBones(mesh);
-	SetTechnique(gfx, mat, mesh, scale);
-}
+	{
 
-void Mesh::SetBones(const aiMesh& mesh) noexcept(!IS_DEBUG) {
-	// add unique bones
-	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
-		if (boneNameIndexMap.find(mesh.mBones[i]->mName.C_Str()) == boneNameIndexMap.end()) {
-			boneNameIndexMap.insert({ mesh.mBones[i]->mName.C_Str(), bonePtrs.size() });
-			bonePtrs.emplace_back(std::make_unique<Bone>(*mesh.mBones[i]));
-		}
-	}
-	// set vertex bone index and weights
-	for (size_t boneIdx = 0; boneIdx < bonePtrs.size(); boneIdx++) {
-		const auto& bonePtr = bonePtrs[boneIdx];
-		const auto& vws = bonePtr->GetVertexWeight();
-		for (size_t vwIdx = 0; vwIdx < vws.size(); vwIdx++) {
-			auto vertexId = vws[vwIdx].first;
-			auto weight = vws[vwIdx].second;
-			for (int i = 0; i < 5; i++) {
-				if (i == 4) {
-					assert(false && "bone error!");
-				}
-				// if bone weight is 0, then we can use this slot
-				if (boneWeight[vertexId][i] == 0.0f) {
-					boneIndex[vertexId][i] = (unsigned int)boneIdx;
-					boneWeight[vertexId][i] = weight;
-					break;
+		// set vertex bone index and weights
+		for (size_t boneIdx = 0; boneIdx < bonePtrs.size(); boneIdx++) {
+			const auto& bonePtr = bonePtrs[boneIdx];
+			if (bonePtr->GetMeshName() != name) continue;
+
+			const auto& vws = bonePtr->GetVertexWeight();
+			for (size_t vwIdx = 0; vwIdx < vws.size(); vwIdx++) {
+				auto vertexId = vws[vwIdx].first;
+				auto weight = vws[vwIdx].second;
+				for (int i = 0; i < 5; i++) {
+					if (i == 4) {
+						assert(false && "bone error!");
+					}
+					// if bone weight is 0, then we can use this slot
+					if (boneWeight[vertexId][i] == 0.0f) {
+						boneOffsetIndex[vertexId][i] = boneNameIndexMap.at(bonePtr->GetName());
+						boneWeight[vertexId][i] = weight;
+						break;
+					}
 				}
 			}
 		}
 	}
-}
 
-void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG) {
+
 	using namespace Bind;
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
@@ -153,9 +155,9 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 
 				Dcb::Buffer vcBuf{ std::move(vscLayout) };
 				if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
-					for (size_t i = 0; i < bonePtrs.size(); i++) {
+					for (size_t i = 0; i < boneOffsetMatrixes.size(); i++) {
 						DirectX::XMFLOAT4X4 transposedBoneOffsetMat;
-						DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&bonePtrs[i]->GetOffsetMatrix())));
+						DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneOffsetMatrixes[i])));
 						r[i] = transposedBoneOffsetMat;
 					}
 				}
@@ -268,7 +270,6 @@ void Mesh::SetTechnique(Graphics& gfx, const Material2& mat, const aiMesh& mesh,
 	}
 }
 
-
 Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale)
@@ -321,13 +322,9 @@ const std::span<aiFace>& Mesh::GetFaces() const noexcept {
 }
 
 const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexcept {
-	return boneIndex;
+	return boneOffsetIndex;
 }
 
 const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {
 	return boneWeight;
-}
-
-const std::unordered_map<std::string, unsigned int>& Mesh::GetBoneNameIndexMap() const noexcept {
-	return boneNameIndexMap;
 }

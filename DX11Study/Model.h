@@ -3,8 +3,10 @@
 #include "Node.h"
 #include <string>
 #include <filesystem>
+#include <vector>
+#include <unordered_map>
 
-class ModelWindow;
+class Bone;
 
 namespace Rgph {
 	class RenderGraph;
@@ -29,4 +31,8 @@ private:
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;
+	// TODO: vertex weight is not needed to save on model
+	std::vector<std::shared_ptr<Bone>> bonePtrs;
+	std::unordered_map<std::string, unsigned int> boneNameIndexMap;
+	std::vector<DirectX::XMFLOAT4X4> boneOffsetMatrixes;
 };

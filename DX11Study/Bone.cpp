@@ -3,9 +3,10 @@
 #include <assimp/scene.h>
 #include <assimp/mesh.h>
 
-Bone::Bone(const aiBone& bone)
+Bone::Bone(const std::string& meshName, const aiBone& bone)
 	:
 	name(bone.mName.C_Str()),
+	meshName(meshName),
 	offset(ConvertToDirectXMatrix(bone.mOffsetMatrix))
 {
 	for (unsigned int i = 0; i < bone.mNumWeights; i++) {
@@ -20,6 +21,11 @@ const DirectX::XMFLOAT4X4& Bone::GetOffsetMatrix() const noexcept {
 
 const std::string& Bone::GetName() const noexcept {
 	return name;
+}
+
+const std::string& Bone::GetMeshName() const noexcept
+{
+	return meshName;
 }
 
 const std::vector<std::pair<unsigned int, float>>& Bone::GetVertexWeight() const noexcept {
