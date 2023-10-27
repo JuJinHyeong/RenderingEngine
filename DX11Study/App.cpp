@@ -35,7 +35,7 @@ App::App()
 	// cube1.LinkTechniques(rg);
 	// cube2.LinkTechniques(rg);
 	// gobber.LinkTechniques(rg);
-	nano.LinkTechniques(rg);
+	//nano.LinkTechniques(rg);
 	//sponza.LinkTechniques(rg);
 	testModel.LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
@@ -67,7 +67,7 @@ void App::DoFrame(float dt)
 	// cube1.Submit(channel::main);
 	// cube2.Submit(channel::main);
 	//sponza.Submit(channel::main);
-	nano.Submit(channel::main);
+	//nano.Submit(channel::main);
 	// gobber.Submit(channel::main);
 	// cameras.Submit(channel::main);
 	testModel.Submit(channel::main);
@@ -76,7 +76,7 @@ void App::DoFrame(float dt)
 	// cube1.Submit(channel::shadow);
 	// cube2.Submit(channel::shadow);
 	// gobber.Submit(channel::shadow);
-	nano.Submit(channel::shadow);
+	//nano.Submit(channel::shadow);
 
 	rg.Execute(wnd.Gfx());
 

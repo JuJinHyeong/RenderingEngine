@@ -1,5 +1,4 @@
 #include "Testing.h"
-#include "Vertex.h"
 #include "ExtendedXMMath.h"
 #include "BindableCommon.h"
 #include "RenderTarget.h"
@@ -14,94 +13,66 @@
 #include <assimp/postprocess.h> // Post processing flags
 #include <stdio.h>
 
-#define Dump(...) Dump::WriteToFile("test_parse.txt", __VA_ARGS__); Dump::Print(__VA_ARGS__);
-
-void TestDynamicMeshLoading() {
-	using namespace custom;
-	Assimp::Importer imp;
-
-	const auto pScene = imp.ReadFile("Models/brick_wall/brick_wall.obj",
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices |
-		aiProcess_ConvertToLeftHanded |
-		aiProcess_GenNormals |
-		aiProcess_CalcTangentSpace
-	);
-	auto layout = VertexLayout{}
-		.Append(VertexLayout::Position3D)
-		.Append(VertexLayout::Normal)
-		.Append(VertexLayout::Tangent)
-		.Append(VertexLayout::Bitangent)
-		.Append(VertexLayout::Texture2D);
-	VertexBuffer buf{ std::move(layout), *pScene->mMeshes[0] };
-
-	for (auto i = 0ull, end = buf.Size(); i < end; i++) {
-		const auto a = buf[i].Attr<VertexLayout::Position3D>();
-		const auto b = buf[i].Attr<VertexLayout::Normal>();
-		const auto c = buf[i].Attr<VertexLayout::Tangent>();
-		const auto d = buf[i].Attr<VertexLayout::Bitangent>();
-		const auto e = buf[i].Attr<VertexLayout::Texture2D>();
-	}
+template<typename... Args>
+void DumpToFile(const Args&... args) {
+	Dump::WriteToFile("test_parse.txt", args...);
 }
-
-
-void TestScaleMatrixTranslation()
-{
-	auto tlMat = DirectX::XMMatrixTranslation(20.f, 30.f, 40.f);
-	tlMat = ScaleTranslation(tlMat, 0.1f);
-	DirectX::XMFLOAT4X4 f4;
-	DirectX::XMStoreFloat4x4(&f4, tlMat);
-	auto etl = ExtractTranslation(f4);
-	assert(etl.x == 2.f && etl.y == 3.f && etl.z == 4.f);
-}
-
-
-void D3DTestScratchPad(Window& wnd) {
-	namespace dx = DirectX;
-	using namespace custom;
-
-	const auto RenderWithVS = [&gfx = wnd.Gfx()](const std::string& vsName) {
-		const auto bitop = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		const auto layout = VertexLayout{}
-			.Append(VertexLayout::Position2D)
-			.Append(VertexLayout::Float3Color);
-
-		VertexBuffer vb(layout, 3);
-		vb[0].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ 0.0f,0.5f };
-		vb[0].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 1.0f,0.0f,0.0f };
-		vb[1].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ 0.5f,-0.5f };
-		vb[1].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 0.0f,1.0f,0.0f };
-		vb[2].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ -0.5f,-0.5f };
-		vb[2].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 0.0f,0.0f,1.0f };
-		const auto bivb = Bind::VertexBuffer::Resolve(gfx, "##?", vb);
-
-		const std::vector<unsigned short> idx = { 0,1,2 };
-		const auto biidx = Bind::IndexBuffer::Resolve(gfx, "##?", idx);
-
-		const auto bips = Bind::PixelShader::Resolve(gfx, "TestPS.cso");
-
-		const auto bivs = Bind::VertexShader::Resolve(gfx, vsName);
-		const auto bilay = Bind::InputLayout::Resolve(gfx, layout, *bivs);
-
-		auto rt = Bind::ShaderInputRenderTarget{ gfx,1280,720,0 };
-
-		biidx->Bind(gfx);
-		bivb->Bind(gfx);
-		bitop->Bind(gfx);
-		bips->Bind(gfx);
-		bivs->Bind(gfx);
-		bilay->Bind(gfx);
-		rt.Clear(gfx, { 0.0f,0.0f,0.0f,1.0f });
-		rt.BindAsBuffer(gfx);
-		gfx.DrawIndexed(biidx->GetCount());
-		gfx.GetTarget()->BindAsBuffer(gfx);
-		rt.ToSurface(gfx).Save("Test_" + vsName + ".png");
-	};
-
-	RenderWithVS("Test1VS.cso");
-	RenderWithVS("Test2VS.cso");
-}
+//
+//void TestScaleMatrixTranslation()
+//{
+//	auto tlMat = DirectX::XMMatrixTranslation(20.f, 30.f, 40.f);
+//	tlMat = ScaleTranslation(tlMat, 0.1f);
+//	DirectX::XMFLOAT4X4 f4;
+//	DirectX::XMStoreFloat4x4(&f4, tlMat);
+//	auto etl = ExtractTranslation(f4);
+//	assert(etl.x == 2.f && etl.y == 3.f && etl.z == 4.f);
+//}
+//void D3DTestScratchPad(Window& wnd) {
+//	namespace dx = DirectX;
+//	using namespace custom;
+//
+//	const auto RenderWithVS = [&gfx = wnd.Gfx()](const std::string& vsName) {
+//		const auto bitop = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//
+//		const auto layout = VertexLayout{}
+//			.Append(VertexLayout::Position2D)
+//			.Append(VertexLayout::Float3Color);
+//
+//		VertexBuffer vb(layout, 3);
+//		vb[0].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ 0.0f,0.5f };
+//		vb[0].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 1.0f,0.0f,0.0f };
+//		vb[1].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ 0.5f,-0.5f };
+//		vb[1].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 0.0f,1.0f,0.0f };
+//		vb[2].Attr<VertexLayout::Position2D>() = dx::XMFLOAT2{ -0.5f,-0.5f };
+//		vb[2].Attr<VertexLayout::Float3Color>() = dx::XMFLOAT3{ 0.0f,0.0f,1.0f };
+//		const auto bivb = Bind::VertexBuffer::Resolve(gfx, "##?", vb);
+//
+//		const std::vector<unsigned short> idx = { 0,1,2 };
+//		const auto biidx = Bind::IndexBuffer::Resolve(gfx, "##?", idx);
+//
+//		const auto bips = Bind::PixelShader::Resolve(gfx, "TestPS.cso");
+//
+//		const auto bivs = Bind::VertexShader::Resolve(gfx, vsName);
+//		const auto bilay = Bind::InputLayout::Resolve(gfx, layout, *bivs);
+//
+//		auto rt = Bind::ShaderInputRenderTarget{ gfx,1280,720,0 };
+//
+//		biidx->Bind(gfx);
+//		bivb->Bind(gfx);
+//		bitop->Bind(gfx);
+//		bips->Bind(gfx);
+//		bivs->Bind(gfx);
+//		bilay->Bind(gfx);
+//		rt.Clear(gfx, { 0.0f,0.0f,0.0f,1.0f });
+//		rt.BindAsBuffer(gfx);
+//		gfx.DrawIndexed(biidx->GetCount());
+//		gfx.GetTarget()->BindAsBuffer(gfx);
+//		rt.ToSurface(gfx).Save("Test_" + vsName + ".png");
+//	};
+//
+//	RenderWithVS("Test1VS.cso");
+//	RenderWithVS("Test2VS.cso");
+//}
 
 // testing assimp
 #define MAX_NUM_BONES_PER_VERTEX 4
@@ -133,24 +104,6 @@ static int space_count = 0;
 float Round(float num) {
 	return std::round(num * 100.0f) / 100.0f;
 }
-void print_space() {
-	std::string space;
-	for (int i = 0; i < space_count; i++) {
-		space += " ";
-	}
-	Dump(space);
-}
-
-void print_assimp_matrix(const aiMatrix4x4& m) {
-	auto round = [](float num) {
-		return std::round(num * 100.0f) / 100.0f;
-	};
-	print_space(); Dump(m.a1, m.a2, m.a3, m.a4, "\n");
-	print_space(); Dump(m.b1, m.b2, m.b3, m.b4, "\n");
-	print_space(); Dump(m.c1, m.c2, m.c3, m.c4, "\n");
-	print_space(); Dump(m.d1, m.d2, m.d3, m.d4, "\n");
-}
-
 
 int get_bone_id(const aiBone* pBone) {
 	int bone_id = 0;
@@ -169,12 +122,14 @@ int get_bone_id(const aiBone* pBone) {
 }
 
 void parse_single_bone(int mesh_index, const aiBone* pBone) {
-	Dump("Bone ", pBone->mName.C_Str(), ": num vertices affected by this bone: ", pBone->mNumWeights, "\n");
+	DumpToFile("Bone ", pBone->mName.C_Str(), ": num vertices affected by this bone: ", pBone->mNumWeights, "\n");
 
 	int bone_id = get_bone_id(pBone);
 	//    printf("      Bone id %d\n", bone_id);
 
-	print_assimp_matrix(pBone->mOffsetMatrix);
+	//auto mat = reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pBone->mOffsetMatrix);
+	std::string matStr = Dump::MatrixToString(pBone->mOffsetMatrix);
+	DumpToFile(matStr, '\n');
 
 	for (unsigned int i = 0; i < pBone->mNumWeights; i++) {
 		//        if (i == 0) printf("\n");
@@ -187,8 +142,6 @@ void parse_single_bone(int mesh_index, const aiBone* pBone) {
 		assert(global_vertex_id < vertex_to_bones.size());
 		vertex_to_bones[global_vertex_id].AddBoneData(bone_id, vw.mWeight);
 	}
-
-	printf("\n");
 }
 
 
@@ -200,8 +153,7 @@ void parse_mesh_bones(int mesh_index, const aiMesh* pMesh) {
 
 
 void parse_meshes(const aiScene* pScene) {
-	Dump("*******************************************************\n");
-	Dump("Parsing ", pScene->mNumMeshes, " meshes\n\n");
+	DumpToFile("Parsing ", pScene->mNumMeshes, " meshes\n\n");
 
 	int total_vertices = 0;
 	int total_indices = 0;
@@ -215,7 +167,7 @@ void parse_meshes(const aiScene* pScene) {
 		int num_indices = pMesh->mNumFaces * 3;
 		int num_bones = pMesh->mNumBones;
 		mesh_base_vertex[i] = total_vertices;
-		Dump("Mesh ", i, " '", pMesh->mName.C_Str(), "': vertices ", num_vertices, " indices ", num_indices, " bones ", num_bones, "\n\n");
+		DumpToFile("Mesh ", i, " '", pMesh->mName.C_Str(), "': vertices ", num_vertices, " indices ", num_indices, " bones ", num_bones, "\n\n");
 		total_vertices += num_vertices;
 		total_indices += num_indices;
 		total_bones += num_bones;
@@ -225,22 +177,25 @@ void parse_meshes(const aiScene* pScene) {
 		if (pMesh->HasBones()) {
 			parse_mesh_bones(i, pMesh);
 		}
-		Dump("\n");
 	}
-	Dump("\nTotal vertices ", total_vertices, " total indices ", total_indices, "total bones ", total_bones);
+	//DumpToFile("\nTotal vertices ", total_vertices, " total indices ", total_indices, "total bones ", total_bones);
 }
 
 
 void parse_node(const aiNode* pNode) {
-	print_space(); Dump("Node name: '", pNode->mName.C_Str(), "' num children ", pNode->mNumChildren, " num meshes ", pNode->mNumMeshes, "\n");
-	print_space(); Dump("Node transformation:\n");
-	print_assimp_matrix(pNode->mTransformation);
+	std::string pad(space_count, ' ');
+	DumpToFile(pad, "Node name: '", pNode->mName.C_Str(), "' num children ", pNode->mNumChildren, " num meshes ", pNode->mNumMeshes, "\n");
+	DumpToFile(pad, "Node Transformation:\n");
+	//auto mat = reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pNode->mTransformation);
+	auto matStr = Dump::MatrixToString(pNode->mTransformation, space_count);
+	DumpToFile(matStr);
 
 	space_count += 4;
 
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
-		Dump("\n");
-		print_space(); Dump("--- ", i, "-- - \n");
+		std::string pad2(space_count, ' ');
+		DumpToFile("\n");
+		DumpToFile(pad2, "--- ", i, " ---\n");
 		parse_node(pNode->mChildren[i]);
 	}
 
@@ -249,8 +204,8 @@ void parse_node(const aiNode* pNode) {
 
 
 void parse_hierarchy(const aiScene* pScene) {
-	Dump("\n*******************************************************\n");
-	Dump("Parsing the node hierarchy\n");
+	DumpToFile("\n*******************************************************\n");
+	DumpToFile("Parsing Nodes\n");
 
 	parse_node(pScene->mRootNode);
 }

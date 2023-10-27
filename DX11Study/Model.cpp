@@ -11,19 +11,13 @@
 #include "Dump.h"
 #include <sstream>
 
+#ifndef NO_DEBUG
 #define DumpClear(...) Dump::ClearFile("model.txt");
 #define Dump(...) Dump::WriteToFile("model.txt", __VA_ARGS__);
-
-std::string MatrixToString(const aiMatrix4x4& m, unsigned int space = 0) {
-	std::stringstream ss;
-	std::string pad(space, ' ');
-	ss << std::fixed << std::setprecision(3)
-	<< pad << m.a1 << " " << m.a2 << " " << m.a3 << " " << m.a4 << "\n"
-	<< pad << m.b1 << " " << m.b2 << " " << m.b3 << " " << m.b4 << "\n"
-	<< pad << m.c1 << " " << m.c2 << " " << m.c3 << " " << m.c4 << "\n"
-	<< pad << m.d1 << " " << m.d2 << " " << m.d3 << " " << m.d4 << "\n";
-	return ss.str();
-}
+#else
+#define DumpClear(...)
+#define Dump(...)
+#endif
 
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
@@ -63,15 +57,15 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		}
 
 		DumpClear();
-		Dump("Parsing ", pScene->mNumMeshes, " meshes\n");
+		Dump("Parsing ", pScene->mNumMeshes, " meshes\n\n");
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			Dump("Mesh ", i, " '", mesh.mName.C_Str(), "': vertices", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
+			Dump("Mesh ", i, " '", mesh.mName.C_Str(), "': vertices ", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
 			for (size_t j = 0; j < mesh.mNumBones; j++) {
 				const auto& bone = *mesh.mBones[j];
 				// Bone  pubis : num vertices affected by this bone:  190 
-				Dump("Bone ", bone.mName.C_Str(), " : num vertices affected by this bone: ", bone.mNumWeights, "\n");
-				Dump(MatrixToString(bone.mOffsetMatrix));
+				Dump("Bone ", bone.mName.C_Str(), ": num vertices affected by this bone: ", bone.mNumWeights, "\n");
+				Dump(Dump::MatrixToString(bone.mOffsetMatrix));
 				Dump("\n");
 				bonePtrs.emplace_back(std::make_shared<Bone>(i, bone));
 				if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
@@ -88,8 +82,8 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		}
 	}
 
-	Dump("**************************************************\n");
-	Dump("Parsing Nodes");
+	Dump("*******************************************************\n");
+	Dump("Parsing Nodes\n");
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
@@ -109,9 +103,9 @@ void Model::Accept(ModelProbe& probe) {
 
 std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space) {
 	std::string pad(space, ' ');
-	Dump(pad, "Node name: ", node.mName.C_Str(), "num children: ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
+	Dump(pad, "Node name: '", node.mName.C_Str(), "' num children ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
 	Dump(pad, "Node Transformation:\n");
-	Dump(MatrixToString(node.mTransformation, space));
+	Dump(Dump::MatrixToString(node.mTransformation, space));
 	Dump("\n");
 	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
@@ -126,7 +120,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 
 	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t i = 0; i < node.mNumChildren; i++) {
-		Dump(pad + "    ", "----------- ", i, " -------------", "\n");
+		Dump(pad + "    ", "--- ", i, " ---\n");
 		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4));
 	}
 
