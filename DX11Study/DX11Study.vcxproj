@@ -271,6 +271,7 @@
     <ClInclude Include="BasicException.h" />
     <ClInclude Include="DepthStencil.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Dump.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="DynamicConstant.h" />

@@ -695,6 +695,9 @@
     <ClInclude Include="Bone.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Dump.h">
+      <Filter>헤더 파일\Testing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DX11Study1.rc">

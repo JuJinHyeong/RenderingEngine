@@ -26,7 +26,7 @@ private:
 	// const aiMaterial* -> aiMaterial* that aiMaterial can't be modified
 	// const aiMaterial* const -> aiMaterial can't be modified also aiMaterial* can't be modified
 	// const aiMaterial* const* -> aiMaterial* is array that each element can't be modified aiMaterial, pointer
-	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node, float scale);
+	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node, float scale, int space=0);
 private:
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;

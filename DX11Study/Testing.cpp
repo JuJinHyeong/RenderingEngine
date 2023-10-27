@@ -4,6 +4,7 @@
 #include "BindableCommon.h"
 #include "RenderTarget.h"
 #include "Surface.h"
+#include "Dump.h"
 #include <sstream>
 #include <map>
 #include <vector>
@@ -12,6 +13,8 @@
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
 #include <stdio.h>
+
+#define Dump(...) Dump::WriteToFile("test_parse.txt", __VA_ARGS__); Dump::Print(__VA_ARGS__);
 
 void TestDynamicMeshLoading() {
 	using namespace custom;
@@ -114,12 +117,9 @@ struct VertexBoneData {
 			if (Weights[i] == 0.0) {
 				BoneIDs[i] = BoneID;
 				Weights[i] = Weight;
-				//printf("Adding bone %d weight %f at index %i\n", BoneID, Weight, i);
 				return;
 			}
 		}
-
-		// should never get here - more bones than we have space for
 		assert(0);
 	}
 };
@@ -130,19 +130,25 @@ std::vector<int> mesh_base_vertex;
 std::map<std::string, unsigned int> bone_name_to_index_map;
 
 static int space_count = 0;
-
+float Round(float num) {
+	return std::round(num * 100.0f) / 100.0f;
+}
 void print_space() {
+	std::string space;
 	for (int i = 0; i < space_count; i++) {
-		printf(" ");
+		space += " ";
 	}
+	Dump(space);
 }
 
-
 void print_assimp_matrix(const aiMatrix4x4& m) {
-	print_space(); printf("%f %f %f %f\n", m.a1, m.a2, m.a3, m.a4);
-	print_space(); printf("%f %f %f %f\n", m.b1, m.b2, m.b3, m.b4);
-	print_space(); printf("%f %f %f %f\n", m.c1, m.c2, m.c3, m.c4);
-	print_space(); printf("%f %f %f %f\n", m.d1, m.d2, m.d3, m.d4);
+	auto round = [](float num) {
+		return std::round(num * 100.0f) / 100.0f;
+	};
+	print_space(); Dump(m.a1, m.a2, m.a3, m.a4, "\n");
+	print_space(); Dump(m.b1, m.b2, m.b3, m.b4, "\n");
+	print_space(); Dump(m.c1, m.c2, m.c3, m.c4, "\n");
+	print_space(); Dump(m.d1, m.d2, m.d3, m.d4, "\n");
 }
 
 
@@ -163,7 +169,7 @@ int get_bone_id(const aiBone* pBone) {
 }
 
 void parse_single_bone(int mesh_index, const aiBone* pBone) {
-	printf("      Bone '%s': num vertices affected by this bone: %d\n", pBone->mName.C_Str(), pBone->mNumWeights);
+	Dump("Bone ", pBone->mName.C_Str(), ": num vertices affected by this bone: ", pBone->mNumWeights, "\n");
 
 	int bone_id = get_bone_id(pBone);
 	//    printf("      Bone id %d\n", bone_id);
@@ -194,8 +200,8 @@ void parse_mesh_bones(int mesh_index, const aiMesh* pMesh) {
 
 
 void parse_meshes(const aiScene* pScene) {
-	printf("*******************************************************\n");
-	printf("Parsing %d meshes\n\n", pScene->mNumMeshes);
+	Dump("*******************************************************\n");
+	Dump("Parsing ", pScene->mNumMeshes, " meshes\n\n");
 
 	int total_vertices = 0;
 	int total_indices = 0;
@@ -209,7 +215,7 @@ void parse_meshes(const aiScene* pScene) {
 		int num_indices = pMesh->mNumFaces * 3;
 		int num_bones = pMesh->mNumBones;
 		mesh_base_vertex[i] = total_vertices;
-		printf("  Mesh %d '%s': vertices %d indices %d bones %d\n\n", i, pMesh->mName.C_Str(), num_vertices, num_indices, num_bones);
+		Dump("Mesh ", i, " '", pMesh->mName.C_Str(), "': vertices ", num_vertices, " indices ", num_indices, " bones ", num_bones, "\n\n");
 		total_vertices += num_vertices;
 		total_indices += num_indices;
 		total_bones += num_bones;
@@ -219,24 +225,22 @@ void parse_meshes(const aiScene* pScene) {
 		if (pMesh->HasBones()) {
 			parse_mesh_bones(i, pMesh);
 		}
-
-		printf("\n");
+		Dump("\n");
 	}
-
-	printf("\nTotal vertices %d total indices %d total bones %d\n", total_vertices, total_indices, total_bones);
+	Dump("\nTotal vertices ", total_vertices, " total indices ", total_indices, "total bones ", total_bones);
 }
 
 
 void parse_node(const aiNode* pNode) {
-	print_space(); printf("Node name: '%s' num children %d num meshes %d\n", pNode->mName.C_Str(), pNode->mNumChildren, pNode->mNumMeshes);
-	print_space(); printf("Node transformation:\n");
+	print_space(); Dump("Node name: '", pNode->mName.C_Str(), "' num children ", pNode->mNumChildren, " num meshes ", pNode->mNumMeshes, "\n");
+	print_space(); Dump("Node transformation:\n");
 	print_assimp_matrix(pNode->mTransformation);
 
 	space_count += 4;
 
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
-		printf("\n");
-		print_space(); printf("--- %d ---\n", i);
+		Dump("\n");
+		print_space(); Dump("--- ", i, "-- - \n");
 		parse_node(pNode->mChildren[i]);
 	}
 
@@ -245,8 +249,8 @@ void parse_node(const aiNode* pNode) {
 
 
 void parse_hierarchy(const aiScene* pScene) {
-	printf("\n*******************************************************\n");
-	printf("Parsing the node hierarchy\n");
+	Dump("\n*******************************************************\n");
+	Dump("Parsing the node hierarchy\n");
 
 	parse_node(pScene->mRootNode);
 }
@@ -272,131 +276,7 @@ void AssimpTest(const std::string& filename) {
 		printf("Error parsing '%s': '%s'\n", filename.c_str(), Importer.GetErrorString());
 	}
 
+	Dump::ClearFile("test_parse.txt");
 	parse_scene(pScene);
 
 }
-//// bone testing
-//class VertexBone {
-//public:
-//	VertexBone() {};
-//	void AddBoneData(unsigned int boneId, float weight) {
-//		for (unsigned int i = 0; i < 4; i++) {
-//			// find the first empty slot
-//			if (weights[i] == 0.0f) {
-//				boneIds[i] = boneId;
-//				weights[i] = weight;
-//				std::stringstream ss;
-//				ss << "Bone " << boneId << " weight " << weight << " index " << i << "\n";
-//				OutputDebugString(ss.str().c_str());
-//				return;
-//			}
-//		}
-//		assert(0 && "Too many bones!");
-//	}
-//
-//private:
-//	unsigned int boneIds[4] = { 0 };
-//	float weights[4] = { 0.0f };
-//};
-//
-//std::vector<VertexBone> vertexToBones;
-//std::vector<int> meshBaseVertex;
-//std::map<std::string, unsigned int> boneNameToIndexMap;
-//
-//int GetBoneId(const aiBone* pBone) {
-//	unsigned int boneId = 0;
-//	std::string boneName(pBone->mName.C_Str());
-//
-//	if (boneNameToIndexMap.find(boneName) == boneNameToIndexMap.end()) {
-//		boneId = boneNameToIndexMap.size();
-//		boneNameToIndexMap[boneName] = boneId;
-//	}
-//	else {
-//		boneId = boneNameToIndexMap[boneName];
-//	}
-//	return boneId;
-//}
-//
-//void ParseSingleBone(int meshIndex, const aiBone* pBone) {
-//	std::stringstream ss;
-//	printf("      Bone '%s': num vertices affected by this bone: %d\n", pBone->mName.C_Str(), pBone->mNumWeights);
-//	int boneId = GetBoneId(pBone);
-//	ss << "Mesh  " << meshIndex << ": " << "Bone " << pBone->mName.C_Str() << ", " << boneId << " affect to " << pBone->mNumWeights << " number of vertices";
-//	OutputDebugString(ss.str().c_str());
-//
-//	for (unsigned int i = 0; i < pBone->mNumWeights; i++) {
-//		if (i == 0) OutputDebugString("\n");
-//		const aiVertexWeight& vw = pBone->mWeights[i];
-//
-//		unsigned int globalVertexId = meshBaseVertex[meshIndex] + vw.mVertexId;
-//
-//		std::stringstream ss2;
-//		ss2 << "global Vertex id: " << globalVertexId << " Weight: " << vw.mWeight << " ";
-//		OutputDebugString(ss2.str().c_str());
-//
-//		vertexToBones[globalVertexId].AddBoneData(boneId, vw.mWeight);
-//	}
-//	OutputDebugString("\n");
-//}
-//
-//void ParseMeshBones(int meshIndex, const aiMesh* pMesh) {
-//	for (unsigned int i = 0; i < pMesh->mNumBones; i++) {
-//		ParseSingleBone(meshIndex, pMesh->mBones[i]);
-//	}
-//}
-//
-//void ParseMesh(const aiScene* pScene) {
-//	OutputDebugString("*******************************************************\n");
-//	std::stringstream ss;
-//	ss << "Parsing " << pScene->mNumMeshes << " meshes\n";
-//	OutputDebugString(ss.str().c_str());
-//	ss.flush();
-//
-//	unsigned int totalVerticesCount = 0;
-//	unsigned int totalIndicesCount = 0;
-//	unsigned int totalBonesCount = 0;
-//
-//	meshBaseVertex.resize(pScene->mNumMeshes);
-//
-//	for (unsigned int i = 0; i < pScene->mNumMeshes; i++) {
-//		const aiMesh* pMesh = pScene->mMeshes[i];
-//		unsigned int numVertices = pMesh->mNumVertices;
-//		unsigned int numIndices = pMesh->mNumFaces * 3;
-//		unsigned int numBones = pMesh->mNumBones;
-//
-//		meshBaseVertex[i] = totalVerticesCount;
-//
-//		std::stringstream ss2;
-//		ss2 << "  Mesh " << i << " '" << pMesh->mName.C_Str() << "': vertices " << numVertices << " indices " << numIndices << " bones " << numBones << "\n\n";
-//		OutputDebugString(ss2.str().c_str());
-//		totalVerticesCount += numVertices;
-//		totalIndicesCount += numIndices;
-//		totalBonesCount += numBones;
-//
-//		vertexToBones.resize(totalVerticesCount);
-//
-//		if (pMesh->HasBones()) {
-//			ParseMeshBones(i, pMesh);
-//		}
-//	}
-//
-//	ss << "Total vertices: " << totalVerticesCount << " total indices: " << totalIndicesCount << " total bones: " << totalBonesCount << "\n";
-//	OutputDebugString(ss.str().c_str());
-//}
-//
-//void AssimpTest(const std::string& filename) {
-//	Assimp::Importer imp;
-//	const aiScene* pScene = imp.ReadFile(filename,
-//		aiProcess_Triangulate |
-//		aiProcess_JoinIdenticalVertices |
-//		aiProcess_ConvertToLeftHanded |
-//		aiProcess_GenNormals |
-//		aiProcess_CalcTangentSpace
-//	);
-//
-//	if (!pScene) {
-//		OutputDebugString("Read File Failed\n");
-//		return;
-//	}
-//	ParseMesh(pScene);
-//}
