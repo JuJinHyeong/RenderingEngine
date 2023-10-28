@@ -13,6 +13,8 @@
 #include <assimp/postprocess.h> // Post processing flags
 #include <stdio.h>
 
+using namespace DirectX;
+
 template<typename... Args>
 void DumpToFile(const Args&... args) {
 	Dump::WriteToFile("test_parse.txt", args...);
@@ -187,24 +189,35 @@ void parse_meshes(const aiScene* pScene) {
 			parse_mesh_bones(i, pMesh);
 		}
 	}
+
 	DumpToFile("\nTotal bones: ", bone_info.size(), "\n");
 	for (auto pair : bone_name_to_index_map) {
 		DumpToFile("#", pair.second, ":", pair.first, "\n");
 	}
-	DumpToFile("\n");
-	for (int i = 0; i < bone_info.size(); i++) {
-		std::string matStr = Dump::MatrixToString(bone_info[i].boneOffset);
-		DumpToFile("#", i, "\n", matStr, "\n");
-	}
 }
 
+XMMATRIX inverseRootTransform = XMMatrixIdentity();
+void parse_node(const aiNode* pNode, const FXMMATRIX& parentTransform) {
+	const auto transform = (DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
+		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pNode->mTransformation)
+	)));
+	const auto accumulatedTransform = transform * parentTransform;
 
-void parse_node(const aiNode* pNode) {
+	if (bone_name_to_index_map.find(pNode->mName.C_Str()) != bone_name_to_index_map.end()) {
+		unsigned int boneIndex = bone_name_to_index_map[pNode->mName.C_Str()];
+		auto finalTransformation = XMMatrixTranspose(XMLoadFloat4x4(&bone_info[boneIndex].boneOffset)) * accumulatedTransform * inverseRootTransform;
+		XMStoreFloat4x4(&bone_info[boneIndex].finalTransformation, finalTransformation);
+	}
+
 	std::string pad(space_count, ' ');
 	DumpToFile(pad, "Node name: '", pNode->mName.C_Str(), "' num children ", pNode->mNumChildren, " num meshes ", pNode->mNumMeshes, "\n");
-	DumpToFile(pad, "Node Transformation:\n");
+	DumpToFile(pad, "Transformation:\n");
+	auto matStr2 = Dump::MatrixToString(XMMatrixTranspose(transform), space_count);
+	DumpToFile(matStr2);
+
+	DumpToFile(pad, "Accmulated Transformation:\n");
 	//auto mat = reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pNode->mTransformation);
-	auto matStr = Dump::MatrixToString(pNode->mTransformation, space_count);
+	auto matStr = Dump::MatrixToString(XMMatrixTranspose(accumulatedTransform), space_count);
 	DumpToFile(matStr);
 
 	space_count += 4;
@@ -213,7 +226,7 @@ void parse_node(const aiNode* pNode) {
 		std::string pad2(space_count, ' ');
 		DumpToFile("\n");
 		DumpToFile(pad2, "--- ", i, " ---\n");
-		parse_node(pNode->mChildren[i]);
+		parse_node(pNode->mChildren[i], accumulatedTransform);
 	}
 
 	space_count -= 4;
@@ -224,13 +237,30 @@ void parse_hierarchy(const aiScene* pScene) {
 	DumpToFile("*******************************************************\n");
 	DumpToFile("Parsing Nodes\n");
 
-	parse_node(pScene->mRootNode);
+	parse_node(pScene->mRootNode, DirectX::XMMatrixIdentity());
+
+	DumpToFile("\nTotal bones: ", bone_info.size(), "\n");
+	for (auto pair : bone_name_to_index_map) {
+		DumpToFile("#", pair.second, ":", pair.first, "\n");
+	}
+	DumpToFile("\n");
+	for (int i = 0; i < bone_info.size(); i++) {
+		DumpToFile("#", i, "\n");
+		std::string matStr = Dump::MatrixToString(bone_info[i].boneOffset);
+		DumpToFile("offset\n", matStr);
+		std::string matStr2 = Dump::MatrixToString(bone_info[i].finalTransformation);
+		DumpToFile("final\n", matStr2, "\n");
+	}
+
 }
 
 
 void parse_scene(const aiScene* pScene) {
 	parse_meshes(pScene);
 
+	auto rootTransform = XMLoadFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&pScene->mRootNode->mTransformation));
+	XMVECTOR determinant = XMMatrixDeterminant(rootTransform);
+	inverseRootTransform = XMMatrixTranspose(XMMatrixInverse(&determinant, rootTransform));
 	parse_hierarchy(pScene);
 }
 

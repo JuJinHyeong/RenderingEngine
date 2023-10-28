@@ -8,7 +8,7 @@ class Dump {
 public:
 	template<typename... Args>
 	static void Print(const Args&... args) {
-		std::cout << std::fixed << std::setprecision(3);
+		std::cout << std::fixed << std::setprecision(6);
 		PrintRecursive(args...);
 	}
 
@@ -20,7 +20,7 @@ public:
 			std::cerr << "Failed to open the file: " << fileName << std::endl;
 			return;
 		}
-		os << std::fixed << std::setprecision(3);
+		os << std::fixed << std::setprecision(5);
 		WriteToFileRecursive(os, args...);
 		os.close();
 	}
@@ -34,7 +34,7 @@ public:
 	static std::string MatrixToString(const aiMatrix4x4& m, unsigned int space = 0) {
 		std::stringstream ss;
 		std::string pad(space, ' ');
-		ss << std::fixed << std::setprecision(3)
+		ss << std::fixed << std::setprecision(5)
 			<< pad << m.a1 << " " << m.a2 << " " << m.a3 << " " << m.a4 << "\n"
 			<< pad << m.b1 << " " << m.b2 << " " << m.b3 << " " << m.b4 << "\n"
 			<< pad << m.c1 << " " << m.c2 << " " << m.c3 << " " << m.c4 << "\n"
@@ -45,12 +45,18 @@ public:
 	static std::string MatrixToString(const DirectX::XMFLOAT4X4& m, unsigned int space = 0) {
 		std::stringstream ss;
 		std::string pad(space, ' ');
-		ss << std::fixed << std::setprecision(3)
+		ss << std::fixed << std::setprecision(5)
 			<< pad << m._11 << " " << m._12 << " " << m._13 << " " << m._14 << "\n"
 			<< pad << m._21 << " " << m._22 << " " << m._23 << " " << m._24 << "\n"
 			<< pad << m._31 << " " << m._32 << " " << m._33 << " " << m._34 << "\n"
 			<< pad << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << "\n";
 		return ss.str();
+	}
+
+	static std::string MatrixToString(const DirectX::FXMMATRIX& m, unsigned int space = 0) {
+		DirectX::XMFLOAT4X4 mat;
+		DirectX::XMStoreFloat4x4(&mat, m);
+		return MatrixToString(mat, space);
 	}
 	
 	static std::string ArrayToString(const std::vector<int>& arr) {

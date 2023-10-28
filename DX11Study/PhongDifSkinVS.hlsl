@@ -25,10 +25,10 @@ VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, 
     {
         boneTransform += boneTransforms[boneIndex[i]] * boneWeight[i];
     }
-    float4 bonePos = mul(boneTransform, float4(pos, 1.0f));
-    vso.viewPos = (float3) mul(float4(pos, 1.0f), modelView);
+    float4 bonePos = float4(pos.x, pos.y, pos.z, 1.0f);
+    vso.viewPos = (float3) mul(bonePos, modelView);
     vso.viewNormal = mul(normal, (float3x3) modelView);
-    vso.pos = mul(float4(pos, 1.0f), modelViewProj);
+    vso.pos = mul(bonePos, modelViewProj);
     vso.tc = tc;
     vso.shadowHomoPos = ToShadowHomoSpace(pos, model);
     return vso;
