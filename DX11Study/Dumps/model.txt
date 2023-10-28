@@ -2,226 +2,283 @@ Parsing  6  meshes
 
 Mesh  0  ' guard1_body.png.msh ': vertices  1884  indices  1884  bones  28 
 
-Bone  pubis : num vertices affected by this bone:  190 
--0.000 0.992 0.128 1.296
-0.000 0.128 -0.992 -26.194
--1.000 -0.000 -0.000 0.014
--0.000 0.000 0.000 1.000
-
-Bone  pelvis : num vertices affected by this bone:  254 
-0.000 0.989 -0.146 -6.984
-0.001 -0.146 -0.989 -29.538
--1.000 0.000 -0.001 -0.020
--0.000 0.000 0.000 1.000
-
-Bone  spine : num vertices affected by this bone:  306 
--0.000 1.000 0.000 -1.427
--0.000 0.000 -1.000 -38.133
--1.000 0.000 -0.000 0.023
--0.000 0.000 0.000 1.000
-
-Bone  neck : num vertices affected by this bone:  78 
-0.000 0.753 -0.658 -35.062
-0.000 -0.658 -0.753 -37.913
--1.000 0.000 -0.000 0.023
--0.000 0.000 0.000 1.000
-
-Bone  upperarm.L : num vertices affected by this bone:  97 
--0.027 1.000 -0.000 -4.664
--1.000 -0.027 -0.000 -7.877
--0.000 -0.000 1.000 48.597
--0.000 0.000 0.000 1.000
-
-Bone  forearm.L : num vertices affected by this bone:  82 
--0.114 0.993 -0.000 -6.454
--0.993 -0.114 -0.000 -20.303
--0.000 -0.000 1.000 48.597
--0.000 0.000 0.000 1.000
-
-Bone  wrist.L : num vertices affected by this bone:  64 
-0.009 1.000 -0.000 -2.516
--1.000 0.009 0.027 -30.706
-0.027 -0.000 1.000 49.465
--0.000 -0.000 0.000 1.000
-
-Bone  thumb.L : num vertices affected by this bone:  47 
--0.584 0.773 0.250 -8.770
--0.710 -0.635 0.304 -6.185
-0.393 -0.000 0.919 57.278
--0.000 0.000 0.000 1.000
-
-Bone  thm_end.L : num vertices affected by this bone:  56 
--0.279 0.953 0.119 -4.383
--0.876 -0.303 0.375 -12.681
-0.393 -0.000 0.919 57.278
--0.000 0.000 0.000 1.000
-
-Bone  fingers.L : num vertices affected by this bone:  90 
--0.022 1.000 -0.008 -4.057
--0.972 -0.020 0.233 -24.961
-0.233 0.013 0.972 55.800
-0.000 0.000 0.000 1.000
-
-Bone  fingerstip.L : num vertices affected by this bone:  49 
--0.000 1.000 -0.000 -2.796
--1.000 -0.000 -0.000 -39.740
--0.000 -0.000 1.000 47.892
--0.000 0.000 0.000 1.000
-
-Bone  upperarm.R : num vertices affected by this bone:  97 
-0.035 0.999 -0.000 -4.839
-0.999 -0.035 -0.000 -7.766
--0.000 -0.000 -1.000 -48.597
--0.000 0.000 0.000 1.000
-
-Bone  forearm.R : num vertices affected by this bone:  82 
-0.117 0.993 -0.000 -6.575
-0.993 -0.117 -0.000 -20.672
--0.000 -0.000 -1.000 -48.597
--0.000 0.000 0.000 1.000
-
-Bone  wrist.R : num vertices affected by this bone:  94 
-0.000 1.000 -0.000 -2.839
-0.999 0.000 0.052 -29.658
-0.052 -0.000 -0.999 -50.181
--0.000 0.000 0.000 1.000
-
-Bone  thumb.R : num vertices affected by this bone:  47 
-0.589 0.760 0.275 -7.666
-0.688 -0.650 0.322 -4.591
-0.424 0.000 -0.906 -57.665
--0.000 0.000 0.000 1.000
-
-Bone  thm_end.R : num vertices affected by this bone:  64 
-0.223 0.969 0.104 -2.959
-0.878 -0.246 0.411 -11.302
-0.424 0.000 -0.906 -57.665
--0.000 0.000 0.000 1.000
-
-Bone  fingers.R : num vertices affected by this bone:  90 
-0.000 1.000 -0.000 -2.838
-0.991 -0.000 0.136 -30.431
-0.136 -0.000 -0.991 -52.957
--0.000 0.000 0.000 1.000
-
-Bone  fingerstip.R : num vertices affected by this bone:  49 
-0.000 1.000 -0.000 -2.838
-1.000 0.000 -0.000 -39.844
--0.000 -0.000 -1.000 -47.969
--0.000 0.000 0.000 1.000
-
-Bone  thigh.R : num vertices affected by this bone:  285 
--0.000 -0.996 -0.089 -1.383
-0.000 -0.089 0.996 30.223
--1.000 0.000 0.000 5.255
--0.000 0.000 0.000 1.000
-
-Bone  shin.R : num vertices affected by this bone:  263 
-0.000 -0.995 0.099 1.845
-0.000 0.099 0.995 17.105
--1.000 -0.000 0.000 5.255
--0.000 0.000 0.000 1.000
-
-Bone  ankle.R : num vertices affected by this bone:  99 
-0.000 -0.540 -0.841 -1.779
-0.000 -0.841 0.540 3.019
--1.000 -0.000 0.000 5.255
--0.000 0.000 0.000 1.000
-
-Bone  toe.R : num vertices affected by this bone:  78 
--0.000 -0.053 -0.999 -1.012
-0.000 -0.999 0.053 -1.817
--1.000 -0.000 0.000 5.255
--0.000 0.000 0.000 1.000
-
-Bone  tiptoe.R : num vertices affected by this bone:  45 
-0.000 -0.000 -1.000 -0.733
-0.000 -1.000 0.000 -5.289
--1.000 0.000 0.000 5.255
--0.000 0.000 0.000 1.000
-
-Bone  thigh.L : num vertices affected by this bone:  285 
--0.000 -0.996 -0.089 -1.383
-0.000 -0.089 0.996 30.223
--1.000 0.000 0.000 -5.209
--0.000 0.000 0.000 1.000
-
-Bone  shin.L : num vertices affected by this bone:  263 
--0.000 -0.995 0.099 1.845
-0.000 0.099 0.995 17.105
--1.000 0.000 0.000 -5.209
--0.000 0.000 0.000 1.000
-
-Bone  ankle.L : num vertices affected by this bone:  99 
-0.000 -0.540 -0.841 -1.778
-0.000 -0.841 0.540 3.019
--1.000 -0.000 0.000 -5.197
--0.000 0.000 0.000 1.000
-
-Bone  toe.L : num vertices affected by this bone:  78 
--0.000 -0.053 -0.999 -1.012
--0.000 -0.999 0.053 -1.817
--1.000 0.000 0.000 -5.197
--0.000 0.000 0.000 1.000
-
-Bone  tiptoe.L : num vertices affected by this bone:  45 
-0.000 -0.000 -1.000 -0.733
-0.000 -1.000 -0.000 -5.289
--1.000 -0.000 0.000 -5.197
--0.000 0.000 0.000 1.000
+# 0 Bone  pubis : num vertices affected by this bone:  190 
+# 1 Bone  pelvis : num vertices affected by this bone:  254 
+# 2 Bone  spine : num vertices affected by this bone:  306 
+# 3 Bone  neck : num vertices affected by this bone:  78 
+# 4 Bone  upperarm.L : num vertices affected by this bone:  97 
+# 5 Bone  forearm.L : num vertices affected by this bone:  82 
+# 6 Bone  wrist.L : num vertices affected by this bone:  64 
+# 7 Bone  thumb.L : num vertices affected by this bone:  47 
+# 8 Bone  thm_end.L : num vertices affected by this bone:  56 
+# 9 Bone  fingers.L : num vertices affected by this bone:  90 
+# 10 Bone  fingerstip.L : num vertices affected by this bone:  49 
+# 11 Bone  upperarm.R : num vertices affected by this bone:  97 
+# 12 Bone  forearm.R : num vertices affected by this bone:  82 
+# 13 Bone  wrist.R : num vertices affected by this bone:  94 
+# 14 Bone  thumb.R : num vertices affected by this bone:  47 
+# 15 Bone  thm_end.R : num vertices affected by this bone:  64 
+# 16 Bone  fingers.R : num vertices affected by this bone:  90 
+# 17 Bone  fingerstip.R : num vertices affected by this bone:  49 
+# 18 Bone  thigh.R : num vertices affected by this bone:  285 
+# 19 Bone  shin.R : num vertices affected by this bone:  263 
+# 20 Bone  ankle.R : num vertices affected by this bone:  99 
+# 21 Bone  toe.R : num vertices affected by this bone:  78 
+# 22 Bone  tiptoe.R : num vertices affected by this bone:  45 
+# 23 Bone  thigh.L : num vertices affected by this bone:  285 
+# 24 Bone  shin.L : num vertices affected by this bone:  263 
+# 25 Bone  ankle.L : num vertices affected by this bone:  99 
+# 26 Bone  toe.L : num vertices affected by this bone:  78 
+# 27 Bone  tiptoe.L : num vertices affected by this bone:  45 
 
 Mesh  1  ' guard1_face.png.msh ': vertices  521  indices  531  bones  2 
 
-Bone  neck : num vertices affected by this bone:  521 
-0.000 0.753 -0.658 -35.062
-0.000 -0.658 -0.753 -37.913
--1.000 0.000 -0.000 0.023
--0.000 0.000 0.000 1.000
-
-Bone  head : num vertices affected by this bone:  521 
-0.000 0.021 -1.000 -55.290
-0.000 -1.000 -0.021 -3.009
--1.000 -0.000 -0.000 0.022
--0.000 0.000 0.000 1.000
+# 3 Bone  neck : num vertices affected by this bone:  521 
+# 28 Bone  head : num vertices affected by this bone:  521 
 
 Mesh  2  ' guard1_helmet.png.msh ': vertices  232  indices  234  bones  1 
 
-Bone  head : num vertices affected by this bone:  232 
-0.000 0.021 -1.000 -55.290
-0.000 -1.000 -0.021 -3.009
--1.000 -0.000 -0.000 0.022
--0.000 0.000 0.000 1.000
+# 28 Bone  head : num vertices affected by this bone:  232 
 
 Mesh  3  ' iron_grill.png.msh ': vertices  32  indices  48  bones  1 
 
-Bone  lamp : num vertices affected by this bone:  32 
-0.000 -1.000 0.000 -6.182
--0.000 0.000 1.000 46.334
--1.000 -0.000 -0.000 -39.750
--0.000 0.000 0.000 1.000
+# 29 Bone  lamp : num vertices affected by this bone:  32 
 
 Mesh  4  ' round_grill.png.msh ': vertices  51  indices  66  bones  1 
 
-Bone  lamp : num vertices affected by this bone:  51 
-0.000 -1.000 0.000 -6.182
--0.000 0.000 1.000 46.334
--1.000 -0.000 -0.000 -39.750
--0.000 0.000 0.000 1.000
+# 29 Bone  lamp : num vertices affected by this bone:  51 
 
 Mesh  5  ' guard1_body.png.msh ': vertices  316  indices  318  bones  2 
 
-Bone  sheath : num vertices affected by this bone:  76 
-0.080 -0.828 0.555 14.085
+# 30 Bone  sheath : num vertices affected by this bone:  76 
+# 31 Bone  sword : num vertices affected by this bone:  240 
+
+Total Bones:  32 
+# 27 : tiptoe.L 
+# 2 : spine 
+# 0 : pubis 
+# 1 : pelvis 
+# 6 : wrist.L 
+# 3 : neck 
+# 19 : shin.R 
+# 5 : forearm.L 
+# 4 : upperarm.L 
+# 7 : thumb.L 
+# 8 : thm_end.L 
+# 9 : fingers.L 
+# 10 : fingerstip.L 
+# 11 : upperarm.R 
+# 24 : shin.L 
+# 12 : forearm.R 
+# 13 : wrist.R 
+# 14 : thumb.R 
+# 15 : thm_end.R 
+# 16 : fingers.R 
+# 17 : fingerstip.R 
+# 18 : thigh.R 
+# 20 : ankle.R 
+# 21 : toe.R 
+# 22 : tiptoe.R 
+# 23 : thigh.L 
+# 25 : ankle.L 
+# 26 : toe.L 
+# 28 : head 
+# 29 : lamp 
+# 30 : sheath 
+# 31 : sword 
+
+# 0 
+ -0.000 0.992 0.128 1.296
+0.000 0.128 -0.992 -26.194
+-1.000 -0.000 -0.000 0.014
+-0.000 0.000 0.000 1.000
+ 
+# 1 
+ 0.000 0.989 -0.146 -6.984
+0.001 -0.146 -0.989 -29.538
+-1.000 0.000 -0.001 -0.020
+-0.000 0.000 0.000 1.000
+ 
+# 2 
+ -0.000 1.000 0.000 -1.427
+-0.000 0.000 -1.000 -38.133
+-1.000 0.000 -0.000 0.023
+-0.000 0.000 0.000 1.000
+ 
+# 3 
+ 0.000 0.753 -0.658 -35.062
+0.000 -0.658 -0.753 -37.913
+-1.000 0.000 -0.000 0.023
+-0.000 0.000 0.000 1.000
+ 
+# 4 
+ -0.027 1.000 -0.000 -4.664
+-1.000 -0.027 -0.000 -7.877
+-0.000 -0.000 1.000 48.597
+-0.000 0.000 0.000 1.000
+ 
+# 5 
+ -0.114 0.993 -0.000 -6.454
+-0.993 -0.114 -0.000 -20.303
+-0.000 -0.000 1.000 48.597
+-0.000 0.000 0.000 1.000
+ 
+# 6 
+ 0.009 1.000 -0.000 -2.516
+-1.000 0.009 0.027 -30.706
+0.027 -0.000 1.000 49.465
+-0.000 -0.000 0.000 1.000
+ 
+# 7 
+ -0.584 0.773 0.250 -8.770
+-0.710 -0.635 0.304 -6.185
+0.393 -0.000 0.919 57.278
+-0.000 0.000 0.000 1.000
+ 
+# 8 
+ -0.279 0.953 0.119 -4.383
+-0.876 -0.303 0.375 -12.681
+0.393 -0.000 0.919 57.278
+-0.000 0.000 0.000 1.000
+ 
+# 9 
+ -0.022 1.000 -0.008 -4.057
+-0.972 -0.020 0.233 -24.961
+0.233 0.013 0.972 55.800
+0.000 0.000 0.000 1.000
+ 
+# 10 
+ -0.000 1.000 -0.000 -2.796
+-1.000 -0.000 -0.000 -39.740
+-0.000 -0.000 1.000 47.892
+-0.000 0.000 0.000 1.000
+ 
+# 11 
+ 0.035 0.999 -0.000 -4.839
+0.999 -0.035 -0.000 -7.766
+-0.000 -0.000 -1.000 -48.597
+-0.000 0.000 0.000 1.000
+ 
+# 12 
+ 0.117 0.993 -0.000 -6.575
+0.993 -0.117 -0.000 -20.672
+-0.000 -0.000 -1.000 -48.597
+-0.000 0.000 0.000 1.000
+ 
+# 13 
+ 0.000 1.000 -0.000 -2.839
+0.999 0.000 0.052 -29.658
+0.052 -0.000 -0.999 -50.181
+-0.000 0.000 0.000 1.000
+ 
+# 14 
+ 0.589 0.760 0.275 -7.666
+0.688 -0.650 0.322 -4.591
+0.424 0.000 -0.906 -57.665
+-0.000 0.000 0.000 1.000
+ 
+# 15 
+ 0.223 0.969 0.104 -2.959
+0.878 -0.246 0.411 -11.302
+0.424 0.000 -0.906 -57.665
+-0.000 0.000 0.000 1.000
+ 
+# 16 
+ 0.000 1.000 -0.000 -2.838
+0.991 -0.000 0.136 -30.431
+0.136 -0.000 -0.991 -52.957
+-0.000 0.000 0.000 1.000
+ 
+# 17 
+ 0.000 1.000 -0.000 -2.838
+1.000 0.000 -0.000 -39.844
+-0.000 -0.000 -1.000 -47.969
+-0.000 0.000 0.000 1.000
+ 
+# 18 
+ -0.000 -0.996 -0.089 -1.383
+0.000 -0.089 0.996 30.223
+-1.000 0.000 0.000 5.255
+-0.000 0.000 0.000 1.000
+ 
+# 19 
+ 0.000 -0.995 0.099 1.845
+0.000 0.099 0.995 17.105
+-1.000 -0.000 0.000 5.255
+-0.000 0.000 0.000 1.000
+ 
+# 20 
+ 0.000 -0.540 -0.841 -1.779
+0.000 -0.841 0.540 3.019
+-1.000 -0.000 0.000 5.255
+-0.000 0.000 0.000 1.000
+ 
+# 21 
+ -0.000 -0.053 -0.999 -1.012
+0.000 -0.999 0.053 -1.817
+-1.000 -0.000 0.000 5.255
+-0.000 0.000 0.000 1.000
+ 
+# 22 
+ 0.000 -0.000 -1.000 -0.733
+0.000 -1.000 0.000 -5.289
+-1.000 0.000 0.000 5.255
+-0.000 0.000 0.000 1.000
+ 
+# 23 
+ -0.000 -0.996 -0.089 -1.383
+0.000 -0.089 0.996 30.223
+-1.000 0.000 0.000 -5.209
+-0.000 0.000 0.000 1.000
+ 
+# 24 
+ -0.000 -0.995 0.099 1.845
+0.000 0.099 0.995 17.105
+-1.000 0.000 0.000 -5.209
+-0.000 0.000 0.000 1.000
+ 
+# 25 
+ 0.000 -0.540 -0.841 -1.778
+0.000 -0.841 0.540 3.019
+-1.000 -0.000 0.000 -5.197
+-0.000 0.000 0.000 1.000
+ 
+# 26 
+ -0.000 -0.053 -0.999 -1.012
+-0.000 -0.999 0.053 -1.817
+-1.000 0.000 0.000 -5.197
+-0.000 0.000 0.000 1.000
+ 
+# 27 
+ 0.000 -0.000 -1.000 -0.733
+0.000 -1.000 -0.000 -5.289
+-1.000 -0.000 0.000 -5.197
+-0.000 0.000 0.000 1.000
+ 
+# 28 
+ 0.000 0.021 -1.000 -55.290
+0.000 -1.000 -0.021 -3.009
+-1.000 -0.000 -0.000 0.022
+-0.000 0.000 0.000 1.000
+ 
+# 29 
+ 0.000 -1.000 0.000 -6.182
+-0.000 0.000 1.000 46.334
+-1.000 -0.000 -0.000 -39.750
+-0.000 0.000 0.000 1.000
+ 
+# 30 
+ 0.080 -0.828 0.555 14.085
 0.117 0.561 0.820 26.476
 -0.990 0.000 0.142 15.391
 -0.000 0.000 0.000 1.000
-
-Bone  sword : num vertices affected by this bone:  240 
-0.082 -0.826 0.557 14.182
+ 
+# 31 
+ 0.082 -0.826 0.557 14.182
 0.120 0.563 0.818 37.418
 -0.989 -0.000 0.145 15.605
 -0.000 0.000 0.000 1.000
-
+ 
 *******************************************************
 Parsing Nodes
  Node name: ' <MD5_Root> ' num children  2  num meshes  0 

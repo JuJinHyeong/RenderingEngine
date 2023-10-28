@@ -7,7 +7,8 @@ Node::Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const D
 	:
 	meshPtrs(std::move(meshPtrs)),
 	name(name),
-	id(id) {
+	id(id) 
+{
 	DirectX::XMStoreFloat4x4(&this->transform, transform);
 	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
 }

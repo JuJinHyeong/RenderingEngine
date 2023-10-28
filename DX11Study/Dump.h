@@ -52,6 +52,16 @@ public:
 			<< pad << m._41 << " " << m._42 << " " << m._43 << " " << m._44 << "\n";
 		return ss.str();
 	}
+	
+	static std::string ArrayToString(const std::vector<int>& arr) {
+		std::stringstream ss;
+		ss << "[";
+		for (int i = 0; i < arr.size(); i++) {
+			ss << " " << arr[i] << " ";
+		}
+		ss << "]";
+		return ss.str();
+	}
 
 private:
 	template<typename T>

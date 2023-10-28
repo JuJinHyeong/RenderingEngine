@@ -6,6 +6,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include <assimp/scene.h>
+
 class Bone;
 
 namespace Rgph {
@@ -27,6 +29,8 @@ private:
 	// const aiMaterial* const -> aiMaterial can't be modified also aiMaterial* can't be modified
 	// const aiMaterial* const* -> aiMaterial* is array that each element can't be modified aiMaterial, pointer
 	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node, float scale, int space=0);
+	unsigned int FindBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG);
+
 private:
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;

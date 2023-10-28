@@ -77,6 +77,15 @@ void DumpToFile(const Args&... args) {
 // testing assimp
 #define MAX_NUM_BONES_PER_VERTEX 4
 
+struct BoneInfo {
+	DirectX::XMFLOAT4X4 boneOffset = DirectX::XMFLOAT4X4();
+	DirectX::XMFLOAT4X4 finalTransformation = DirectX::XMFLOAT4X4();
+	
+	BoneInfo(const aiMatrix4x4& offset) {
+		boneOffset = *reinterpret_cast<const DirectX::XMFLOAT4X4*>(&offset);
+	}
+};
+
 struct VertexBoneData {
 	unsigned int BoneIDs[MAX_NUM_BONES_PER_VERTEX] = { 0 };
 	float Weights[MAX_NUM_BONES_PER_VERTEX] = { 0.0f };
@@ -95,7 +104,7 @@ struct VertexBoneData {
 	}
 };
 
-
+std::vector<BoneInfo> bone_info;
 std::vector<VertexBoneData> vertex_to_bones;
 std::vector<int> mesh_base_vertex;
 std::map<std::string, unsigned int> bone_name_to_index_map;
@@ -113,6 +122,7 @@ int get_bone_id(const aiBone* pBone) {
 		// Allocate an index for a new bone
 		bone_id = (int)bone_name_to_index_map.size();
 		bone_name_to_index_map[bone_name] = bone_id;
+		bone_info.emplace_back(pBone->mOffsetMatrix);
 	}
 	else {
 		bone_id = bone_name_to_index_map[bone_name];
@@ -122,14 +132,13 @@ int get_bone_id(const aiBone* pBone) {
 }
 
 void parse_single_bone(int mesh_index, const aiBone* pBone) {
-	DumpToFile("Bone ", pBone->mName.C_Str(), ": num vertices affected by this bone: ", pBone->mNumWeights, "\n");
-
 	int bone_id = get_bone_id(pBone);
+	DumpToFile("#", bone_id, "Bone ", pBone->mName.C_Str(), ": num vertices affected by this bone: ", pBone->mNumWeights, "\n");
 	//    printf("      Bone id %d\n", bone_id);
 
 	//auto mat = reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pBone->mOffsetMatrix);
-	std::string matStr = Dump::MatrixToString(pBone->mOffsetMatrix);
-	DumpToFile(matStr, '\n');
+	//std::string matStr = Dump::MatrixToString(pBone->mOffsetMatrix);
+	//DumpToFile(matStr, '\n');
 
 	for (unsigned int i = 0; i < pBone->mNumWeights; i++) {
 		//        if (i == 0) printf("\n");
@@ -153,7 +162,7 @@ void parse_mesh_bones(int mesh_index, const aiMesh* pMesh) {
 
 
 void parse_meshes(const aiScene* pScene) {
-	DumpToFile("Parsing ", pScene->mNumMeshes, " meshes\n\n");
+	DumpToFile("Parsing ", pScene->mNumMeshes, " meshes\n");
 
 	int total_vertices = 0;
 	int total_indices = 0;
@@ -167,7 +176,7 @@ void parse_meshes(const aiScene* pScene) {
 		int num_indices = pMesh->mNumFaces * 3;
 		int num_bones = pMesh->mNumBones;
 		mesh_base_vertex[i] = total_vertices;
-		DumpToFile("Mesh ", i, " '", pMesh->mName.C_Str(), "': vertices ", num_vertices, " indices ", num_indices, " bones ", num_bones, "\n\n");
+		DumpToFile("\nMesh ", i, " '", pMesh->mName.C_Str(), "': vertices ", num_vertices, " indices ", num_indices, " bones ", num_bones, "\n\n");
 		total_vertices += num_vertices;
 		total_indices += num_indices;
 		total_bones += num_bones;
@@ -178,7 +187,15 @@ void parse_meshes(const aiScene* pScene) {
 			parse_mesh_bones(i, pMesh);
 		}
 	}
-	//DumpToFile("\nTotal vertices ", total_vertices, " total indices ", total_indices, "total bones ", total_bones);
+	DumpToFile("\nTotal bones: ", bone_info.size(), "\n");
+	for (auto pair : bone_name_to_index_map) {
+		DumpToFile("#", pair.second, ":", pair.first, "\n");
+	}
+	DumpToFile("\n");
+	for (int i = 0; i < bone_info.size(); i++) {
+		std::string matStr = Dump::MatrixToString(bone_info[i].boneOffset);
+		DumpToFile("#", i, "\n", matStr, "\n");
+	}
 }
 
 
@@ -204,7 +221,7 @@ void parse_node(const aiNode* pNode) {
 
 
 void parse_hierarchy(const aiScene* pScene) {
-	DumpToFile("\n*******************************************************\n");
+	DumpToFile("*******************************************************\n");
 	DumpToFile("Parsing Nodes\n");
 
 	parse_node(pScene->mRootNode);

@@ -57,21 +57,19 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		}
 
 		DumpClear();
-		Dump("Parsing ", pScene->mNumMeshes, " meshes\n\n");
+		Dump("Parsing ", pScene->mNumMeshes, " meshes\n");
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			Dump("Mesh ", i, " '", mesh.mName.C_Str(), "': vertices ", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
+			Dump("\nMesh ", i, " '", mesh.mName.C_Str(), "': vertices ", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
 			for (size_t j = 0; j < mesh.mNumBones; j++) {
 				const auto& bone = *mesh.mBones[j];
 				// Bone  pubis : num vertices affected by this bone:  190 
-				Dump("Bone ", bone.mName.C_Str(), ": num vertices affected by this bone: ", bone.mNumWeights, "\n");
-				Dump(Dump::MatrixToString(bone.mOffsetMatrix));
-				Dump("\n");
+				//Dump(Dump::MatrixToString(bone.mOffsetMatrix));
+				//Dump("\n");
 				bonePtrs.emplace_back(std::make_shared<Bone>(i, bone));
-				if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
-					boneNameIndexMap[bone.mName.C_Str()] = (unsigned int)boneOffsetMatrixes.size();
-					boneOffsetMatrixes.push_back(bonePtrs.back()->GetOffsetMatrix());
-				}
+
+				unsigned int boneIndex = FindBoneIndex(bone);
+				Dump("#", boneIndex, "Bone ", bone.mName.C_Str(), ": num vertices affected by this bone: ", bone.mNumWeights, "\n");
 			}
 		}
 
@@ -79,6 +77,16 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
 			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, i, bonePtrs, boneNameIndexMap, boneOffsetMatrixes, scale));
+		}
+
+		Dump("\nTotal Bones: ", boneOffsetMatrixes.size(), "\n");
+		for (auto pair : boneNameIndexMap) {
+			Dump("#", pair.second, ":", pair.first, "\n");
+		}
+		Dump("\n");
+		for (size_t i = 0; i < boneOffsetMatrixes.size(); i++) {
+			std::string matStr = Dump::MatrixToString(boneOffsetMatrixes[i]);
+			Dump("#", i, "\n", matStr, "\n");
 		}
 	}
 
@@ -102,14 +110,20 @@ void Model::Accept(ModelProbe& probe) {
 }
 
 std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space) {
-	std::string pad(space, ' ');
-	Dump(pad, "Node name: '", node.mName.C_Str(), "' num children ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
-	Dump(pad, "Node Transformation:\n");
-	Dump(Dump::MatrixToString(node.mTransformation, space));
-	Dump("\n");
 	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
 	)), scale);
+
+	std::string pad(space, ' ');
+	{
+		// TODO: Remove this
+		Dump(pad, "Node name: '", node.mName.C_Str(), "' num children ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
+		Dump(pad, "Node Transformation:\n");
+		DirectX::XMFLOAT4X4 tf;
+		DirectX::XMStoreFloat4x4(&tf, DirectX::XMMatrixTranspose(transform));
+		Dump(Dump::MatrixToString(tf, space));
+		Dump("\n");
+	}
 
 	std::vector<Mesh*> curMeshPtrs;
 	curMeshPtrs.reserve(node.mNumMeshes);
@@ -135,4 +149,18 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pMesh : meshPtrs) {
 		pMesh->LinkTechniques(rg);
 	}
+}
+
+unsigned int Model::FindBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG) {
+	unsigned int index = -1;
+	if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
+		index = (unsigned int)boneOffsetMatrixes.size();
+		boneNameIndexMap[bone.mName.C_Str()] = index;
+		boneOffsetMatrixes.push_back(*reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix));
+	}
+	else {
+		index = boneNameIndexMap[bone.mName.C_Str()];
+	}
+	assert(index != -1);
+	return index;
 }
