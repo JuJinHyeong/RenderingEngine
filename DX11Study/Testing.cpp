@@ -15,10 +15,8 @@
 
 using namespace DirectX;
 
-template<typename... Args>
-void DumpToFile(const Args&... args) {
-	Dump::WriteToFile("test_parse.txt", args...);
-}
+#define DumpToFile(...) Dump::WriteToFile("test_parse.txt", __VA_ARGS__);
+
 //
 //void TestScaleMatrixTranslation()
 //{

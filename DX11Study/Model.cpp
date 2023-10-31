@@ -63,9 +63,6 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 			Dump("\nMesh ", i, " '", mesh.mName.C_Str(), "': vertices ", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
 			for (size_t j = 0; j < mesh.mNumBones; j++) {
 				const auto& bone = *mesh.mBones[j];
-				// Bone  pubis : num vertices affected by this bone:  190 
-				//Dump(Dump::MatrixToString(bone.mOffsetMatrix));
-				//Dump("\n");
 				bonePtrs.emplace_back(std::make_shared<Bone>(i, bone));
 
 				unsigned int boneIndex = FindBoneIndex(bone);
@@ -92,6 +89,10 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 
 	Dump("*******************************************************\n");
 	Dump("Parsing Nodes\n");
+	auto rootTransform = DirectX::XMLoadFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&pScene->mRootNode->mTransformation));
+	DirectX::XMVECTOR determinant = XMMatrixDeterminant(rootTransform);
+	rootInverseTransform = XMMatrixTranspose(XMMatrixInverse(&determinant, rootTransform));
+
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 }
@@ -109,10 +110,17 @@ void Model::Accept(ModelProbe& probe) {
 	pRoot->Accept(probe);
 }
 
-std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space) {
+std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space, DirectX::FXMMATRIX& parentTransform) {
 	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
 	)), scale);
+	const auto accumulatedTransform = transform * parentTransform;
+
+	if (boneNameIndexMap.find(node.mName.C_Str()) != boneNameIndexMap.end()) {
+		unsigned int boneIndex = boneNameIndexMap[node.mName.C_Str()];
+		auto finalTransform = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneMatrixes[boneIndex].offsetMatrix)) * accumulatedTransform * rootInverseTransform;
+		DirectX::XMStoreFloat4x4(&boneMatrixes[boneIndex].finalMatrix, finalTransform);
+	}
 
 	std::string pad(space, ' ');
 	{
@@ -135,7 +143,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t i = 0; i < node.mNumChildren; i++) {
 		Dump(pad + "    ", "--- ", i, " ---\n");
-		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4));
+		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4, accumulatedTransform));
 	}
 
 	return pNode;
@@ -156,7 +164,9 @@ unsigned int Model::FindBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG) {
 	if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
 		index = (unsigned int)boneOffsetMatrixes.size();
 		boneNameIndexMap[bone.mName.C_Str()] = index;
-		boneOffsetMatrixes.push_back(*reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix));
+		DirectX::XMFLOAT4X4 offsetMatrix = *reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix);
+		boneOffsetMatrixes.push_back(offsetMatrix);
+		boneMatrixes.push_back({ offsetMatrix });
 	}
 	else {
 		index = boneNameIndexMap[bone.mName.C_Str()];
