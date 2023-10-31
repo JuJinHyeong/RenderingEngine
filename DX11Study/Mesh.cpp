@@ -22,10 +22,6 @@ Mesh::Mesh(
 	Graphics& gfx,
 	const Material2& mat,
 	const aiMesh& mesh,
-	const unsigned int meshIndex,
-	const std::vector<std::shared_ptr<Bone>>& bonePtrs,
-	const std::unordered_map<std::string, unsigned int>& boneNameIndexMap,
-	const std::vector<DirectX::XMFLOAT4X4>& boneOffsetMatrixes,
 	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
@@ -38,39 +34,25 @@ Mesh::Mesh(
 	bitangents(mesh.mBitangents, mesh.mNumVertices),
 	colors(mesh.mColors[0], mesh.mNumVertices),
 	faces(mesh.mFaces, mesh.mNumFaces),
-	boneOffsetIndex(mesh.mNumVertices, {0, 0, 0, 0}),
-	boneWeight(mesh.mNumVertices, {0.0f, 0.0f, 0.0f, 0.0f})
+	bones(mesh.mBones, mesh.mNumBones)
 {
-	{
-		std::vector<std::shared_ptr<Bone>> matchingBones;
-		std::copy_if(bonePtrs.begin(), bonePtrs.end(), std::back_inserter(matchingBones),
-			[meshIndex=meshIndex](const std::shared_ptr<Bone>& bone) {
-				return bone->GetMeshIndex() == meshIndex;
-			});
-		// set vertex bone index and weights
-		for (size_t boneIdx = 0; boneIdx < matchingBones.size(); boneIdx++) {
-			const auto& bonePtr = matchingBones[boneIdx];
+	using namespace Bind;
 
-			const auto& vws = bonePtr->GetVertexWeight();
-			for (size_t vwIdx = 0; vwIdx < vws.size(); vwIdx++) {
-				auto vertexId = vws[vwIdx].first;
-				auto weight = vws[vwIdx].second;
-				for (int i = 0; i < 5; i++) {
-					if (i == 4) {
-						assert(false && "bone error!");
-					}
-					// if bone weight is 0, then we can use this slot
-					if (boneWeight[vertexId][i] == 0.0f) {
-						boneOffsetIndex[vertexId][i] = boneNameIndexMap.at(bonePtr->GetName());
-						boneWeight[vertexId][i] = weight;
-						break;
-					}
+	boneIndex.reserve(vertices.size());
+	for (auto bone : bones) {
+		for (unsigned int i = 0u; i < bone->mNumWeights; i++) {
+			auto vertexId = bone->mWeights[i].mVertexId;
+			auto weight = bone->mWeights[i].mWeight;
+			for (unsigned int j = 0; j < 5; j++) {
+				assert(j != 5);
+				if (boneWeight[vertexId][j] == 0.0f) {
+					boneIndex[vertexId][j] = 0; //TODO: Find bone index
+					boneWeight[vertexId][j] = weight;
 				}
 			}
 		}
 	}
 
-	using namespace Bind;
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
 	Dcb::RawLayout vscLayout;
@@ -134,15 +116,14 @@ Mesh::Mesh(
 				}
 			}
 			{
-				if (!boneOffsetMatrixes.empty()) {
+				if (!bones.empty()) {
 					hasSkinned = true;
 					shaderCode += "Skin";
-
+					
 					vertexLayout.Append(custom::VertexLayout::BoneIndex);
 					vertexLayout.Append(custom::VertexLayout::BoneWeight);
 
-					vscLayout.Add<Dcb::Array>("boneTransforms");
-					vscLayout["boneTransforms"].Set<Dcb::Matrix>(boneOffsetMatrixes.size());
+					// add bone transformcbuf
 				}
 			}
 			{
@@ -154,19 +135,6 @@ Mesh::Mesh(
 				step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "PS.cso"));
 				if (hasTexture) {
 					step.AddBindable(Bind::Sampler::Resolve(gfx));
-				}
-
-				if (hasSkinned) {
-					Dcb::Buffer vcBuf{ std::move(vscLayout) };
-					if (auto r = vcBuf["boneTransforms"]; r.Exists()) {
-						for (size_t i = 0; i < boneOffsetMatrixes.size(); i++) {
-							DirectX::XMFLOAT4X4 transposedBoneOffsetMat;
-							DirectX::XMStoreFloat4x4(&transposedBoneOffsetMat, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneOffsetMatrixes[i])));
-							r[i] = transposedBoneOffsetMat;
-							//r[i] = boneOffsetMatrixes[i];
-						}
-					}
-					step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vcBuf), 2u));
 				}
 
 				Dcb::Buffer buf{ std::move(pscLayout) };
@@ -327,8 +295,12 @@ const std::span<aiFace>& Mesh::GetFaces() const noexcept {
 	return faces;
 }
 
+const std::span<aiBone*>& Mesh::GetBones() const noexcept {
+	return bones;
+}
+
 const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexcept {
-	return boneOffsetIndex;
+	return boneIndex;
 }
 
 const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {

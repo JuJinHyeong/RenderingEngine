@@ -161,6 +161,7 @@
     <ClCompile Include="BlurOutlineDrawingPass.cpp" />
     <ClCompile Include="BlurOutlineRenderGraph.cpp" />
     <ClCompile Include="Bone.cpp" />
+    <ClCompile Include="BoneTransformCbuf.cpp" />
     <ClCompile Include="BufferClearPass.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraContainer.cpp" />
@@ -254,6 +255,7 @@
     <ClInclude Include="BlurOutlineRenderGraph.h" />
     <ClInclude Include="BlurPack.h" />
     <ClInclude Include="Bone.h" />
+    <ClInclude Include="BoneTransformCbuf.h" />
     <ClInclude Include="BufferClearPass.h" />
     <ClInclude Include="BufferResource.h" />
     <ClInclude Include="Camera.h" />

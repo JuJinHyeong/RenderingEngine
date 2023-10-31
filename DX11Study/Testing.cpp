@@ -249,7 +249,6 @@ void parse_hierarchy(const aiScene* pScene) {
 		std::string matStr2 = Dump::MatrixToString(bone_info[i].finalTransformation);
 		DumpToFile("final\n", matStr2, "\n");
 	}
-
 }
 
 

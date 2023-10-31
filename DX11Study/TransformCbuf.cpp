@@ -6,9 +6,11 @@ namespace Bind {
 			pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx, slot);
 		}
 	}
+
 	TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent, UINT slot)
 		:
-		pParent(&parent) {
+		pParent(&parent) 
+	{
 		if (!pVcbuf) {
 			pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx, slot);
 		}

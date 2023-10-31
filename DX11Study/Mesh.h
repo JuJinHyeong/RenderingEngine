@@ -9,16 +9,7 @@
 
 class Mesh : public Drawable {
 public:
-	Mesh(
-		Graphics& gfx,
-		const Material2& mat,
-		const aiMesh& mesh,
-		const unsigned int meshIndex,
-		const std::vector<std::shared_ptr<Bone>>& bonePtrs,
-		const std::unordered_map<std::string, unsigned int>& boneNameIndexMap,
-		const std::vector<DirectX::XMFLOAT4X4>& boneOffsetMatrixes,
-		float scale = 1.0f
-	) noexcept(!IS_DEBUG);
+	Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
 	Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
@@ -32,6 +23,7 @@ public:
 	const std::span<aiVector3D>& GetBitangents() const noexcept;
 	const std::span<aiColor4D>& GetColors() const noexcept;
 	const std::span<aiFace>& GetFaces() const noexcept;
+	const std::span<aiBone*>& GetBones() const noexcept;
 	const std::vector<std::array<unsigned int, 4>>& GetBoneIndex() const noexcept;
 	const std::vector<std::array<float, 4>>& GetBoneWeight() const noexcept;
 
@@ -47,6 +39,7 @@ private:
 	std::span<aiVector3D> bitangents;
 	std::span<aiColor4D> colors;
 	std::span<aiFace> faces;
-	std::vector<std::array<unsigned int, 4>> boneOffsetIndex;
+	std::span<aiBone*> bones;
+	std::vector<std::array<unsigned int, 4>> boneIndex;
 	std::vector<std::array<float, 4>> boneWeight;
 };
