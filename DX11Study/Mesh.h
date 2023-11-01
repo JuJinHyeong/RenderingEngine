@@ -9,11 +9,13 @@
 
 class Mesh : public Drawable {
 public:
-	Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
+	using string_to_uint_map = std::unordered_map<std::string, unsigned int>;
+	Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, string_to_uint_map boneNameToIndex, std::vector<Bone>& boneMatrixes, float scale = 1.0f) noexcept(!IS_DEBUG);
 	Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
+	const std::vector<DirectX::XMMATRIX>& GetBoneTransforms() const noexcept override;
 	void Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 
 	const std::span<aiVector3D>& GetVertices() const noexcept;
@@ -29,6 +31,7 @@ public:
 
 private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
+	mutable std::vector<Bone>* boneMatrixesPtr = nullptr;
 	std::string name;
 	std::string tag;
 

@@ -14,14 +14,19 @@
 #include "IndexBuffer.h"
 #include "Topology.h"
 #include "Vertex.h"
+#include "BoneTransformCbuf.h"
 #include <array>
 #include <algorithm>
 #include <unordered_map>
+
+#include "Dump.h"
 
 Mesh::Mesh(
 	Graphics& gfx,
 	const Material2& mat,
 	const aiMesh& mesh,
+	string_to_uint_map boneNameToIndex,
+	std::vector<Bone>& boneMatrixes,
 	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
@@ -34,20 +39,23 @@ Mesh::Mesh(
 	bitangents(mesh.mBitangents, mesh.mNumVertices),
 	colors(mesh.mColors[0], mesh.mNumVertices),
 	faces(mesh.mFaces, mesh.mNumFaces),
-	bones(mesh.mBones, mesh.mNumBones)
+	bones(mesh.mBones, mesh.mNumBones),
+	boneIndex(mesh.mNumVertices),
+	boneWeight(mesh.mNumVertices),
+	boneMatrixesPtr(&boneMatrixes)
 {
 	using namespace Bind;
 
-	boneIndex.reserve(vertices.size());
 	for (auto bone : bones) {
 		for (unsigned int i = 0u; i < bone->mNumWeights; i++) {
 			auto vertexId = bone->mWeights[i].mVertexId;
 			auto weight = bone->mWeights[i].mWeight;
 			for (unsigned int j = 0; j < 5; j++) {
-				assert(j != 5);
+				assert(j != 4 && "error!");
 				if (boneWeight[vertexId][j] == 0.0f) {
-					boneIndex[vertexId][j] = 0; //TODO: Find bone index
+					boneIndex[vertexId][j] = boneNameToIndex[bone->mName.C_Str()]; //TODO: Find bone index
 					boneWeight[vertexId][j] = weight;
+					break;
 				}
 			}
 		}
@@ -119,11 +127,11 @@ Mesh::Mesh(
 				if (!bones.empty()) {
 					hasSkinned = true;
 					shaderCode += "Skin";
-					
+
 					vertexLayout.Append(custom::VertexLayout::BoneIndex);
 					vertexLayout.Append(custom::VertexLayout::BoneWeight);
 
-					// add bone transformcbuf
+					step.AddBindable(std::make_unique<BoneTransformCbuf>(gfx));
 				}
 			}
 			{
@@ -260,6 +268,16 @@ Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs)
 
 DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
 	return DirectX::XMLoadFloat4x4(&transform);
+}
+
+const std::vector<DirectX::XMMATRIX>& Mesh::GetBoneTransforms() const noexcept
+{
+	std::vector<DirectX::XMMATRIX> v;
+	v.resize(boneMatrixesPtr->size());
+	std::transform(boneMatrixesPtr->begin(), boneMatrixesPtr->end(), v.begin(), [](Bone& bone) {
+		return bone.GetFinalMatrixXM();
+	});
+	return v;
 }
 
 void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {

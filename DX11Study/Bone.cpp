@@ -1,34 +1,39 @@
 #include "Bone.h"
-#include "ExtendedXMMath.h"
-#include <assimp/scene.h>
-#include <assimp/mesh.h>
 
-Bone::Bone(const unsigned int meshIndex, const aiBone& bone)
+Bone::Bone(const aiBone& bone)
 	:
-	name(bone.mName.C_Str()),
-	meshIndex(meshIndex),
-	offset(ConvertToDirectXMatrix(bone.mOffsetMatrix)),
-	vertexWeights(bone.mNumWeights)
+	finalMatrix(DirectX::XMFLOAT4X4())
 {
-	for (unsigned int i = 0; i < bone.mNumWeights; i++) {
-		aiVertexWeight vw = bone.mWeights[i];
-		vertexWeights[i] = std::move(std::make_pair(vw.mVertexId, vw.mWeight));
-	}
+	DirectX::XMMATRIX transposedMatrix = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix)));
+	DirectX::XMStoreFloat4x4(&offsetMatrix, transposedMatrix);
 }
 
-const DirectX::XMFLOAT4X4& Bone::GetOffsetMatrix() const noexcept {
-	return offset;
-}
-
-const std::string& Bone::GetName() const noexcept {
-	return name;
-}
-
-const unsigned int Bone::GetMeshIndex() const noexcept
+const DirectX::XMMATRIX Bone::GetOffsetMatrixXM() const noexcept
 {
-	return meshIndex;
+	return DirectX::XMLoadFloat4x4(&offsetMatrix);
 }
 
-const std::vector<std::pair<unsigned int, float>>& Bone::GetVertexWeight() const noexcept {
-	return vertexWeights;
+const DirectX::XMFLOAT4X4& Bone::GetOffsetMatrix() const noexcept
+{
+	return offsetMatrix;
+}
+
+const DirectX::XMMATRIX Bone::GetFinalMatrixXM() const noexcept
+{
+	return DirectX::XMLoadFloat4x4(&finalMatrix);
+}
+
+const DirectX::XMFLOAT4X4& Bone::GetFinalMatrix() const noexcept
+{
+	return finalMatrix;
+}
+
+void Bone::SetFinalMatrix(DirectX::FXMMATRIX& mat)
+{
+	DirectX::XMStoreFloat4x4(&finalMatrix, mat);
+}
+
+void Bone::SetFinalMatrix(DirectX::XMFLOAT4X4& mat)
+{
+	finalMatrix = mat;
 }

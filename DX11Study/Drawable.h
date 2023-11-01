@@ -41,9 +41,13 @@ public:
 	void Accept(TechniqueProbe& probe);
 
 	virtual DirectX::XMMATRIX GetTransformXM() const noexcept = 0;
+	virtual const std::vector<DirectX::XMMATRIX>& GetBoneTransforms() const noexcept {
+		return std::vector<DirectX::XMMATRIX>(0);
+	}
 	void AddBind(std::shared_ptr<Bind::Bindable> bind) noexcept(!IS_DEBUG);
 
 	void LinkTechniques(Rgph::RenderGraph& rg);
+
 
 protected:
 	std::shared_ptr<Bind::IndexBuffer> pIndices;

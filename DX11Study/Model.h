@@ -5,10 +5,8 @@
 #include <filesystem>
 #include <vector>
 #include <unordered_map>
-
 #include <assimp/scene.h>
-
-class Bone;
+#include "Bone.h"
 
 namespace Rgph {
 	class RenderGraph;
@@ -32,15 +30,11 @@ private:
 	unsigned int ResolveBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG);
 
 private:
-	struct BoneMatrix {
-		DirectX::XMFLOAT4X4 offsetMatrix;
-		DirectX::XMFLOAT4X4 finalMatrix;
-	};
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;
 	DirectX::XMMATRIX rootInverseTransform = DirectX::XMMatrixIdentity();
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;
 	// TODO: vertex weight is not needed to save on model
 	std::unordered_map<std::string, unsigned int> boneNameIndexMap;
-	std::vector<BoneMatrix> boneMatrixes;
+	std::vector<Bone> bones;
 };

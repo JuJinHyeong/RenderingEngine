@@ -1,20 +1,21 @@
 #pragma once
 #include <assimp/scene.h>
-#include <assimp/mesh.h>
 #include <DirectXMath.h>
-#include <string>
-#include <vector>
 
 class Bone {
 public:
-	Bone(const unsigned int meshIndex, const aiBone& bone);
+	Bone(const aiBone& bone);
+	
+	const DirectX::XMMATRIX GetOffsetMatrixXM() const noexcept;
 	const DirectX::XMFLOAT4X4& GetOffsetMatrix() const noexcept;
-	const std::string& GetName() const noexcept;
-	const unsigned int GetMeshIndex() const noexcept;
-	const std::vector<std::pair<unsigned int, float>>& GetVertexWeight() const noexcept;
+
+	const DirectX::XMMATRIX GetFinalMatrixXM() const noexcept;
+	const DirectX::XMFLOAT4X4& GetFinalMatrix() const noexcept;
+
+	void SetFinalMatrix(DirectX::FXMMATRIX& mat);
+	void SetFinalMatrix(DirectX::XMFLOAT4X4& mat);
+
 private:
-	std::string name;
-	unsigned int meshIndex;
-	DirectX::XMFLOAT4X4 offset;
-	std::vector<std::pair<unsigned int, float>> vertexWeights;
+	DirectX::XMFLOAT4X4 offsetMatrix;
+	DirectX::XMFLOAT4X4 finalMatrix;
 };

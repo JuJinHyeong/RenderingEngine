@@ -61,33 +61,17 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 
 		for (size_t meshIdx = 0; meshIdx < pScene->mNumMeshes; meshIdx++) {
 			const auto& mesh = *pScene->mMeshes[meshIdx];
-			std::vector<std::array<unsigned int, 4>> vertexBoneIndex(mesh.mNumVertices);
-			std::vector<std::array<float, 4>> vertexBoneWeight(mesh.mNumVertices);
-
 			Dump("\nMesh ", meshIdx, " '", mesh.mName.C_Str(), "': vertices ", mesh.mNumVertices, " indices ", mesh.mNumFaces * 3, " bones ", mesh.mNumBones, "\n\n");
 			for (size_t j = 0; j < mesh.mNumBones; j++) {
 				const auto& bone = *mesh.mBones[j];
 				unsigned int boneIndex = ResolveBoneIndex(bone);
-				for (unsigned int weightIdx = 0; weightIdx < bone.mNumWeights; weightIdx++) {
-					unsigned int vertexId = bone.mWeights[weightIdx].mVertexId;
-					float weight = bone.mWeights[weightIdx].mWeight;
-					for (int k = 0; k < 5; k++) {
-						assert(k != 4 && "vertex bone index must be smaller than 4");
-						if (vertexBoneWeight[vertexId][k] == 0.0f) {
-							vertexBoneIndex[vertexId][k] = boneIndex;
-							vertexBoneWeight[vertexId][k] = weight;
-							break;
-						}
-					}
-				}
 				Dump("#", boneIndex, "Bone ", bone.mName.C_Str(), ": num vertices affected by this bone: ", bone.mNumWeights, "\n");
 			}
-
 		}
 
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, boneNameIndexMap, bones, scale));
 		}
 	}
 
@@ -103,8 +87,8 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 	for (auto pair : boneNameIndexMap) {
 		unsigned int boneIndex = pair.second;
 		Dump("#", boneIndex, ":", pair.first, "\n");
-		Dump("Offset Matrix\n", Dump::MatrixToString(boneMatrixes[boneIndex].offsetMatrix));
-		Dump("Final Matrix\n", Dump::MatrixToString(boneMatrixes[boneIndex].finalMatrix), "\n");
+		Dump("Offset Matrix\n", Dump::MatrixToString(bones[boneIndex].GetOffsetMatrix()));
+		Dump("Final Matrix\n", Dump::MatrixToString(bones[boneIndex].GetFinalMatrix()), "\n");
 	}
 }
 
@@ -122,10 +106,11 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 	)), scale);
 	const auto accumulatedTransform = transform * parentTransform;
 
-	if (boneNameIndexMap.find(node.mName.C_Str()) != boneNameIndexMap.end()) {
-		unsigned int boneIndex = boneNameIndexMap[node.mName.C_Str()];
-		auto finalTransform = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&boneMatrixes[boneIndex].offsetMatrix)) * accumulatedTransform * rootInverseTransform;
-		DirectX::XMStoreFloat4x4(&boneMatrixes[boneIndex].finalMatrix, finalTransform);
+	auto it = boneNameIndexMap.find(node.mName.C_Str());
+	if (it != boneNameIndexMap.end()) {
+		unsigned int boneIndex = it->second;
+		auto finalTransform = bones[boneIndex].GetOffsetMatrixXM() * accumulatedTransform * rootInverseTransform;
+		bones[boneIndex].SetFinalMatrix(finalTransform);
 	}
 
 	std::string pad(space, ' ');
@@ -133,9 +118,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 		// TODO: Remove this
 		Dump(pad, "Node name: '", node.mName.C_Str(), "' num children ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
 		Dump(pad, "Node Transformation:\n");
-		DirectX::XMFLOAT4X4 tf;
-		DirectX::XMStoreFloat4x4(&tf, DirectX::XMMatrixTranspose(transform));
-		Dump(Dump::MatrixToString(tf, space));
+		Dump(Dump::MatrixToString(DirectX::XMMatrixTranspose(transform), space));
 		Dump("\n");
 	}
 
@@ -166,15 +149,16 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 }
 
 unsigned int Model::ResolveBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG) {
+	auto it = boneNameIndexMap.find(bone.mName.C_Str());
 	unsigned int index = -1;
-	if (boneNameIndexMap.find(bone.mName.C_Str()) == boneNameIndexMap.end()) {
-		index = (unsigned int)boneMatrixes.size();
+	if (it == boneNameIndexMap.end()) {
+		index = (unsigned int)bones.size();
 		boneNameIndexMap[bone.mName.C_Str()] = index;
 		DirectX::XMFLOAT4X4 offsetMatrix = *reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix);
-		boneMatrixes.push_back({ offsetMatrix });
+		bones.emplace_back(bone);
 	}
 	else {
-		index = boneNameIndexMap[bone.mName.C_Str()];
+		index = it->second;
 	}
 	assert(index != -1);
 	return index;
