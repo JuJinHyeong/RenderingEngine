@@ -15,7 +15,7 @@ public:
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
-	const std::vector<DirectX::XMMATRIX>& GetBoneTransforms() const noexcept override;
+	const std::vector<DirectX::XMFLOAT4X4> GetBoneTransforms() const noexcept override;
 	void Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 
 	const std::span<aiVector3D>& GetVertices() const noexcept;

@@ -18,14 +18,14 @@ struct VSOut
 VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, float4 boneIndex : BoneIndex, float4 boneWeight : BoneWeight)
 {
     VSOut vso;
-    
-    matrix boneTransform = (matrix)0.0f;
+    //matrix identity = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    matrix boneTransform = (matrix) 0.0f;
     [unroll]
     for (int i = 0; i < 4; i++)
     {
         boneTransform += boneTransforms[boneIndex[i]] * boneWeight[i];
     }
-    float4 bonePos = float4(pos, 1.0f);
+    float4 bonePos = mul(float4(pos, 1.0f), boneTransform);
     vso.viewPos = (float3) mul(bonePos, modelView);
     vso.viewNormal = mul(normal, (float3x3) modelView);
     vso.pos = mul(bonePos, modelViewProj);

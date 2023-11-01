@@ -1,10 +1,18 @@
 #include "BoneTransformCbuf.h"
+#include <algorithm>
 
 namespace Bind {
 	BoneTransformCbuf::BoneTransformCbuf(Graphics& gfx, UINT slot)
+		:
+		pParent(nullptr)
 	{
 		if (!pVcbuf) {
-			pVcbuf = std::make_unique<VertexConstantBuffer<BoneTransforms>>(gfx, slot);
+			Dcb::RawLayout vscLayout;
+			vscLayout.Add<Dcb::Array>("transforms");
+			vscLayout["transforms"].Set<Dcb::Matrix>(32);
+
+			Dcb::Buffer buf{ std::move(vscLayout) };
+			pVcbuf = std::make_unique<CachingVertexConstantBufferEx>(gfx, buf, slot);
 		}
 	}
 	
@@ -13,7 +21,12 @@ namespace Bind {
 		pParent(&parent)
 	{
 		if (!pVcbuf) {
-			pVcbuf = std::make_unique<VertexConstantBuffer<BoneTransforms>>(gfx, slot);
+			Dcb::RawLayout vscLayout;
+			vscLayout.Add<Dcb::Array>("transforms");
+			vscLayout["transforms"].Set<Dcb::Matrix>(32);
+
+			Dcb::Buffer buf{ std::move(vscLayout) };
+			pVcbuf = std::make_unique<CachingVertexConstantBufferEx>(gfx, buf, slot);
 		}
 	}
 	
@@ -24,24 +37,22 @@ namespace Bind {
 	
 	void BoneTransformCbuf::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
 	{
-		UpdateBindImpl(gfx, GetBoneTransforms(gfx));
+		UpdateBindImpl(gfx, GetBoneTransforms());
 	}
 	
-	void BoneTransformCbuf::UpdateBindImpl(Graphics& gfx, const BoneTransforms& btf) noexcept
+	void BoneTransformCbuf::UpdateBindImpl(Graphics& gfx, const Dcb::Buffer& buf) noexcept
 	{
-		pVcbuf->Update(gfx, btf);
+		pVcbuf->SetBuffer(buf);
 		pVcbuf->Bind(gfx);
 	}
 
-	BoneTransformCbuf::BoneTransforms BoneTransformCbuf::GetBoneTransforms(Graphics& gfx) noexcept
+	Dcb::Buffer BoneTransformCbuf::GetBoneTransforms() noexcept
 	{
-		BoneTransforms boneTransforms;
-		const auto& transforms = pParent->GetBoneTransforms();
+		std::vector<DirectX::XMFLOAT4X4> transforms = pParent->GetBoneTransforms();
+		Dcb::Buffer buf = pVcbuf->GetBuffer();
 		for (size_t i = 0; i < transforms.size(); i++) {
-			boneTransforms.transforms[i] = transforms[i];
+			buf["transforms"][i] = transforms[i];
 		}
-		return boneTransforms;
+		return buf;
 	}
-
-	std::unique_ptr<VertexConstantBuffer<BoneTransformCbuf::BoneTransforms>> BoneTransformCbuf::pVcbuf;
 }

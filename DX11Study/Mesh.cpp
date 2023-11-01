@@ -224,7 +224,7 @@ Mesh::Mesh(
 	}
 	// set drawables
 	{
-		auto v = custom::VertexBuffer{ vertexLayout, mesh };
+		auto v = custom::VertexBuffer{ vertexLayout, *this };
 		if (scale != 1.0f) {
 			for (size_t i = 0u; i < v.Size(); i++) {
 				DirectX::XMFLOAT3& pos = v[i].Attr<custom::VertexLayout::ElementType::Position3D>();
@@ -270,12 +270,12 @@ DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
 	return DirectX::XMLoadFloat4x4(&transform);
 }
 
-const std::vector<DirectX::XMMATRIX>& Mesh::GetBoneTransforms() const noexcept
+const std::vector<DirectX::XMFLOAT4X4> Mesh::GetBoneTransforms() const noexcept
 {
-	std::vector<DirectX::XMMATRIX> v;
+	std::vector<DirectX::XMFLOAT4X4> v;
 	v.resize(boneMatrixesPtr->size());
 	std::transform(boneMatrixesPtr->begin(), boneMatrixesPtr->end(), v.begin(), [](Bone& bone) {
-		return bone.GetFinalMatrixXM();
+		return bone.GetFinalMatrix();
 	});
 	return v;
 }
