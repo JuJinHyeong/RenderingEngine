@@ -26,7 +26,7 @@ Mesh::Mesh(
 	const Material2& mat,
 	const aiMesh& mesh,
 	string_to_uint_map boneNameToIndex,
-	std::vector<Bone>& boneMatrixes,
+	std::vector<Bone>* boneMatrixes,
 	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
@@ -42,7 +42,7 @@ Mesh::Mesh(
 	bones(mesh.mBones, mesh.mNumBones),
 	boneIndex(mesh.mNumVertices),
 	boneWeight(mesh.mNumVertices),
-	boneMatrixesPtr(&boneMatrixes)
+	boneMatrixesPtr(boneMatrixes)
 {
 	using namespace Bind;
 

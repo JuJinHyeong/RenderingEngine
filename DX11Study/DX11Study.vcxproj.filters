@@ -360,6 +360,9 @@
     <ClCompile Include="BoneTransformCbuf.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowsMessageMap.h">
@@ -703,6 +706,9 @@
     </ClInclude>
     <ClInclude Include="BoneTransformCbuf.h">
       <Filter>헤더 파일\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

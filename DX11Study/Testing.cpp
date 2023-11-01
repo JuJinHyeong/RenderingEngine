@@ -196,9 +196,10 @@ void parse_meshes(const aiScene* pScene) {
 
 XMMATRIX inverseRootTransform = XMMatrixIdentity();
 void parse_node(const aiNode* pNode, const FXMMATRIX& parentTransform) {
-	const auto transform = (DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
+	auto transform = (DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&pNode->mTransformation)
 	)));
+
 	const auto accumulatedTransform = transform * parentTransform;
 
 	if (bone_name_to_index_map.find(pNode->mName.C_Str()) != bone_name_to_index_map.end()) {
@@ -251,7 +252,6 @@ void parse_hierarchy(const aiScene* pScene) {
 	}
 }
 
-
 void parse_scene(const aiScene* pScene) {
 	parse_meshes(pScene);
 
@@ -261,7 +261,7 @@ void parse_scene(const aiScene* pScene) {
 	parse_hierarchy(pScene);
 }
 
-void AssimpTest(const std::string& filename) {
+void AssimpTest(const std::string& filename, float tick) {
 	Assimp::Importer Importer;
 	const aiScene* pScene = Importer.ReadFile(filename,
 			aiProcess_Triangulate |

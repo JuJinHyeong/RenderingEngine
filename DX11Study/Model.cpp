@@ -71,8 +71,12 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 
 		for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 			const auto& mesh = *pScene->mMeshes[i];
-			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, boneNameIndexMap, bones, scale));
+			meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, nameBoneIndexMap, &bones, scale));
 		}
+	}
+
+	for (int i = 0; i < pScene->mNumAnimations; i++) {
+		animations.emplace_back(*pScene->mAnimations[i]);
 	}
 
 	Dump("*******************************************************\n");
@@ -84,7 +88,7 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
 	
-	for (auto pair : boneNameIndexMap) {
+	for (auto pair : nameBoneIndexMap) {
 		unsigned int boneIndex = pair.second;
 		Dump("#", boneIndex, ":", pair.first, "\n");
 		Dump("Offset Matrix\n", Dump::MatrixToString(bones[boneIndex].GetOffsetMatrix()));
@@ -93,25 +97,21 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 }
 
 void Model::Submit(size_t channel) const noexcept(!IS_DEBUG) {
-	pRoot->Submit(channel, DirectX::XMMatrixIdentity());
+	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), animations[0], animationTick);
 }
 
 void Model::Accept(ModelProbe& probe) {
+	ImGui::Begin("Model Anim");
+	ImGui::SliderFloat("Animation Tick", &animationTick, 0.0f, 140.0f);
+	ImGui::End();
 	pRoot->Accept(probe);
 }
 
-std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space, DirectX::FXMMATRIX& parentTransform) {
+std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space) {
 	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
 	)), scale);
-	const auto accumulatedTransform = transform * parentTransform;
 
-	auto it = boneNameIndexMap.find(node.mName.C_Str());
-	if (it != boneNameIndexMap.end()) {
-		unsigned int boneIndex = it->second;
-		auto finalTransform = bones[boneIndex].GetOffsetMatrixXM() * accumulatedTransform * rootInverseTransform;
-		bones[boneIndex].SetFinalMatrix(finalTransform);
-	}
 
 	std::string pad(space, ' ');
 	{
@@ -129,10 +129,10 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 		curMeshPtrs.push_back(meshPtrs.at(meshIdx).get());
 	}
 
-	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), transform);
+	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), &nameBoneIndexMap, &bones, transform, rootInverseTransform);
 	for (size_t i = 0; i < node.mNumChildren; i++) {
 		Dump(pad + "    ", "--- ", i, " ---\n");
-		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4, accumulatedTransform));
+		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4));
 	}
 
 	return pNode;
@@ -149,11 +149,11 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 }
 
 unsigned int Model::ResolveBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG) {
-	auto it = boneNameIndexMap.find(bone.mName.C_Str());
+	auto it = nameBoneIndexMap.find(bone.mName.C_Str());
 	unsigned int index = -1;
-	if (it == boneNameIndexMap.end()) {
+	if (it == nameBoneIndexMap.end()) {
 		index = (unsigned int)bones.size();
-		boneNameIndexMap[bone.mName.C_Str()] = index;
+		nameBoneIndexMap[bone.mName.C_Str()] = index;
 		DirectX::XMFLOAT4X4 offsetMatrix = *reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix);
 		bones.emplace_back(bone);
 	}

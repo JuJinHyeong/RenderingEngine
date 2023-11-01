@@ -1,14 +1,25 @@
 #pragma once
 #include "Mesh.h"
+#include "Bone.h"
+#include "Animation.h"
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class Node {
 	friend class Model;
 public:
-	Node(int id, const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG);
+	Node(
+		int id,
+		const std::string& name,
+		std::vector<Mesh*> meshPtrs,
+		std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap,
+		std::vector<Bone>* pBoneMatrixes,
+		const DirectX::XMMATRIX& transform,
+		const DirectX::XMMATRIX& inverseRootTransform = DirectX::XMMatrixIdentity()
+	) noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
-	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const Animation& pAnim, float tick = 0.0f) const noexcept(!IS_DEBUG);
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept;
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;
@@ -30,4 +41,7 @@ private:
 	DirectX::XMFLOAT4X4 transform;
 	// local transform
 	DirectX::XMFLOAT4X4 appliedTransform;
+	DirectX::XMFLOAT4X4 inverseRootTransform;
+	std::vector<Bone>* pBoneMatrixes = nullptr;
+	std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap;
 };
