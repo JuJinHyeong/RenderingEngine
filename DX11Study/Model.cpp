@@ -100,10 +100,11 @@ void Model::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), animations[0], animationTick);
 }
 
+void ShowMatrix(DirectX::XMFLOAT4X4& mat) {
+	
+}
+
 void Model::Accept(ModelProbe& probe) {
-	ImGui::Begin("Model Anim");
-	ImGui::SliderFloat("Animation Tick", &animationTick, 0.0f, 140.0f);
-	ImGui::End();
 	pRoot->Accept(probe);
 }
 
@@ -146,6 +147,16 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pMesh : meshPtrs) {
 		pMesh->LinkTechniques(rg);
 	}
+}
+
+const std::vector<Bone>& Model::GetBoneMatrixes() const noexcept
+{
+	return bones;
+}
+
+float& Model::GetAnimationTick() noexcept
+{
+	return animationTick;
 }
 
 unsigned int Model::ResolveBoneIndex(const aiBone& bone) noexcept(!IS_DEBUG) {

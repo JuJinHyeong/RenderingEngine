@@ -21,6 +21,9 @@ public:
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const Animation& pAnim, float tick = 0.0f) const noexcept(!IS_DEBUG);
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept;
+	//TODO: remove
+	const DirectX::XMFLOAT4X4& GetFinalTransform() const noexcept;
+	const DirectX::XMFLOAT4X4& GetTransform() const noexcept;
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;
 	// index need to imgui, Node need to graphics
@@ -44,4 +47,6 @@ private:
 	DirectX::XMFLOAT4X4 inverseRootTransform;
 	std::vector<Bone>* pBoneMatrixes = nullptr;
 	std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap;
+	// TODO: remove for test
+	mutable DirectX::XMFLOAT4X4 finalTransform;
 };

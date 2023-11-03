@@ -123,12 +123,9 @@ aiVector3D InterpolateScaling(float tick, const std::vector<aiVectorKey>& scalin
 	const aiVector3D& end = scalingKeys[rightIndex].mValue;
 	return (1 - factor) * start + factor * end;
 }
-float prevTick = 0.0f;
 void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const Animation& animation, float tick) const noexcept(!IS_DEBUG) {
 	auto tf = DirectX::XMLoadFloat4x4(&transform);
-	if (prevTick != tick) {
-		Dump::Print("transform\n", Dump::MatrixToString(transform));
-	}
+
 	if (tick > 0.0f) {
 		auto nameChannelMap = animation.GetNameChannelMap();
 		auto it = nameChannelMap.find(name);
@@ -137,34 +134,23 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 
 			aiVector3D scaling = InterpolateScaling(tick, pNodeAnim.scalingKeys);
 			DirectX::XMMATRIX scalingMatrix = DirectX::XMMatrixScalingFromVector(DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&scaling)));
-			if (prevTick != tick) {
-				Dump::Print("Scaling\n", Dump::MatrixToString(scalingMatrix));
-			}
+
 
 			aiQuaternion rotation = InterpolateRotation(tick, pNodeAnim.rotationKeys);
 			DirectX::XMFLOAT4 rot = { rotation.x, rotation.y, rotation.z, rotation.w };
 			DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&rot));
-			if (prevTick != tick) {
-				Dump::Print("Rotation\n", Dump::MatrixToString(rotationMatrix));
-			}
 
 			aiVector3D position = InterpolatePosition(tick, pNodeAnim.positionKeys);
 			DirectX::XMMATRIX positionMatrix = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&position)));
 
-			if (prevTick != tick) {
-				Dump::Print("Position\n", Dump::MatrixToString(positionMatrix));
-			}
-
 			tf = scalingMatrix * rotationMatrix * positionMatrix;
-			if (prevTick != tick) {
-				Dump::Print("calculation\n", Dump::MatrixToString(tf));
-			}
 		}
 	}
 
 	auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
 		* tf
 		* accumulatedTransform;
+	DirectX::XMStoreFloat4x4(&finalTransform, built);
 
 	auto it = pNameToBoneIndexMap->find(name);
 	if (it != pNameToBoneIndexMap->end()) {
@@ -183,6 +169,15 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 
 const DirectX::XMFLOAT4X4& Node::GetAppliedTransform() const noexcept {
 	return appliedTransform;
+}
+
+const DirectX::XMFLOAT4X4& Node::GetFinalTransform() const noexcept {
+	return finalTransform;
+}
+
+const DirectX::XMFLOAT4X4& Node::GetTransform() const noexcept
+{
+	return transform;
 }
 
 void Node::SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {

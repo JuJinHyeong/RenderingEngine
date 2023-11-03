@@ -13,6 +13,7 @@ namespace Rgph {
 }
 
 class Model {
+	friend class MP;
 public:
 	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f, const bool test = false);
 	~Model() noexcept(!IS_DEBUG);
@@ -22,6 +23,8 @@ public:
 	//void ShowWindow(const char* windowName) noexcept(!IS_DEBUG);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 	void LinkTechniques(Rgph::RenderGraph& rg);
+	const std::vector<Bone>& GetBoneMatrixes() const noexcept;
+	float& GetAnimationTick() noexcept;
 private:
 	// const aiMaterial* -> aiMaterial* that aiMaterial can't be modified
 	// const aiMaterial* const -> aiMaterial can't be modified also aiMaterial* can't be modified
