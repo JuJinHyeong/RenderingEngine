@@ -92,7 +92,6 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		unsigned int boneIndex = pair.second;
 		Dump("#", boneIndex, ":", pair.first, "\n");
 		Dump("Offset Matrix\n", Dump::MatrixToString(bones[boneIndex].GetOffsetMatrix()));
-		Dump("Final Matrix\n", Dump::MatrixToString(bones[boneIndex].GetFinalMatrix()), "\n");
 	}
 }
 
@@ -119,7 +118,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 		// TODO: Remove this
 		Dump(pad, "Node name: '", node.mName.C_Str(), "' num children ", node.mNumChildren, " num meshes ", node.mNumMeshes, "\n");
 		Dump(pad, "Node Transformation:\n");
-		Dump(Dump::MatrixToString(DirectX::XMMatrixTranspose(transform), space));
+		Dump(Dump::MatrixToString(transform, space));
 		Dump("\n");
 	}
 

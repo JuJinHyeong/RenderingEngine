@@ -112,7 +112,10 @@ namespace custom {
 			static constexpr const char* code = "BI";
 			// TODO: fix extractor
 			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBoneIndex());
+			static SysType Extract2(const Mesh& mesh, size_t i) noexcept {
+				const SysType* a = reinterpret_cast<const SysType*>(&mesh.GetBoneIndex()[i]);
+				return *a; 
+			}
 		};
 		template<> struct Map<BoneWeight> {
 			using SysType = DirectX::XMFLOAT4;

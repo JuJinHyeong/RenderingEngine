@@ -8,6 +8,7 @@
 
 class Node {
 	friend class Model;
+	friend class MP;
 public:
 	Node(
 		int id,
@@ -26,6 +27,8 @@ public:
 	const DirectX::XMFLOAT4X4& GetTransform() const noexcept;
 	void SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
 	int GetId() const noexcept;
+	const bool IsSelected() const noexcept;
+	void SetSelected(bool selected) noexcept;
 	// index need to imgui, Node need to graphics
 	//void ShowTree(Node*& pSelectedNode)  const noexcept(!IS_DEBUG);
 	bool HasChildren() const noexcept;
@@ -49,4 +52,5 @@ private:
 	std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap;
 	// TODO: remove for test
 	mutable DirectX::XMFLOAT4X4 finalTransform;
+	bool selected = false;
 };

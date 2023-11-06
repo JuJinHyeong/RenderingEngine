@@ -33,6 +33,9 @@ public:
 			return tagScratch.c_str();
 		};
 
+		if (auto v = buf["selectedBoneIndex"]; v.Exists()) {
+			dcheck(ImGui::SliderInt(tag("Selected Bone Index"), &v, 0, 32));
+		}
 		if (auto v = buf["scale"]; v.Exists()) {
 			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
 		}
@@ -66,6 +69,8 @@ public:
 
 class MP : ModelProbe {
 	friend class Model;
+	friend class Node;
+	friend class Mesh;
 public:
 	MP(std::string name)
 		:
@@ -106,9 +111,9 @@ public:
 			const auto dcheck = [&dirty](bool changed) {dirty = dirty || changed; };
 			auto& tf = ResolveTransform();
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Translation");
-			dcheck(ImGui::SliderFloat("X", &tf.x, -60.f, 60.f));
-			dcheck(ImGui::SliderFloat("Y", &tf.y, -60.f, 60.f));
-			dcheck(ImGui::SliderFloat("Z", &tf.z, -60.f, 60.f));
+			dcheck(ImGui::SliderFloat("X", &tf.x, -0.3f, 0.3f));
+			dcheck(ImGui::SliderFloat("Y", &tf.y, -0.3f, 0.3f));
+			dcheck(ImGui::SliderFloat("Z", &tf.z, -0.3f, 0.3f));
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
 			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
@@ -121,21 +126,26 @@ public:
 					dx::XMMatrixTranslation(tf.x, tf.y, tf.z)
 				);
 			}
+
+			for (auto meshPtr : pSelectedNode->meshPtrs) {
+				ImGui::Text(meshPtr->name.c_str());
+			}
+
 			//const auto& ftf = ResolveFinalTransform();
 			//ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Final Translation");
 			//ImGui::Text("%f %f %f", tf.x, tf.y, tf.z);
 
 			//ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Final Orientation");
 			//ImGui::Text("%f %f %f", tf.xRot, tf.yRot, tf.zRot);
-			const auto& transform = pSelectedNode->GetAppliedTransform();
-			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "applied Transform Matrix");
+			const auto& transform = pSelectedNode->GetTransform();
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Transform Matrix");
 			ImGui::Text("%f %f %f %f", transform._11, transform._12, transform._13, transform._14);
 			ImGui::Text("%f %f %f %f", transform._21, transform._22, transform._23, transform._24);
 			ImGui::Text("%f %f %f %f", transform._31, transform._32, transform._33, transform._34);
 			ImGui::Text("%f %f %f %f", transform._41, transform._42, transform._43, transform._44);
 			const auto& tfp = GetTransformParameters(transform);
 			ImGui::Text("Translate %f %f %f", tfp.x, tfp.y, tfp.z);
-			ImGui::Text("Rotation %f %f %f", tfp.xRot, tfp.yRot, tfp.zRot);
+			ImGui::Text("Rotation %f %f %f", tfp.xRot * 180 / PI, tfp.yRot * 180 / PI, tfp.zRot * 180 / PI);
 
 			const auto& finalTransform = pSelectedNode->GetFinalTransform();
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Final Transform Matrix");
@@ -145,7 +155,7 @@ public:
 			ImGui::Text("%f %f %f %f", finalTransform._41, finalTransform._42, finalTransform._43, finalTransform._44);
 			const auto& ftfp = GetTransformParameters(finalTransform);
 			ImGui::Text("Translate %f %f %f", ftfp.x, ftfp.y, ftfp.z);
-			ImGui::Text("Rotation %f %f %f", ftfp.xRot, ftfp.yRot, ftfp.zRot);
+			ImGui::Text("Rotation %f %f %f", ftfp.xRot * 180 / PI, ftfp.yRot * 180 / PI, ftfp.zRot * 180 / PI);
 
 
 			TP probe;
@@ -183,7 +193,6 @@ protected:
 			// add highlight on current selected node
 			probe.highlighted = true;
 			node.Accept(probe);
-
 			pSelectedNode = &node;
 		}
 		return expanded;

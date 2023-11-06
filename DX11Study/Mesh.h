@@ -8,6 +8,7 @@
 #include <vector>
 
 class Mesh : public Drawable {
+	friend class MP;
 public:
 	using string_to_uint_map = std::unordered_map<std::string, unsigned int>;
 	Mesh(Graphics& gfx, const Material2& mat, const aiMesh& mesh, string_to_uint_map boneNameToIndex, std::vector<Bone>* boneMatrixes, float scale = 1.0f) noexcept(!IS_DEBUG);

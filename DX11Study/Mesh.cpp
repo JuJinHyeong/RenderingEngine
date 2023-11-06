@@ -132,12 +132,15 @@ Mesh::Mesh(
 					vertexLayout.Append(custom::VertexLayout::BoneWeight);
 
 					step.AddBindable(std::make_unique<BoneTransformCbuf>(gfx));
+
+					vscLayout.Add<Dcb::Integer>("selectedBoneIndex");
 				}
 			}
 			{
 				step.AddBindable(std::make_unique<TransformCbuf>(gfx));
 				step.AddBindable(Blender::Resolve(gfx, false));
 				auto pvs = VertexShader::Resolve(gfx, shaderCode + "VS.cso");
+
 				step.AddBindable(InputLayout::Resolve(gfx, vertexLayout, *pvs));
 				step.AddBindable(std::move(pvs));
 				step.AddBindable(PixelShader::Resolve(gfx, shaderCode + "PS.cso"));
@@ -163,6 +166,10 @@ Mesh::Mesh(
 				buf["useNormalMap"].SetifExists(true);
 				buf["normalMapWeight"].SetifExists(1.0f);
 				step.AddBindable(std::make_unique<Bind::CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
+
+				Dcb::Buffer vBuf{ std::move(vscLayout) };
+				vBuf["selectedBoneIndex"].SetifExists(0);
+				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vBuf), 3u));
 			}
 			phong.AddStep(std::move(step));
 		}
@@ -234,6 +241,7 @@ Mesh::Mesh(
 			}
 		}
 		pVertices = Bind::VertexBuffer::Resolve(gfx, tag, std::move(v));
+
 	}
 	{
 		std::vector<unsigned short> indices;
