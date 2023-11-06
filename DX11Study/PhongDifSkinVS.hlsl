@@ -33,7 +33,18 @@ VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, 
         boneTransform += boneTransforms[boneIndex[i]] * boneWeight[i];
         if (boneIndex[i] == selectedBoneIndex && boneWeight[i] > 0.0f)
         {
-            vso.color += float4(boneWeight[i], 0.0f, 0.0f, 0.0f);
+            if (boneWeight[i] > 0.7f)
+            {
+                vso.color.r = boneWeight[i];
+            }
+            else if (boneWeight[i] > 0.3f)
+            {
+                vso.color.g = boneWeight[i];
+            }
+            else
+            {
+                vso.color.b = boneWeight[i];
+            }
         }
     }
     float4 bonePos = mul(float4(pos, 1.0f), boneTransform);
@@ -42,5 +53,6 @@ VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, 
     vso.pos = mul(bonePos, modelViewProj);
     vso.tc = tc;
     vso.shadowHomoPos = ToShadowHomoSpace(pos, model);
+    
     return vso;
 }

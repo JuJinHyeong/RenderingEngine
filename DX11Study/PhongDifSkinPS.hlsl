@@ -32,7 +32,7 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float2 tc : T
         diffuse = specular = 0.0f;
     }
     
-    float4 test = color.r == 0.0f ? tex.Sample(splr, tc) : color;
+    float4 test = (color.r + color.g + color.b) == 0.0f ? tex.Sample(splr, tc) : color;
     
     return float4(saturate((diffuse + ambient) * test.rgb + specular), 1.0f);
 }

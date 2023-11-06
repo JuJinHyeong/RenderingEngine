@@ -101,6 +101,24 @@ public:
 		}
 		ImGui::End();
 
+		ImGui::Begin(std::string(name + " cpu calcualated vertices").c_str());
+		const auto& testMesh = model.meshPtrs[1];
+		for (int i = 0; i < testMesh->vertices.size(); i++) {
+			const auto& boneIndex = testMesh->GetBoneIndex()[i];
+			const auto& boneWeight = testMesh->GetBoneWeight()[i];
+			auto aiVertex = testMesh->vertices[i];
+			DirectX::XMFLOAT4 vertex = DirectX::XMFLOAT4(aiVertex.x, aiVertex.y, aiVertex.z, 1.0f);
+			DirectX::XMMATRIX boneTransform = {};
+			for (int j = 0; j < 4; j++) {
+				boneTransform += boneMatrixes[boneIndex[j]].GetFinalMatrixXM() * boneWeight[j];
+			}
+			auto calcuatedVector = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&vertex), boneTransform);
+			DirectX::XMFLOAT4 bonePos;
+			DirectX::XMStoreFloat4(&bonePos, calcuatedVector);
+			ImGui::Text("%f %f %f %f", bonePos.x, bonePos.y, bonePos.z, bonePos.w);
+		}
+		ImGui::End();
+
 		ImGui::Begin(name.c_str());
 		ImGui::Columns(2, nullptr, true);
 		model.Accept(*this);

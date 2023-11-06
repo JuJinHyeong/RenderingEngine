@@ -112,10 +112,7 @@ namespace custom {
 			static constexpr const char* code = "BI";
 			// TODO: fix extractor
 			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
-			static SysType Extract2(const Mesh& mesh, size_t i) noexcept {
-				const SysType* a = reinterpret_cast<const SysType*>(&mesh.GetBoneIndex()[i]);
-				return *a; 
-			}
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBoneIndex());
 		};
 		template<> struct Map<BoneWeight> {
 			using SysType = DirectX::XMFLOAT4;
@@ -132,8 +129,8 @@ namespace custom {
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_UNKNOWN;
 			static constexpr const char* semantic = "!INVALID!";
 			static constexpr const char* code = "!INV!";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces)
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetFaces());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetVertices());
 		};
 
 		// TODO: make to template lambda

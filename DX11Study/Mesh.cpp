@@ -25,41 +25,18 @@ Mesh::Mesh(
 	Graphics& gfx,
 	const Material2& mat,
 	const aiMesh& mesh,
-	string_to_uint_map boneNameToIndex,
+	const string_to_uint_map& boneNameToIndex,
 	std::vector<Bone>* boneMatrixes,
 	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
 	name(mesh.mName.C_Str()),
 	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
-	vertices(mesh.mVertices, mesh.mNumVertices),
-	textureCoords(mesh.mTextureCoords[0], mesh.mNumVertices),
-	normals(mesh.mNormals, mesh.mNumVertices),
-	tangents(mesh.mTangents, mesh.mNumVertices),
-	bitangents(mesh.mBitangents, mesh.mNumVertices),
-	colors(mesh.mColors[0], mesh.mNumVertices),
-	faces(mesh.mFaces, mesh.mNumFaces),
-	bones(mesh.mBones, mesh.mNumBones),
-	boneIndex(mesh.mNumVertices),
-	boneWeight(mesh.mNumVertices),
 	boneMatrixesPtr(boneMatrixes)
 {
 	using namespace Bind;
 
-	for (auto bone : bones) {
-		for (unsigned int i = 0u; i < bone->mNumWeights; i++) {
-			auto vertexId = bone->mWeights[i].mVertexId;
-			auto weight = bone->mWeights[i].mWeight;
-			for (unsigned int j = 0; j < 5; j++) {
-				assert(j != 4 && "error!");
-				if (boneWeight[vertexId][j] == 0.0f) {
-					boneIndex[vertexId][j] = boneNameToIndex[bone->mName.C_Str()]; //TODO: Find bone index
-					boneWeight[vertexId][j] = weight;
-					break;
-				}
-			}
-		}
-	}
+	InitializePerVertexData(mesh, boneNameToIndex);
 
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
@@ -124,7 +101,7 @@ Mesh::Mesh(
 				}
 			}
 			{
-				if (!bones.empty()) {
+				if (mesh.HasBones()) {
 					hasSkinned = true;
 					shaderCode += "Skin";
 
@@ -241,23 +218,9 @@ Mesh::Mesh(
 			}
 		}
 		pVertices = Bind::VertexBuffer::Resolve(gfx, tag, std::move(v));
-
 	}
-	{
-		std::vector<unsigned short> indices;
-		indices.reserve(mesh.mNumFaces * 3);
-		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
-			const auto& face = mesh.mFaces[i];
-			assert(face.mNumIndices == 3);
-			indices.push_back(face.mIndices[0]);
-			indices.push_back(face.mIndices[1]);
-			indices.push_back(face.mIndices[2]);
-		}
-		pIndices = Bind::IndexBuffer::Resolve(gfx, tag, std::move(indices));
-	}
-	{
-		pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
+	pIndices = Bind::IndexBuffer::Resolve(gfx, tag, indices);
+	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
@@ -293,36 +256,28 @@ void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) cons
 	Drawable::Submit(channels);
 }
 
-const std::span<aiVector3D>& Mesh::GetVertices() const noexcept {
+const std::vector<DirectX::XMFLOAT3>& Mesh::GetVertices() const noexcept {
 	return vertices;
 }
 
-const std::span<aiVector3D>& Mesh::GetTextureCoords() const noexcept {
+const std::vector<DirectX::XMFLOAT3>& Mesh::GetTextureCoords() const noexcept {
 	return textureCoords;
 }
 
-const std::span<aiVector3D>& Mesh::GetNormals() const noexcept {
+const std::vector<DirectX::XMFLOAT3>& Mesh::GetNormals() const noexcept {
 	return normals;
 }
 
-const std::span<aiVector3D>& Mesh::GetTangents() const noexcept {
+const std::vector<DirectX::XMFLOAT3>& Mesh::GetTangents() const noexcept {
 	return tangents;
 }
 
-const std::span<aiVector3D>& Mesh::GetBitangents() const noexcept {
+const std::vector<DirectX::XMFLOAT3>& Mesh::GetBitangents() const noexcept {
 	return bitangents;
 }
 
-const std::span<aiColor4D>& Mesh::GetColors() const noexcept {
+const std::vector<DirectX::XMFLOAT4>& Mesh::GetColors() const noexcept {
 	return colors;
-}
-
-const std::span<aiFace>& Mesh::GetFaces() const noexcept {
-	return faces;
-}
-
-const std::span<aiBone*>& Mesh::GetBones() const noexcept {
-	return bones;
 }
 
 const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexcept {
@@ -332,3 +287,67 @@ const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexc
 const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {
 	return boneWeight;
 }
+
+#define Initialize(mData, data)\
+if(mesh.mData != nullptr){\
+	data.reserve(mesh.mNumVertices);\
+	for(unsigned int i=0; i<mesh.mNumVertices; i++) {\
+		data.emplace_back(mesh.mData[i].x, mesh.mData[i].y, mesh.mData[i].z);\
+	}\
+}
+void Mesh::InitializePerVertexData(const aiMesh& mesh, const string_to_uint_map& boneNameToIndex) noexcept(!IS_DEBUG)
+{
+	// TODO: optimize cach hit rate...?
+	//for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+	//	vertices.emplace_back(mesh.mVertices[i].x, mesh.mVertices[i].y, mesh.mVertices[i].z);
+	//	if (mesh.mTextureCoords[0] != nullptr) {
+	//		textureCoords.emplace_back(mesh.mTextureCoords[0][i].x, mesh.mTextureCoords[0][i].y, mesh.mTextureCoords[0][i].z);
+	//	}
+	//	if (mesh.mNormals != nullptr) {
+	//		normals.emplace_back(mesh.mNormals[i].x, mesh.mNormals[i].y, mesh.mNormals[i].z);
+	//	}
+	//	if (mesh.mTangents != nullptr) {
+	//		tangents.emplace_back(mesh.mTangents[i].x, mesh.mTangents[i].y, mesh.mTangents[i].z);
+	//	}
+	//}
+
+	Initialize(mVertices, vertices);
+	Initialize(mTextureCoords[0], textureCoords);
+	Initialize(mNormals, normals);
+	Initialize(mTangents, tangents);
+	Initialize(mBitangents, bitangents);
+	if (mesh.mColors[0] != nullptr) {
+		for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+			colors.emplace_back(mesh.mColors[0][i].r, mesh.mColors[0][i].g, mesh.mColors[0][i].b, mesh.mColors[0][i].a);
+		}
+	}
+	if (mesh.mFaces != nullptr) {
+		for (unsigned int i = 0; i < mesh.mNumFaces; i++) {
+			assert(mesh.mFaces[i].mNumIndices == 3);
+			// TODO: what difference between below two?
+			//auto a = *reinterpret_cast<const DirectX::XMUINT3*>(mesh.mFaces[i].mIndices);
+			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[0]));
+			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[1]));
+			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[2]));
+		}
+	}
+
+	boneIndex.resize(mesh.mNumVertices);
+	boneWeight.resize(mesh.mNumVertices);
+	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
+		auto bone = mesh.mBones[i];
+		for (unsigned int j = 0u; j < bone->mNumWeights; j++) {
+			auto vertexId = bone->mWeights[j].mVertexId;
+			auto weight = bone->mWeights[j].mWeight;
+			for (unsigned int j = 0; j < 5; j++) {
+				assert(j != 4 && "error!");
+				if (boneWeight[vertexId][j] == 0.0f) {
+					boneIndex[vertexId][j] = boneNameToIndex.at(bone->mName.C_Str()); //TODO: Find bone index
+					boneWeight[vertexId][j] = weight;
+					break;
+				}
+			}
+		}
+	}
+}
+#undef Initialize(mData, data)
