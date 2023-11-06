@@ -50,8 +50,10 @@ namespace Bind {
 	{
 		std::vector<DirectX::XMFLOAT4X4> transforms = pParent->GetBoneTransforms();
 		Dcb::Buffer buf = pVcbuf->GetBuffer();
+		DirectX::XMFLOAT4X4 temp;
 		for (size_t i = 0; i < transforms.size(); i++) {
-			buf["transforms"][i] = transforms[i];
+			DirectX::XMStoreFloat4x4(&temp, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&transforms[i])));
+			buf["transforms"][i] = temp;
 		}
 		return buf;
 	}

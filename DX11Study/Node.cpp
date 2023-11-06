@@ -10,19 +10,17 @@ Node::Node(
 	std::vector<Mesh*> meshPtrs, 
 	std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap,
 	std::vector<Bone>* pBoneMatrixes,
-	const DirectX::XMMATRIX& transform,
-	const DirectX::XMMATRIX& inverseRootTransform
-) noexcept(!IS_DEBUG)
+	const DirectX::XMMATRIX& transform) noexcept(!IS_DEBUG)
 	:
 	meshPtrs(std::move(meshPtrs)),
 	name(name),
 	id(id),
 	pBoneMatrixes(pBoneMatrixes),
-	pNameToBoneIndexMap(pNameToBoneIndexMap)
+	pNameToBoneIndexMap(pNameToBoneIndexMap),
+	finalTransform(DirectX::XMFLOAT4X4())
 {
 	DirectX::XMStoreFloat4x4(&this->transform, transform);
 	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
-	DirectX::XMStoreFloat4x4(&this->inverseRootTransform, inverseRootTransform);
 }
 
 int Node::GetId() const noexcept {
@@ -131,7 +129,7 @@ aiVector3D InterpolateScaling(float tick, const std::vector<aiVectorKey>& scalin
 	const aiVector3D& end = scalingKeys[rightIndex].mValue;
 	return (1 - factor) * start + factor * end;
 }
-void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const Animation& animation, float tick) const noexcept(!IS_DEBUG) {
+void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const DirectX::FXMMATRIX& inverseRootMatrix, const Animation& animation, float tick) const noexcept(!IS_DEBUG) {
 	auto tf = DirectX::XMLoadFloat4x4(&transform);
 
 	if (tick > 0.0f) {
@@ -142,7 +140,6 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 
 			aiVector3D scaling = InterpolateScaling(tick, pNodeAnim.scalingKeys);
 			DirectX::XMMATRIX scalingMatrix = DirectX::XMMatrixScalingFromVector(DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&scaling)));
-
 
 			aiQuaternion rotation = InterpolateRotation(tick, pNodeAnim.rotationKeys);
 			DirectX::XMFLOAT4 rot = { rotation.x, rotation.y, rotation.z, rotation.w };
@@ -155,15 +152,15 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 		}
 	}
 
-	auto built = DirectX::XMLoadFloat4x4(&appliedTransform)
+	auto built = accumulatedTransform
 		* tf
-		* accumulatedTransform;
+		* DirectX::XMLoadFloat4x4(&appliedTransform);
 	DirectX::XMStoreFloat4x4(&finalTransform, built);
 
 	auto it = pNameToBoneIndexMap->find(name);
 	if (it != pNameToBoneIndexMap->end()) {
 		unsigned int boneIndex = pNameToBoneIndexMap->at(name);
-		auto finalTransform = pBoneMatrixes->at(boneIndex).GetOffsetMatrixXM() * built * DirectX::XMLoadFloat4x4(&inverseRootTransform);
+		auto finalTransform = inverseRootMatrix * built * pBoneMatrixes->at(boneIndex).GetOffsetMatrixXM();
 		pBoneMatrixes->at(boneIndex).SetFinalMatrix(finalTransform);
 	}
 	
@@ -171,7 +168,7 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 		pm->Submit(channel, built);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(channel, built, animation, tick);
+		pc->Submit(channel, built, inverseRootMatrix, animation, tick);
 	}
 }
 

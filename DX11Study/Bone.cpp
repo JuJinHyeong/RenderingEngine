@@ -4,8 +4,7 @@ Bone::Bone(const aiBone& bone)
 	:
 	finalMatrix(DirectX::XMFLOAT4X4())
 {
-	DirectX::XMMATRIX transposedMatrix = DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix)));
-	DirectX::XMStoreFloat4x4(&offsetMatrix, transposedMatrix);
+	DirectX::XMStoreFloat4x4(&offsetMatrix, DirectX::XMLoadFloat4x4(reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix)));
 }
 
 const DirectX::XMMATRIX Bone::GetOffsetMatrixXM() const noexcept

@@ -75,15 +75,12 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 		}
 	}
 
-	for (int i = 0; i < pScene->mNumAnimations; i++) {
+	for (unsigned int i = 0; i < pScene->mNumAnimations; i++) {
 		animations.emplace_back(*pScene->mAnimations[i]);
 	}
 
 	Dump("*******************************************************\n");
 	Dump("Parsing Nodes\n");
-	auto rootTransform = DirectX::XMLoadFloat4x4(reinterpret_cast<DirectX::XMFLOAT4X4*>(&pScene->mRootNode->mTransformation));
-	DirectX::XMVECTOR determinant = XMMatrixDeterminant(rootTransform);
-	rootInverseTransform = XMMatrixTranspose(XMMatrixInverse(&determinant, rootTransform));
 
 	int nextId = 0;
 	pRoot = ParseNode(nextId, *pScene->mRootNode, scale);
@@ -96,7 +93,9 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 }
 
 void Model::Submit(size_t channel) const noexcept(!IS_DEBUG) {
-	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), animations[0], animationTick);
+	auto rootTransform = DirectX::XMLoadFloat4x4(&pRoot->transform) * DirectX::XMLoadFloat4x4(&pRoot->appliedTransform);
+	DirectX::XMVECTOR determinant = XMMatrixDeterminant(rootTransform);
+	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), XMMatrixInverse(&determinant, rootTransform), animations[0], animationTick);
 }
 
 void ShowMatrix(DirectX::XMFLOAT4X4& mat) {
@@ -108,9 +107,9 @@ void Model::Accept(ModelProbe& probe) {
 }
 
 std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float scale, int space) {
-	const auto transform = ScaleTranslation(DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(
+	const auto transform = DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
-	)), scale);
+	);
 
 
 	std::string pad(space, ' ');
@@ -129,7 +128,7 @@ std::unique_ptr<Node> Model::ParseNode(int& curId, const aiNode& node, float sca
 		curMeshPtrs.push_back(meshPtrs.at(meshIdx).get());
 	}
 
-	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), &nameBoneIndexMap, &bones, transform, rootInverseTransform);
+	auto pNode = std::make_unique<Node>(curId++, node.mName.C_Str(), std::move(curMeshPtrs), &nameBoneIndexMap, &bones, transform);
 	for (size_t i = 0; i < node.mNumChildren; i++) {
 		Dump(pad + "    ", "--- ", i, " ---\n");
 		pNode->AddChild(ParseNode(curId, *node.mChildren[i], scale, space + 4));

@@ -15,7 +15,6 @@ namespace Bind {
 	
 	void ShadowCameraCBuf::Update(Graphics& gfx) {
 		const auto pos = pCamera->GetPos();
-		// TODO: why?????
 		const Transform t{
 			dx::XMMatrixTranspose(
 				DirectX::XMMatrixTranslation(-pos.x, -pos.y, -pos.z)

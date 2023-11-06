@@ -76,24 +76,45 @@ public:
 		:
 		name(std::move(name)) 
 	{}
-	void SpawnWindow(Model& model) {
-
+	void SpawnWindow(Model& model , Graphics& gfx) {
 		ImGui::Begin(std::string(name + " Anim").c_str());
 		ImGui::SliderFloat("Animation Tick", &model.animationTick, 0.0f, 140.0f);
 		ImGui::End();
 
+		ImGui::Begin("view proj transform");
+		DirectX::XMFLOAT4X4 float4x4;
+		DirectX::XMStoreFloat4x4(&float4x4, gfx.GetCamera());
+		ImGui::Text("View");
+		ImGui::Text("%f %f %f %f", float4x4._11, float4x4._12, float4x4._13, float4x4._14);
+		ImGui::Text("%f %f %f %f", float4x4._21, float4x4._22, float4x4._23, float4x4._24);
+		ImGui::Text("%f %f %f %f", float4x4._31, float4x4._32, float4x4._33, float4x4._34);
+		ImGui::Text("%f %f %f %f", float4x4._41, float4x4._42, float4x4._43, float4x4._44);
+		DirectX::XMStoreFloat4x4(&float4x4, gfx.GetProjection());
+		ImGui::Text("Proj");
+		ImGui::Text("%f %f %f %f", float4x4._11, float4x4._12, float4x4._13, float4x4._14);
+		ImGui::Text("%f %f %f %f", float4x4._21, float4x4._22, float4x4._23, float4x4._24);
+		ImGui::Text("%f %f %f %f", float4x4._31, float4x4._32, float4x4._33, float4x4._34);
+		ImGui::Text("%f %f %f %f", float4x4._41, float4x4._42, float4x4._43, float4x4._44);
+		DirectX::XMStoreFloat4x4(&float4x4, gfx.GetCamera() * gfx.GetProjection());
+		ImGui::Text("view proj");
+		ImGui::Text("%f %f %f %f", float4x4._11, float4x4._12, float4x4._13, float4x4._14);
+		ImGui::Text("%f %f %f %f", float4x4._21, float4x4._22, float4x4._23, float4x4._24);
+		ImGui::Text("%f %f %f %f", float4x4._31, float4x4._32, float4x4._33, float4x4._34);
+		ImGui::Text("%f %f %f %f", float4x4._41, float4x4._42, float4x4._43, float4x4._44);
+		ImGui::End();
+
 		ImGui::Begin(std::string(name + " bone matrixes").c_str());
 		const auto& boneMatrixes = model.GetBoneMatrixes();
-		std::string name;
+		std::string boneName;
 		for (int i = 0; i < boneMatrixes.size(); i++) {
 			for (auto map : model.nameBoneIndexMap) {
 				if (map.second == i) {
-					name = map.first;
+					boneName = map.first;
 					break;
 				}
 			}
 			const auto finalMatrix = boneMatrixes[i].GetFinalMatrix();
-			ImGui::Text(name.c_str());
+			ImGui::Text(boneName.c_str());
 			ImGui::Text("%f %f %f %f", finalMatrix._11, finalMatrix._12, finalMatrix._13, finalMatrix._14);
 			ImGui::Text("%f %f %f %f", finalMatrix._21, finalMatrix._22, finalMatrix._23, finalMatrix._24);
 			ImGui::Text("%f %f %f %f", finalMatrix._31, finalMatrix._32, finalMatrix._33, finalMatrix._34);
@@ -112,7 +133,7 @@ public:
 			for (int j = 0; j < 4; j++) {
 				boneTransform += boneMatrixes[boneIndex[j]].GetFinalMatrixXM() * boneWeight[j];
 			}
-			auto calcuatedVector = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&vertex), boneTransform);
+			auto calcuatedVector = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&vertex), gfx.GetCamera() * boneTransform);
 			DirectX::XMFLOAT4 bonePos;
 			DirectX::XMStoreFloat4(&bonePos, calcuatedVector);
 			ImGui::Text("%f %f %f %f", bonePos.x, bonePos.y, bonePos.z, bonePos.w);
@@ -136,13 +157,19 @@ public:
 			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
 			dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Matrix");
+			auto diff = dx::XMMatrixTranslation(tf.x, tf.y, tf.z) *
+				dx::XMMatrixRotationZ(tf.zRot) *
+				dx::XMMatrixRotationY(tf.yRot) *
+				dx::XMMatrixRotationX(tf.xRot);
+			DirectX::XMFLOAT4X4 appliedTransform;
+			dx::XMStoreFloat4x4(&appliedTransform, diff);
+			ImGui::Text("%f %f %f %f", appliedTransform._11, appliedTransform._12, appliedTransform._13, appliedTransform._14);
+			ImGui::Text("%f %f %f %f", appliedTransform._21, appliedTransform._22, appliedTransform._23, appliedTransform._24);
+			ImGui::Text("%f %f %f %f", appliedTransform._31, appliedTransform._32, appliedTransform._33, appliedTransform._34);
+			ImGui::Text("%f %f %f %f", appliedTransform._41, appliedTransform._42, appliedTransform._43, appliedTransform._44);
 			if (dirty) {
-				pSelectedNode->SetAppliedTransform(
-					dx::XMMatrixRotationX(tf.xRot) *
-					dx::XMMatrixRotationY(tf.yRot) *
-					dx::XMMatrixRotationZ(tf.zRot) *
-					dx::XMMatrixTranslation(tf.x, tf.y, tf.z)
-				);
+				pSelectedNode->SetAppliedTransform(diff);
 			}
 
 			for (auto meshPtr : pSelectedNode->meshPtrs) {

@@ -16,11 +16,10 @@ public:
 		std::vector<Mesh*> meshPtrs,
 		std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap,
 		std::vector<Bone>* pBoneMatrixes,
-		const DirectX::XMMATRIX& transform,
-		const DirectX::XMMATRIX& inverseRootTransform = DirectX::XMMatrixIdentity()
+		const DirectX::XMMATRIX& transform
 	) noexcept(!IS_DEBUG);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
-	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const Animation& pAnim, float tick = 0.0f) const noexcept(!IS_DEBUG);
+	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const DirectX::FXMMATRIX& inverseRootMatrix, const Animation& pAnim, float tick = 0.0f) const noexcept(!IS_DEBUG);
 	const DirectX::XMFLOAT4X4& GetAppliedTransform() const noexcept;
 	//TODO: remove
 	const DirectX::XMFLOAT4X4& GetFinalTransform() const noexcept;
@@ -47,7 +46,6 @@ private:
 	DirectX::XMFLOAT4X4 transform;
 	// local transform
 	DirectX::XMFLOAT4X4 appliedTransform;
-	DirectX::XMFLOAT4X4 inverseRootTransform;
 	std::vector<Bone>* pBoneMatrixes = nullptr;
 	std::unordered_map<std::string, unsigned int>* pNameToBoneIndexMap;
 	// TODO: remove for test
