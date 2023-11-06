@@ -8,6 +8,8 @@ namespace Bind {
 	protected:
 		struct Transforms {
 			DirectX::XMMATRIX model;
+			DirectX::XMMATRIX view;
+			DirectX::XMMATRIX proj;
 			DirectX::XMMATRIX modelView;
 			DirectX::XMMATRIX modelViewProj;
 		};

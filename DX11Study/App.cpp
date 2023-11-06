@@ -22,7 +22,7 @@ App::App()
 	: wnd(width, height, "First App"),
 	  light(wnd.Gfx(), {10.0f, 4.0f, 0.0f})
 {
-	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "First", DirectX::XMFLOAT3{-13.5f, 6.0f, 3.5f}, 0.0f, PI / 2.0f, false));
+	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "First", DirectX::XMFLOAT3{0.0f, 0.0f, -60.0f}, 0.0f, 0.0f, false));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{-13.5f, 28.0f, -3.5f}, 0.0f, PI / 2.0f, false));
 	cameras.AddCamera(light.ShareCamera());
 
@@ -101,6 +101,24 @@ void App::DoFrame(float dt)
 		// cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
 		nanoProbe.SpawnWindow(testModel);
 		rg.RenderWindows(wnd.Gfx());
+
+		ImGui::Begin("view proj transform");
+		DirectX::XMFLOAT4X4 view;
+		DirectX::XMStoreFloat4x4(&view, DirectX::XMMatrixTranspose(wnd.Gfx().GetCamera()));
+		DirectX::XMFLOAT4X4 proj;
+		DirectX::XMStoreFloat4x4(&proj, DirectX::XMMatrixTranspose(wnd.Gfx().GetProjection()));
+		ImGui::Text("View");
+		ImGui::Text("%f %f %f %f", view._11, view._12, view._13, view._14);
+		ImGui::Text("%f %f %f %f", view._21, view._22, view._23, view._24);
+		ImGui::Text("%f %f %f %f", view._31, view._32, view._33, view._34);
+		ImGui::Text("%f %f %f %f", view._41, view._42, view._43, view._44);
+		ImGui::Text("Proj");
+		ImGui::Text("%f %f %f %f", proj._11, proj._12, proj._13, proj._14);
+		ImGui::Text("%f %f %f %f", proj._21, proj._22, proj._23, proj._24);
+		ImGui::Text("%f %f %f %f", proj._31, proj._32, proj._33, proj._34);
+		ImGui::Text("%f %f %f %f", proj._41, proj._42, proj._43, proj._44);
+
+		ImGui::End();
 	}
 
 	wnd.Gfx().EndFrame();

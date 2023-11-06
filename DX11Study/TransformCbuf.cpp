@@ -34,6 +34,8 @@ namespace Bind {
 		const auto modelView = model * gfx.GetCamera();
 		return {
 			DirectX::XMMatrixTranspose(model),
+			DirectX::XMMatrixTranspose(gfx.GetCamera()),
+			DirectX::XMMatrixTranspose(gfx.GetProjection()),
 			DirectX::XMMatrixTranspose(modelView),
 			DirectX::XMMatrixTranspose(modelView * gfx.GetProjection())
 		};
