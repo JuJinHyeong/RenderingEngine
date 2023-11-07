@@ -95,7 +95,7 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const
 void Model::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	auto rootTransform = DirectX::XMLoadFloat4x4(&pRoot->transform) * DirectX::XMLoadFloat4x4(&pRoot->appliedTransform);
 	DirectX::XMVECTOR determinant = XMMatrixDeterminant(rootTransform);
-	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), XMMatrixInverse(&determinant, rootTransform), animations[0], animationTick);
+	pRoot->Submit(channel, DirectX::XMMatrixIdentity(), XMMatrixInverse(&determinant, rootTransform), animations.empty() ? nullptr : &animations[0], animationTick);
 }
 
 void ShowMatrix(DirectX::XMFLOAT4X4& mat) {

@@ -63,6 +63,9 @@ aiVector3D InterpolatePosition(float tick, const std::vector<aiVectorKey>& posit
 	if (positionKeys.size() == 1) {
 		return positionKeys[0].mValue;
 	}
+	if (positionKeys.back().mTime < tick) {
+		return positionKeys.back().mValue;
+	}
 
 	unsigned int leftIndex = 0;
 	for (unsigned int i = 0; i < positionKeys.size() - 1; i++) {
@@ -72,6 +75,7 @@ aiVector3D InterpolatePosition(float tick, const std::vector<aiVectorKey>& posit
 			break;
 		}
 	}
+
 	unsigned int rightIndex = leftIndex + 1;
 
 	float deltaTime = positionKeys[rightIndex].mTime - positionKeys[leftIndex].mTime;
@@ -86,6 +90,9 @@ aiQuaternion InterpolateRotation(float tick, const std::vector<aiQuatKey>& rotat
 	aiQuaternion ret;
 	if (rotationKeys.size() == 1) {
 		return rotationKeys[0].mValue;
+	}
+	if (rotationKeys.back().mTime < tick) {
+		return rotationKeys.back().mValue;
 	}
 
 	unsigned int leftIndex = 0;
@@ -111,6 +118,9 @@ aiVector3D InterpolateScaling(float tick, const std::vector<aiVectorKey>& scalin
 	if (scalingKeys.size() == 1) {
 		return scalingKeys[0].mValue;
 	}
+	if (scalingKeys.back().mTime < tick) {
+		return scalingKeys.back().mValue;
+	}
 
 	unsigned int leftIndex = 0;
 	for (unsigned int i = 0; i < scalingKeys.size() - 1; i++) {
@@ -129,11 +139,11 @@ aiVector3D InterpolateScaling(float tick, const std::vector<aiVectorKey>& scalin
 	const aiVector3D& end = scalingKeys[rightIndex].mValue;
 	return (1 - factor) * start + factor * end;
 }
-void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const DirectX::FXMMATRIX& inverseRootMatrix, const Animation& animation, float tick) const noexcept(!IS_DEBUG) {
+void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const DirectX::FXMMATRIX& inverseRootMatrix, const Animation* pAnim, float tick) const noexcept(!IS_DEBUG) {
 	auto tf = DirectX::XMLoadFloat4x4(&transform);
 
-	if (tick > 0.0f) {
-		auto nameChannelMap = animation.GetNameChannelMap();
+	if (tick > 0.0f && pAnim != nullptr) {
+		auto nameChannelMap = pAnim->GetNameChannelMap();
 		auto it = nameChannelMap.find(name);
 		if (it != nameChannelMap.end()) {
 			auto& pNodeAnim = it->second;
@@ -148,7 +158,9 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 			aiVector3D position = InterpolatePosition(tick, pNodeAnim.positionKeys);
 			DirectX::XMMATRIX positionMatrix = DirectX::XMMatrixTranslationFromVector(DirectX::XMLoadFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(&position)));
 
-			tf = scalingMatrix * rotationMatrix * positionMatrix;
+			tf = DirectX::XMMatrixTranspose(scalingMatrix * rotationMatrix * positionMatrix);
+
+			DirectX::XMStoreFloat4x4(&animatedTransform, tf);
 		}
 	}
 
@@ -168,7 +180,7 @@ void Node::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform, const
 		pm->Submit(channel, built);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(channel, built, inverseRootMatrix, animation, tick);
+		pc->Submit(channel, built, inverseRootMatrix, pAnim, tick);
 	}
 }
 
@@ -180,8 +192,7 @@ const DirectX::XMFLOAT4X4& Node::GetFinalTransform() const noexcept {
 	return finalTransform;
 }
 
-const DirectX::XMFLOAT4X4& Node::GetTransform() const noexcept
-{
+const DirectX::XMFLOAT4X4& Node::GetTransform() const noexcept {
 	return transform;
 }
 

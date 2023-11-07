@@ -48,7 +48,6 @@ VSOut main(float3 pos : Position, float3 normal : Normal, float2 tc : Texcoord, 
         }
     }
     float4 bonePos = mul(float4(pos, 1.0f), boneTransform);
-    matrix viewProj = view * proj;
     vso.viewPos = (float3) mul(bonePos, modelView);
     vso.viewNormal = mul(normal, (float3x3) modelView);
     vso.pos = mul(bonePos, modelViewProj);

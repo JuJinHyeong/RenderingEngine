@@ -4,20 +4,20 @@
 DirectX::XMFLOAT3 ExtractEulerAngles(const DirectX::XMFLOAT4X4& matrix) {
     DirectX::XMFLOAT3 euler = { 0.0f, 0.0f, 0.0f };
 
-    euler.x = asinf(-matrix._32);
+    euler.x = asinf(-matrix._23);
     if (cosf(euler.x) > 0.0001) {
-        euler.y = atan2f(matrix._31, matrix._33);
-        euler.z = atan2f(matrix._12, matrix._22);
+        euler.y = atan2f(matrix._13, matrix._33);
+        euler.z = atan2f(matrix._21, matrix._22);
     }
     else {
         euler.y = 0.0f;
-        euler.z = atan2f(-matrix._21, matrix._11);
+        euler.z = atan2f(-matrix._12, matrix._11);
     }
     return euler;
 }
 
 DirectX::XMFLOAT3 ExtractTranslation(const DirectX::XMFLOAT4X4& matrix) {
-    return { matrix._41, matrix._42, matrix._43 };
+    return { matrix._14, matrix._24, matrix._34 };
 }
 
 DirectX::XMMATRIX ScaleTranslation(DirectX::XMMATRIX matrix, float scale) {

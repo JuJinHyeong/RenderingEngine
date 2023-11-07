@@ -5,5 +5,4 @@ cbuffer TransformCBuf : register(b0)
     matrix proj;
     matrix modelView;
     matrix modelViewProj;
-    matrix viewProj;
 };

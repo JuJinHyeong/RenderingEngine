@@ -78,7 +78,7 @@ public:
 	{}
 	void SpawnWindow(Model& model , Graphics& gfx) {
 		ImGui::Begin(std::string(name + " Anim").c_str());
-		ImGui::SliderFloat("Animation Tick", &model.animationTick, 0.0f, 140.0f);
+		ImGui::SliderFloat("Animation Tick", &model.animationTick, 0.0f, 1000.0f);
 		ImGui::End();
 
 		ImGui::Begin("view proj transform");
@@ -123,7 +123,10 @@ public:
 		ImGui::End();
 
 		ImGui::Begin(std::string(name + " cpu calcualated vertices").c_str());
-		const auto& testMesh = model.meshPtrs[1];
+		
+		ImGui::SliderInt("mesh index", &meshIndex, 0, model.meshPtrs.size() - 1, "%d");
+		const auto& testMesh = model.meshPtrs[meshIndex];
+		ImGui::Text("mesh name: %s", testMesh->name.c_str());
 		for (int i = 0; i < testMesh->vertices.size(); i++) {
 			const auto& boneIndex = testMesh->GetBoneIndex()[i];
 			const auto& boneWeight = testMesh->GetBoneWeight()[i];
@@ -133,10 +136,10 @@ public:
 			for (int j = 0; j < 4; j++) {
 				boneTransform += boneMatrixes[boneIndex[j]].GetFinalMatrixXM() * boneWeight[j];
 			}
-			auto calcuatedVector = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&vertex), gfx.GetCamera() * boneTransform);
+			auto calcuatedVector = DirectX::XMVector4Transform(DirectX::XMLoadFloat4(&vertex), boneTransform);
 			DirectX::XMFLOAT4 bonePos;
 			DirectX::XMStoreFloat4(&bonePos, calcuatedVector);
-			ImGui::Text("%f %f %f %f", bonePos.x, bonePos.y, bonePos.z, bonePos.w);
+			ImGui::Text("%f %f %f %f", bonePos.x / bonePos.w, bonePos.y / bonePos.w, bonePos.z / bonePos.w, 1.0f);
 		}
 		ImGui::End();
 
@@ -154,14 +157,14 @@ public:
 			dcheck(ImGui::SliderFloat("Y", &tf.y, -0.3f, 0.3f));
 			dcheck(ImGui::SliderFloat("Z", &tf.z, -0.3f, 0.3f));
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
-			dcheck(ImGui::SliderAngle("X-rotation", &tf.xRot, -180.0f, 180.0f));
-			dcheck(ImGui::SliderAngle("Y-rotation", &tf.yRot, -180.0f, 180.0f));
-			dcheck(ImGui::SliderAngle("Z-rotation", &tf.zRot, -180.0f, 180.0f));
+			dcheck(ImGui::SliderFloat("X-rotation", &tf.xRot, -PI, PI));
+			dcheck(ImGui::SliderFloat("Y-rotation", &tf.yRot, -PI, PI));
+			dcheck(ImGui::SliderFloat("Z-rotation", &tf.zRot, -PI, PI));
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Matrix");
-			auto diff = dx::XMMatrixTranslation(tf.x, tf.y, tf.z) *
-				dx::XMMatrixRotationZ(tf.zRot) *
+			auto diff = dx::XMMatrixTranspose(dx::XMMatrixRotationX(tf.xRot) *
 				dx::XMMatrixRotationY(tf.yRot) *
-				dx::XMMatrixRotationX(tf.xRot);
+				dx::XMMatrixRotationZ(tf.zRot) *
+				dx::XMMatrixTranslation(tf.x, tf.y, tf.z));
 			DirectX::XMFLOAT4X4 appliedTransform;
 			dx::XMStoreFloat4x4(&appliedTransform, diff);
 			ImGui::Text("%f %f %f %f", appliedTransform._11, appliedTransform._12, appliedTransform._13, appliedTransform._14);
@@ -191,6 +194,16 @@ public:
 			const auto& tfp = GetTransformParameters(transform);
 			ImGui::Text("Translate %f %f %f", tfp.x, tfp.y, tfp.z);
 			ImGui::Text("Rotation %f %f %f", tfp.xRot * 180 / PI, tfp.yRot * 180 / PI, tfp.zRot * 180 / PI);
+
+			const auto& animTransform = pSelectedNode->animatedTransform;
+			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Animated Transform Matrix");
+			ImGui::Text("%f %f %f %f", animTransform._11, animTransform._12, animTransform._13, animTransform._14);
+			ImGui::Text("%f %f %f %f", animTransform._21, animTransform._22, animTransform._23, animTransform._24);
+			ImGui::Text("%f %f %f %f", animTransform._31, animTransform._32, animTransform._33, animTransform._34);
+			ImGui::Text("%f %f %f %f", animTransform._41, animTransform._42, animTransform._43, animTransform._44);
+			const auto& atfp = GetTransformParameters(animTransform);
+			ImGui::Text("Translate %f %f %f", atfp.x, atfp.y, atfp.z);
+			ImGui::Text("Rotation %f %f %f", atfp.xRot * 180 / PI, atfp.yRot * 180 / PI, atfp.zRot * 180 / PI);
 
 			const auto& finalTransform = pSelectedNode->GetFinalTransform();
 			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Final Transform Matrix");
@@ -247,6 +260,7 @@ protected:
 	}
 private:
 	Node* pSelectedNode = nullptr;
+	int meshIndex = 0;
 	struct TransformParameters {
 		float xRot = 0.0f;
 		float yRot = 0.0f;

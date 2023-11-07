@@ -143,10 +143,11 @@ Mesh::Mesh(
 				buf["useNormalMap"].SetifExists(true);
 				buf["normalMapWeight"].SetifExists(1.0f);
 				step.AddBindable(std::make_unique<Bind::CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
-
-				Dcb::Buffer vBuf{ std::move(vscLayout) };
-				vBuf["selectedBoneIndex"].SetifExists(0);
-				step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vBuf), 3u));
+				if (hasSkinned) {
+					Dcb::Buffer vBuf{ std::move(vscLayout) };
+					vBuf["selectedBoneIndex"].SetifExists(0);
+					step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vBuf), 3u));
+				}
 			}
 			phong.AddStep(std::move(step));
 		}
@@ -340,13 +341,22 @@ void Mesh::InitializePerVertexData(const aiMesh& mesh, const string_to_uint_map&
 			auto vertexId = bone->mWeights[j].mVertexId;
 			auto weight = bone->mWeights[j].mWeight;
 			for (unsigned int j = 0; j < 5; j++) {
-				assert(j != 4 && "error!");
+				if (j == 4) {
+					continue;
+				}
+				//assert(j != 4 && "error!");
 				if (boneWeight[vertexId][j] == 0.0f) {
 					boneIndex[vertexId][j] = boneNameToIndex.at(bone->mName.C_Str()); //TODO: Find bone index
 					boneWeight[vertexId][j] = weight;
 					break;
 				}
 			}
+		}
+	}
+	for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
+		const float sum = boneWeight[i][0] + boneWeight[i][1] + boneWeight[i][2] + boneWeight[i][3];
+		if (sum < 1.0f) {
+			boneWeight[i][0] /= sum;
 		}
 	}
 }

@@ -880,5 +880,11 @@
     <FxCompile Include="PhongDifSkinPS.hlsl">
       <Filter>Shaders\Phong</Filter>
     </FxCompile>
+    <FxCompile Include="PhongDifMskSkinPS.hlsl">
+      <Filter>Shaders\Phong</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongDifMskSkinVS.hlsl">
+      <Filter>Shaders\Phong</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
