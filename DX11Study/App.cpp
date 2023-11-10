@@ -34,10 +34,10 @@ App::App()
 	light.LinkTechniques(rg);
 	// cube1.LinkTechniques(rg);
 	// cube2.LinkTechniques(rg);
-	// gobber.LinkTechniques(rg);
-	//nano.LinkTechniques(rg);
-	//sponza.LinkTechniques(rg);
-	testModel.LinkTechniques(rg);
+	gobber.LinkTechniques(rg);
+	nano.LinkTechniques(rg);
+	sponza.LinkTechniques(rg);
+	//testModel.LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
 
 	rg.BindShadowCamera(*light.ShareCamera());
@@ -66,17 +66,17 @@ void App::DoFrame(float dt)
 	light.Submit(channel::main);
 	// cube1.Submit(channel::main);
 	// cube2.Submit(channel::main);
-	//sponza.Submit(channel::main);
-	//nano.Submit(channel::main);
-	// gobber.Submit(channel::main);
+	sponza.Submit(channel::main);
+	nano.Submit(channel::main);
+	gobber.Submit(channel::main);
 	// cameras.Submit(channel::main);
-	testModel.Submit(channel::main);
+	//testModel.Submit(channel::main);
 
-	//sponza.Submit(channel::shadow);
+	sponza.Submit(channel::shadow);
 	// cube1.Submit(channel::shadow);
 	// cube2.Submit(channel::shadow);
-	// gobber.Submit(channel::shadow);
-	//nano.Submit(channel::shadow);
+	gobber.Submit(channel::shadow);
+	nano.Submit(channel::shadow);
 
 	rg.Execute(wnd.Gfx());
 
@@ -94,12 +94,12 @@ void App::DoFrame(float dt)
 	{
 		cameras.SpawnWindow(wnd.Gfx());
 		light.SpawnControlWindow();
-		//sponzaProbe.SpawnWindow(sponza);
-		//nanoProbe.SpawnWindow(nano);
-		// gobberProbe.SpawnWindow(gobber);
+		sponzaProbe.SpawnWindow(sponza);
+		nanoProbe.SpawnWindow(nano);
+		gobberProbe.SpawnWindow(gobber);
 		// cube1.SpawnControlWindow(wnd.Gfx(), "cube1");
 		// cube2.SpawnControlWindow(wnd.Gfx(), "cube2");
-		nanoProbe.SpawnWindow(testModel, wnd.Gfx());
+		//nanoProbe.SpawnWindow(testModel, wnd.Gfx());
 		rg.RenderWindows(wnd.Gfx());
 	}
 

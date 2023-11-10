@@ -1,5 +1,6 @@
 #include "BoneTransformCbuf.h"
 #include <algorithm>
+#include <iostream>
 
 namespace Bind {
 	BoneTransformCbuf::BoneTransformCbuf(Graphics& gfx, UINT slot)
@@ -48,13 +49,7 @@ namespace Bind {
 
 	Dcb::Buffer BoneTransformCbuf::GetBoneTransforms() noexcept
 	{
-		std::vector<DirectX::XMFLOAT4X4> transforms = pParent->GetBoneTransforms();
 		Dcb::Buffer buf = pVcbuf->GetBuffer();
-		DirectX::XMFLOAT4X4 temp;
-		for (size_t i = 0; i < transforms.size(); i++) {
-			DirectX::XMStoreFloat4x4(&temp, DirectX::XMMatrixTranspose(DirectX::XMLoadFloat4x4(&transforms[i])));
-			buf["transforms"][i] = temp;
-		}
 		return buf;
 	}
 }

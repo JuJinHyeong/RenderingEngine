@@ -127,27 +127,9 @@ namespace custom {
 
 	template<VertexLayout::ElementType type>
 	struct AttributeAiMeshFill {
-		static constexpr void Exec(VertexBuffer* pBuf, const aiMesh& mesh) noexcept(!IS_DEBUG) {
-			for (size_t i = 0u, end = mesh.mNumVertices; i < end; i++) {
-				(*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract(mesh, i);
-			}
-		};
-	};
-	VertexBuffer::VertexBuffer(VertexLayout layout_in, const aiMesh& mesh) 
-		:
-		layout(std::move(layout_in))
-	{
-		Resize(mesh.mNumVertices);
-		for (size_t i = 0, end = layout.GetElementCount(); i < end; i++) {
-			VertexLayout::Bridge<AttributeAiMeshFill>(layout.ResolveByIndex(i).GetType(), this, mesh);
-		}
-	}
-
-	template<VertexLayout::ElementType type>
-	struct AttributeAiMeshFill2 {
 		static constexpr void Exec(VertexBuffer* pBuf, const Mesh& mesh) noexcept(!IS_DEBUG) {
 			for (size_t i = 0u, end = mesh.GetVertices().size(); i < end; i++) {
-				(*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract2(mesh, i);
+				(*pBuf)[i].Attr<type>() = VertexLayout::Map<type>::Extract(mesh, i);
 			}
 		};
 	};
@@ -157,7 +139,7 @@ namespace custom {
 	{
 		Resize(mesh.GetVertices().size());
 		for (size_t i = 0, end = layout.GetElementCount(); i < end; i++) {
-			VertexLayout::Bridge<AttributeAiMeshFill2>(layout.ResolveByIndex(i).GetType(), this, mesh);
+			VertexLayout::Bridge<AttributeAiMeshFill>(layout.ResolveByIndex(i).GetType(), this, mesh);
 		}
 	}
 

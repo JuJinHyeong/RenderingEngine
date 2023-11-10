@@ -14,7 +14,6 @@
 #include "IndexBuffer.h"
 #include "Topology.h"
 #include "Vertex.h"
-#include "BoneTransformCbuf.h"
 #include <array>
 #include <algorithm>
 #include <unordered_map>
@@ -23,20 +22,17 @@
 
 Mesh::Mesh(
 	Graphics& gfx,
-	const Material2& mat,
+	const Material& mat,
 	const aiMesh& mesh,
-	const string_to_uint_map& boneNameToIndex,
-	std::vector<Bone>* boneMatrixes,
 	float scale) noexcept(!IS_DEBUG)
 	:
 	Drawable(gfx, mat, mesh, scale),
 	name(mesh.mName.C_Str()),
-	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
-	boneMatrixesPtr(boneMatrixes)
+	tag(mat.rootPath + "%" + mesh.mName.C_Str())
 {
 	using namespace Bind;
 
-	InitializePerVertexData(mesh, boneNameToIndex);
+	InitializePerVertexData(mesh);
 
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
@@ -101,19 +97,6 @@ Mesh::Mesh(
 				}
 			}
 			{
-				if (mesh.HasBones()) {
-					hasSkinned = true;
-					shaderCode += "Skin";
-
-					vertexLayout.Append(custom::VertexLayout::BoneIndex);
-					vertexLayout.Append(custom::VertexLayout::BoneWeight);
-
-					step.AddBindable(std::make_unique<BoneTransformCbuf>(gfx));
-
-					vscLayout.Add<Dcb::Integer>("selectedBoneIndex");
-				}
-			}
-			{
 				step.AddBindable(std::make_unique<TransformCbuf>(gfx));
 				step.AddBindable(Blender::Resolve(gfx, false));
 				auto pvs = VertexShader::Resolve(gfx, shaderCode + "VS.cso");
@@ -143,11 +126,6 @@ Mesh::Mesh(
 				buf["useNormalMap"].SetifExists(true);
 				buf["normalMapWeight"].SetifExists(1.0f);
 				step.AddBindable(std::make_unique<Bind::CachingPixelConstantBufferEx>(gfx, std::move(buf), 1u));
-				if (hasSkinned) {
-					Dcb::Buffer vBuf{ std::move(vscLayout) };
-					vBuf["selectedBoneIndex"].SetifExists(0);
-					step.AddBindable(std::make_unique<Bind::CachingVertexConstantBufferEx>(gfx, std::move(vBuf), 3u));
-				}
 			}
 			phong.AddStep(std::move(step));
 		}
@@ -224,11 +202,6 @@ Mesh::Mesh(
 	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-Mesh::Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept(!IS_DEBUG)
-	:
-	Drawable(gfx, mat, mesh, scale)
-{}
-
 // Mesh
 Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs) {
 	AddBind(Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
@@ -240,16 +213,6 @@ Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs)
 
 DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
 	return DirectX::XMLoadFloat4x4(&transform);
-}
-
-const std::vector<DirectX::XMFLOAT4X4> Mesh::GetBoneTransforms() const noexcept
-{
-	std::vector<DirectX::XMFLOAT4X4> v;
-	v.resize(boneMatrixesPtr->size());
-	std::transform(boneMatrixesPtr->begin(), boneMatrixesPtr->end(), v.begin(), [](Bone& bone) {
-		return bone.GetFinalMatrix();
-	});
-	return v;
 }
 
 void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
@@ -281,14 +244,6 @@ const std::vector<DirectX::XMFLOAT4>& Mesh::GetColors() const noexcept {
 	return colors;
 }
 
-const std::vector<std::array<unsigned int, 4>>& Mesh::GetBoneIndex() const noexcept {
-	return boneIndex;
-}
-
-const std::vector<std::array<float, 4>>& Mesh::GetBoneWeight() const noexcept {
-	return boneWeight;
-}
-
 #define Initialize(mData, data)\
 if(mesh.mData != nullptr){\
 	data.reserve(mesh.mNumVertices);\
@@ -296,22 +251,8 @@ if(mesh.mData != nullptr){\
 		data.emplace_back(mesh.mData[i].x, mesh.mData[i].y, mesh.mData[i].z);\
 	}\
 }
-void Mesh::InitializePerVertexData(const aiMesh& mesh, const string_to_uint_map& boneNameToIndex) noexcept(!IS_DEBUG)
+void Mesh::InitializePerVertexData(const aiMesh& mesh) noexcept(!IS_DEBUG)
 {
-	// TODO: optimize cach hit rate...?
-	//for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
-	//	vertices.emplace_back(mesh.mVertices[i].x, mesh.mVertices[i].y, mesh.mVertices[i].z);
-	//	if (mesh.mTextureCoords[0] != nullptr) {
-	//		textureCoords.emplace_back(mesh.mTextureCoords[0][i].x, mesh.mTextureCoords[0][i].y, mesh.mTextureCoords[0][i].z);
-	//	}
-	//	if (mesh.mNormals != nullptr) {
-	//		normals.emplace_back(mesh.mNormals[i].x, mesh.mNormals[i].y, mesh.mNormals[i].z);
-	//	}
-	//	if (mesh.mTangents != nullptr) {
-	//		tangents.emplace_back(mesh.mTangents[i].x, mesh.mTangents[i].y, mesh.mTangents[i].z);
-	//	}
-	//}
-
 	Initialize(mVertices, vertices);
 	Initialize(mTextureCoords[0], textureCoords);
 	Initialize(mNormals, normals);
@@ -330,33 +271,6 @@ void Mesh::InitializePerVertexData(const aiMesh& mesh, const string_to_uint_map&
 			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[0]));
 			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[1]));
 			indices.push_back(static_cast<unsigned short>(mesh.mFaces[i].mIndices[2]));
-		}
-	}
-
-	boneIndex.resize(mesh.mNumVertices);
-	boneWeight.resize(mesh.mNumVertices);
-	for (unsigned int i = 0; i < mesh.mNumBones; i++) {
-		auto bone = mesh.mBones[i];
-		for (unsigned int j = 0u; j < bone->mNumWeights; j++) {
-			auto vertexId = bone->mWeights[j].mVertexId;
-			auto weight = bone->mWeights[j].mWeight;
-			for (unsigned int j = 0; j < 5; j++) {
-				if (j == 4) {
-					continue;
-				}
-				//assert(j != 4 && "error!");
-				if (boneWeight[vertexId][j] == 0.0f) {
-					boneIndex[vertexId][j] = boneNameToIndex.at(bone->mName.C_Str()); //TODO: Find bone index
-					boneWeight[vertexId][j] = weight;
-					break;
-				}
-			}
-		}
-	}
-	for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
-		const float sum = boneWeight[i][0] + boneWeight[i][1] + boneWeight[i][2] + boneWeight[i][3];
-		if (sum < 1.0f) {
-			boneWeight[i][0] /= sum;
 		}
 	}
 }

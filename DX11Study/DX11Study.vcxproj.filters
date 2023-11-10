@@ -234,9 +234,6 @@
     <ClCompile Include="ConstantBufferEx.cpp">
       <Filter>소스 파일\Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Testing.cpp">
       <Filter>소스 파일\Testing</Filter>
     </ClCompile>
@@ -351,7 +348,7 @@
     <ClCompile Include="CubeTexture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Material2.cpp">
+    <ClCompile Include="Material.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Bone.cpp">
@@ -650,9 +647,6 @@
     <ClInclude Include="Frustum.h">
       <Filter>헤더 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>헤더 파일\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="Projection.h">
       <Filter>헤더 파일\Camera</Filter>
     </ClInclude>
@@ -695,7 +689,7 @@
     <ClInclude Include="CubeTexture.h">
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Material2.h">
+    <ClInclude Include="Material.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Bone.h">

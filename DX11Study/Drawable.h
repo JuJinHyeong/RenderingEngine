@@ -6,7 +6,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
-#include "Material2.h"
+#include "Material.h"
 
 class TechniqueProbe;
 class Material;
@@ -29,7 +29,6 @@ class Material;
 class Drawable {
 public:
 	Drawable() = default;
-	Drawable(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept;
 	Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept;
 	Drawable(const Drawable&) = delete;
 	virtual ~Drawable() = default;

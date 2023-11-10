@@ -1,10 +1,9 @@
 #include "Bone.h"
 
 Bone::Bone(const aiBone& bone)
-	:
-	finalMatrix(DirectX::XMFLOAT4X4())
 {
 	DirectX::XMStoreFloat4x4(&offsetMatrix, DirectX::XMLoadFloat4x4(reinterpret_cast<const DirectX::XMFLOAT4X4*>(&bone.mOffsetMatrix)));
+	DirectX::XMStoreFloat4x4(&finalMatrix, DirectX::XMMatrixIdentity());
 }
 
 const DirectX::XMMATRIX Bone::GetOffsetMatrixXM() const noexcept

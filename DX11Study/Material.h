@@ -1,26 +1,23 @@
 #pragma once
 #include <assimp/scene.h>
-#include <vector>
 #include <filesystem>
-#include "BindableCommon.h"
-#include "Technique.h"
-#include "DynamicConstant.h"
-#include "ConstantBufferEx.h"
+#include <string>
+#include <optional>
+#include "Graphics.h"
+#include "Texture.h"
 
 class Material {
 public:
 	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG);
-	// why extract in material??
-	custom::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
-	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
-	std::shared_ptr<Bind::VertexBuffer> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh, float scale) const noexcept(!IS_DEBUG);
-	std::shared_ptr<Bind::IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noexcept(!IS_DEBUG);
-	std::vector<Technique> GetTechniques() const noexcept;
-private:
-	std::string MakeMeshTag(const aiMesh& mesh) const noexcept;
-private:
-	custom::VertexLayout vertexLayout;
-	std::vector<Technique> techniques;
-	std::string modelPath;
+public:
+	std::string rootPath;
 	std::string name;
+
+	std::optional<std::shared_ptr<Bind::Texture>> difTexture = std::nullopt;
+	std::optional<std::shared_ptr<Bind::Texture>> specTexture = std::nullopt;
+	std::optional<std::shared_ptr<Bind::Texture>> nrmTexture = std::nullopt;
+	
+	aiColor3D materialColor = { 0.45f, 0.45f, 0.85f };
+	aiColor3D specularColor = { 0.18f, 0.18f, 0.18f };
+	float gloss = 8.0f;
 };

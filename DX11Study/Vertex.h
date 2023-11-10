@@ -7,8 +7,7 @@
 #include <d3d11.h>
 #include "Mesh.h"
 
-#define DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const aiMesh& mesh,size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
-#define DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(member) static SysType Extract2( const Mesh& mesh,size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
+#define DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(member) static SysType Extract( const Mesh& mesh,size_t i ) noexcept {return *reinterpret_cast<const SysType*>(&mesh.member[i]);}
 
 #define LAYOUT_ELEMENT_TYPES \
 	X( Position2D ) \
@@ -20,8 +19,6 @@
 	X( Float3Color ) \
 	X( Float4Color ) \
 	X( BGRAColor ) \
-	X( BoneIndex ) \
-	X( BoneWeight ) \
 	X( Count )
 
 namespace custom {
@@ -38,90 +35,63 @@ namespace custom {
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P2";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mVertices);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetVertices());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetVertices());
 		};
 		template<> struct Map<Position3D> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const char* code = "P3";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mVertices);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetVertices());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetVertices());
 		};
 		template<> struct Map<Texture2D> {
 			using SysType = DirectX::XMFLOAT2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const char* code = "T2";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mTextureCoords[0]);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetTextureCoords());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetTextureCoords());
 		};
 		template<> struct Map<Normal> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
 			static constexpr const char* code = "N";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mNormals);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetNormals());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetNormals());
 		};
 		template<> struct Map<Tangent> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Tangent";
 			static constexpr const char* code = "T";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mTangents);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetTangents());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetTangents());
 		};
 		template<> struct Map<Bitangent> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Bitangent";
 			static constexpr const char* code = "BT";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mBitangents);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBitangents());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetBitangents());
 		};
 		template<> struct Map<Float3Color> {
 			using SysType = DirectX::XMFLOAT3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C3";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mColors[0]);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetColors());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetColors());
 		};
 		template<> struct Map<Float4Color> {
 			using SysType = DirectX::XMFLOAT4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C4";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mColors[0]);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetColors());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetColors());
 		};
 		template<> struct Map<BGRAColor> {
 			using SysType = DirectX::XMFLOAT4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Color";
 			static constexpr const char* code = "C8";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mColors[0]);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetColors());
-		};
-		template<> struct Map<BoneIndex> {
-			using SysType = DirectX::XMINT4;
-			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_SINT;
-			static constexpr const char* semantic = "BoneIndex";
-			static constexpr const char* code = "BI";
-			// TODO: fix extractor
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBoneIndex());
-		};
-		template<> struct Map<BoneWeight> {
-			using SysType = DirectX::XMFLOAT4;
-			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
-			static constexpr const char* semantic = "BoneWeight";
-			static constexpr const char* code = "BW";
-			// TODO: fix extractor
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces)
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetBoneWeight());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetColors());
 		};
 		// for default case
 		template<> struct Map<Count> {
@@ -129,8 +99,7 @@ namespace custom {
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_UNKNOWN;
 			static constexpr const char* semantic = "!INVALID!";
 			static constexpr const char* code = "!INV!";
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(mFaces);
-			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR2(GetVertices());
+			DYNAMIC_VERTEX_ELEMENT_AI_EXTRACTOR(GetVertices());
 		};
 
 		// TODO: make to template lambda

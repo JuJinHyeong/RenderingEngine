@@ -7,18 +7,8 @@
 #include "BindableCodex.h"
 #include "Material.h"
 
-Drawable::Drawable(Graphics& gfx, const Material2& mat, const aiMesh& mesh, float scale) noexcept {
-
-}
-
 Drawable::Drawable(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale) noexcept {
-	pVertices = mat.MakeVertexBindable(gfx, mesh, scale);
-	pIndices = mat.MakeIndexBindable(gfx, mesh);
-	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (auto& t : mat.GetTechniques()) {
-		AddTechnique(std::move(t));
-	}
 }
 
 void Drawable::Submit(size_t channels) const noexcept {
