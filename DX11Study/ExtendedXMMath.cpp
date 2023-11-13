@@ -1,6 +1,8 @@
 #include "ExtendedXMMath.h"
 #include <assimp/scene.h>
 
+using namespace DirectX;
+
 DirectX::XMFLOAT3 ExtractEulerAngles(const DirectX::XMFLOAT4X4& matrix) {
     DirectX::XMFLOAT3 euler = { 0.0f, 0.0f, 0.0f };
 
@@ -36,4 +38,25 @@ DirectX::XMFLOAT4X4 ConvertToDirectXMatrix(const aiMatrix4x4& aiMat) {
     dxMat._41 = aiMat.a4; dxMat._42 = aiMat.b4; dxMat._43 = aiMat.c4; dxMat._44 = aiMat.d4;
 
     return dxMat;
+}
+
+XMFLOAT3 GetPositionFromMatrix(const FXMMATRIX& mat)
+{
+    return XMFLOAT3(XMVectorGetX(mat.r[3]), XMVectorGetY(mat.r[3]), XMVectorGetZ(mat.r[3]));
+}
+
+XMFLOAT4 GetRotationFromMatrix(const FXMMATRIX& mat)
+{
+    XMFLOAT4 rot;
+    XMStoreFloat4(&rot, XMQuaternionRotationMatrix(mat));
+    return rot;
+}
+
+XMFLOAT3 GetScaleFromMatrix(const FXMMATRIX& mat)
+{
+    XMFLOAT3 scale;
+    scale.x = XMVectorGetX(XMVector3Length(mat.r[0]));
+    scale.y = XMVectorGetY(XMVector3Length(mat.r[1]));
+    scale.z = XMVectorGetZ(XMVector3Length(mat.r[2]));
+    return scale;
 }

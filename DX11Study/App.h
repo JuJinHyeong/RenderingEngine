@@ -35,7 +35,7 @@ private:
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
-	Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
+	//Model sponza{ wnd.Gfx(), "models/sponza/sponza.obj", 1/20.0f };
 	//Model testModel{wnd.Gfx(), "models/boblampclean/boblampclean.md5mesh", 1.0f};
 	//Model testModel{ wnd.Gfx(), "models/man/model.dae", 1.0f };
 

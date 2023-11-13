@@ -12,6 +12,12 @@
 #include <assimp/scene.h>       // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
 #include <stdio.h>
+#include <fstream>
+#include "json.hpp"
+#include "Scene.h"
+#include "SceneObject.h"
+#include "Model.h"
+#include "CustomMath.h"
 
 using namespace DirectX;
 
@@ -74,13 +80,14 @@ using namespace DirectX;
 //	RenderWithVS("Test2VS.cso");
 //}
 
-// testing assimp
+#pragma region bonetest
+
 #define MAX_NUM_BONES_PER_VERTEX 4
 
 struct BoneInfo {
 	DirectX::XMFLOAT4X4 boneOffset = DirectX::XMFLOAT4X4();
 	DirectX::XMFLOAT4X4 finalTransformation = DirectX::XMFLOAT4X4();
-	
+
 	BoneInfo(const aiMatrix4x4& offset) {
 		boneOffset = *reinterpret_cast<const DirectX::XMFLOAT4X4*>(&offset);
 	}
@@ -264,11 +271,11 @@ void parse_scene(const aiScene* pScene) {
 void AssimpTest(const std::string& filename, float tick) {
 	Assimp::Importer Importer;
 	const aiScene* pScene = Importer.ReadFile(filename,
-			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices |
-			aiProcess_ConvertToLeftHanded |
-			aiProcess_GenNormals |
-			aiProcess_CalcTangentSpace
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals |
+		aiProcess_CalcTangentSpace
 	);
 
 	if (!pScene) {
@@ -278,4 +285,64 @@ void AssimpTest(const std::string& filename, float tick) {
 	Dump::ClearFile("test_parse.txt");
 	parse_scene(pScene);
 
+}
+#pragma endregion
+
+void JsonTest()
+{
+	using json = nlohmann::json;
+	json j;
+	j["int"] = 1;
+	j["float"] = 1.3f;
+	j["string"] = std::string("this is test");
+	j["bool"] = true;
+	j["array constructor"] = json::array({1,2,3,4,5});
+	j["array push_back"] = json::array();
+	j["array push_back"].push_back(1);
+	j["array push_back"].push_back(2);
+	j["array push_back"].push_back(3);
+	j["array push_back"].push_back(4);
+	j["array push_back"].push_back(5);
+	json nested;
+	nested["int"] = 123;
+	nested["array"] = json::array({ 5,4,3,2,1 });
+	j["nested json"] = nested;
+	
+	std::ofstream out("test.json");
+	if (out.is_open()) {
+		out << j.dump(2);
+	}
+	else {
+		out << "error!";
+	}
+	out.close();
+}
+
+void SceneTest(Graphics& gfx)
+{
+	using json = nlohmann::json;
+	Scene scene("test");
+	auto obj1 = std::make_unique<SceneObject>("test1");
+	auto nano = std::make_unique<Model>(gfx, "models/nano_textured/nanosuit.obj", 1.0f);
+	auto nanoTf = DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(2.0f, 1.0f, 2.0f) 
+		* DirectX::XMMatrixRotationX(PI / 2)
+		* DirectX::XMMatrixRotationY(PI / 2)
+		* DirectX::XMMatrixRotationZ(0.0f)
+		* DirectX::XMMatrixTranslation(10.0f, -1.0f, 3.2f));
+	nano->SetRootTransform(nanoTf);
+	obj1->SetObject(std::move(nano));
+	auto obj2 = std::make_unique<SceneObject>("test2");
+	obj2->SetObject(std::make_unique<Model>(gfx, "models/gobber/GoblinX.obj", 1.0f));
+	scene.AddObject(std::move(obj1));
+	scene.AddObject(std::move(obj2));
+	
+	json j = scene.ToJson();
+	std::ofstream out("scenetest.json");
+	if (out.is_open()) {
+		out << j.dump(2);
+	}
+	else {
+		out << "error!";
+	}
+	out.close();
 }

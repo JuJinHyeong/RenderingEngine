@@ -33,9 +33,6 @@ public:
 			return tagScratch.c_str();
 		};
 
-		if (auto v = buf["selectedBoneIndex"]; v.Exists()) {
-			dcheck(ImGui::SliderInt(tag("Selected Bone Index"), &v, 0, 32));
-		}
 		if (auto v = buf["scale"]; v.Exists()) {
 			dcheck(ImGui::SliderFloat(tag("Scale"), &v, 1.0f, 2.0f, "%.3f"));
 		}
@@ -94,7 +91,6 @@ public:
 			dcheck(ImGui::SliderFloat("X-rotation", &tf.xRot, -PI, PI));
 			dcheck(ImGui::SliderFloat("Y-rotation", &tf.yRot, -PI, PI));
 			dcheck(ImGui::SliderFloat("Z-rotation", &tf.zRot, -PI, PI));
-			ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Applied Matrix");
 			auto diff = dx::XMMatrixTranspose(dx::XMMatrixRotationX(tf.xRot) *
 				dx::XMMatrixRotationY(tf.yRot) *
 				dx::XMMatrixRotationZ(tf.zRot) *

@@ -1,0 +1,30 @@
+{
+  "array constructor": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "array push_back": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "bool": true,
+  "float": 1.2999999523162842,
+  "int": 1,
+  "nested json": {
+    "array": [
+      5,
+      4,
+      3,
+      2,
+      1
+    ],
+    "int": 123
+  },
+  "string": "this is test"
+}

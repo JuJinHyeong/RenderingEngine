@@ -88,6 +88,9 @@
     <Filter Include="Shaders\includes">
       <UniqueIdentifier>{758a1f98-dbc4-44a9-b4a6-d1dcaaa4f2b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Scene">
+      <UniqueIdentifier>{0796834b-9191-46b9-9d4f-4e188291d2cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -358,6 +361,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -702,6 +714,21 @@
       <Filter>헤더 파일\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Animation.h">
+      <Filter>헤더 파일\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonSerializable.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>헤더 파일\Drawable</Filter>
     </ClInclude>
   </ItemGroup>

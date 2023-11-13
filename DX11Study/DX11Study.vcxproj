@@ -203,6 +203,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="NullPixelShader.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="PerformanceLog.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -215,6 +216,8 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="ShadowRasterizer.cpp" />
     <ClCompile Include="ShadowSampler.cpp" />
@@ -298,6 +301,8 @@
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="InputLayout.h" />
     <ClInclude Include="Job.h" />
+    <ClInclude Include="json.hpp" />
+    <ClInclude Include="JsonSerializable.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="LambertianPass.h" />
     <ClInclude Include="LayoutCodex.h" />
@@ -309,6 +314,7 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="NullPixelShader.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="OutlineDrawingPass.h" />
     <ClInclude Include="OutlineMaskGenerationPass.h" />
     <ClInclude Include="Pass.h" />
@@ -326,6 +332,8 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneObject.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="ShadowMappingPass.h" />
     <ClInclude Include="ShadowRasterizer.h" />

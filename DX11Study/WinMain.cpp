@@ -1,7 +1,6 @@
 #include "App.h"
 #include "WindowsMessageMap.h"
 #include "Mouse.h"
-#include "Testing.h"
 
 #include <sstream>
 
@@ -13,7 +12,6 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		if (err != 0) {
 			throw std::exception("Failed to redirect stdout to console");
 		}
-		AssimpTest("models/boblampclean/boblampclean.md5mesh");
 		App app;
 		return app.Go();
 	}

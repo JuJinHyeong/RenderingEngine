@@ -13,7 +13,7 @@
 // Model
 Model::~Model() noexcept(!IS_DEBUG) {}
 
-Model::Model(Graphics& gfx, const std::string& pathStr, const float scale, const bool test)
+Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(pathStr.c_str(),
@@ -79,4 +79,9 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pMesh : meshPtrs) {
 		pMesh->LinkTechniques(rg);
 	}
+}
+
+const DirectX::XMFLOAT4X4& Model::GetTransform() const noexcept
+{
+	return pRoot->GetAppliedTransform();
 }
