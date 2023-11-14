@@ -1,0 +1,1 @@
+Response: {"camera":{"aperture":0,"aspect":1,"focus_distance":1,"fov":90,"lookat":[0,0,1],"position":[0,0,0],"up":[0,1,0]},"height":720,"max_depth":50,"name":"test","output":"test.png","samples_per_pixel":100,"width":1280}

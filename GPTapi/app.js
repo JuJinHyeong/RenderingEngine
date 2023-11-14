@@ -5,6 +5,8 @@ const index_1 = require("./routes/index");
 const gpt_1 = require("./routes/gpt");
 const debug = require('debug')('my express app');
 const app = express();
+app.use(express.json());
+app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 app.use('/', index_1.default);
 app.use('/gpt', gpt_1.default);
 app.use('/health', (req, res) => res.send("still alive..."));

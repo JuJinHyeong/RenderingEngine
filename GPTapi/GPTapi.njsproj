@@ -6,7 +6,7 @@
     <Name>GPTapi</Name>
     <RootNamespace>GPTapi</RootNamespace>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
-    <Environment>OPENAI_API_KEY=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</Environment>
+    <Environment>OPENAI_API_KEY=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</Environment>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -36,23 +36,21 @@
     <None Include="routes\index.ts" />
     <Content Include="tsconfig.json" />
     <Content Include="package.json" />
-    <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
     <Content Include="views\index.pug" />
     <Content Include="views\layout.pug" />
-    <Content Include="views\error.pug" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="models\" />
-    <Folder Include="public\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
+    <Folder Include="services\" />
     <Folder Include="routes\" />
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="routes\gpt.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="services\gptService.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>

@@ -6,6 +6,8 @@ import gpt from './routes/gpt';
 const debug = require('debug')('my express app');
 const app = express();
 
+app.use(express.json());
+app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 app.use('/', routes);
 app.use('/gpt', gpt);
 app.use('/health', (req, res) => res.send("still alive..."));

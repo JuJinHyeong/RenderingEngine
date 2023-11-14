@@ -18,8 +18,12 @@
 #include "SceneObject.h"
 #include "Model.h"
 #include "CustomMath.h"
+#include <iostream>
+#include <curl/curl.h>
+#include <fstream>
 
 using namespace DirectX;
+using json = nlohmann::json;
 
 #define DumpToFile(...) Dump::WriteToFile("test_parse.txt", __VA_ARGS__);
 
@@ -346,3 +350,112 @@ void SceneTest(Graphics& gfx)
 	}
 	out.close();
 }
+
+void MatrixTest() {
+	using namespace DirectX;
+	XMVECTOR v = XMVectorSet(1.0f, 2.0f, 3.0f, 1.0f);
+	XMFLOAT4 pos;
+	XMStoreFloat4(&pos, v);
+	std::cout << "pos" << std::endl;
+	std::cout << pos.x << " " << pos.y << " " << pos.z << " " << pos.w << std::endl;
+
+	const auto translateMatrixXM = XMMatrixTranslation(10.0f, -10.0, 5.0);
+	XMFLOAT4X4 translateMatrix;
+	XMStoreFloat4x4(&translateMatrix, translateMatrixXM);
+	std::cout << "translate matrix" << std::endl;
+	std::cout << translateMatrix._11 << " " << translateMatrix._12 << " " << translateMatrix._13 << " " << translateMatrix._14 << std::endl;
+	std::cout << translateMatrix._21 << " " << translateMatrix._22 << " " << translateMatrix._23 << " " << translateMatrix._24 << std::endl;
+	std::cout << translateMatrix._31 << " " << translateMatrix._32 << " " << translateMatrix._33 << " " << translateMatrix._34 << std::endl;
+	std::cout << translateMatrix._41 << " " << translateMatrix._42 << " " << translateMatrix._43 << " " << translateMatrix._44 << std::endl;
+
+	XMVECTOR translatedV = XMVector3Transform(v, translateMatrixXM);
+	XMFLOAT4 translatedPos;
+	XMStoreFloat4(&translatedPos, translatedV);
+	std::cout << "translated pos" << std::endl;
+	std::cout << translatedPos.x << " " << translatedPos.y << " " << translatedPos.z << " " << translatedPos.w << std::endl;
+}
+
+#pragma region curltest
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* userp) {
+	size_t newLength = size * nmemb;
+	try {
+		//std::cout << *(char*)contents << std::endl;
+		userp->append((char*)contents, newLength);
+	}
+	catch (std::bad_alloc& e) {
+		return 0;
+	}
+	return newLength;
+}
+std::string httpGetRequest(const std::string& url) {
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+
+	curl = curl_easy_init();
+	if (curl) {
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+
+		res = curl_easy_perform(curl);
+
+		if (res != CURLE_OK) {
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+		}
+
+		curl_easy_cleanup(curl);
+	}
+	return readBuffer;
+}
+std::string httpPostRequest(const std::string& url, const json& body) {
+	CURL* curl;
+	CURLcode res;
+	std::string readBuffer;
+
+	std::string postData = body.dump();
+
+	curl = curl_easy_init();
+	if (curl) {
+		struct curl_slist* headers = NULL;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+
+		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+
+		res = curl_easy_perform(curl);
+		if (res != CURLE_OK) {
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+		}
+
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+	}
+	return readBuffer;
+}
+void CurlTest() {
+	std::string url = "http://127.0.0.1:1337/gpt";
+	json body {
+		{"name", "test"},
+		{"camera", {
+			{"position", {0.0f, 0.0f, 0.0f}},
+			{"lookat", {0.0f, 0.0f, 1.0f}},
+			{"up", {0.0f, 1.0f, 0.0f}},
+			{"fov", 90.0f},
+			{"aspect", 1.0f},
+			{"aperture", 0.0f},
+			{"focus_distance", 1.0f}
+		}},
+		{"width", 1280},
+		{"height", 720},
+		{"samples_per_pixel", 100},
+		{"max_depth", 50},
+		{"output", "test.png"}
+	};
+	std::string response = httpPostRequest(url + "/modify_scene", body);
+	std::cout << "Response: " << response << '\n';
+}
+#pragma endregion
