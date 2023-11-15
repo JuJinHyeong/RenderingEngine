@@ -7,12 +7,19 @@ SceneObject::SceneObject(const std::string& name)
     name(name)
 {
 }
+SceneObject::SceneObject(const std::string& name, std::unique_ptr<Object> pObject, const Type type) noexcept
+    :
+    name(name),
+    pObject(std::move(pObject)),
+    type(type)
+{
+}
 json SceneObject::ToJson() const
 {
     json j;
     j["id"] = id;
     j["name"] = name;
-    const auto objTransform = object->GetTransform();
+    const auto& objTransform = pObject->GetTransform();
     auto tf = DirectX::XMLoadFloat4x4(&objTransform);
     auto pos = GetPositionFromMatrix(tf);
     auto rot = GetRotationFromMatrix(tf);
@@ -32,5 +39,30 @@ void SceneObject::AddChild(std::unique_ptr<SceneObject> child)
 
 void SceneObject::SetObject(std::unique_ptr<Object> object)
 {
-    this->object = std::move(object);
+    pObject = std::move(object);
+}
+
+const std::unique_ptr<Object>& SceneObject::GetObjectPtr() const noexcept
+{
+    return pObject;
+}
+
+void SceneObject::Submit(size_t channel) noexcept(!IS_DEBUG)
+{
+    pObject->Submit(channel);
+}
+
+void SceneObject::LinkTechniques(Rgph::RenderGraph& rg)
+{
+    pObject->LinkTechniques(rg);
+}
+
+const SceneObject::Type SceneObject::GetType() const noexcept
+{
+    return type;
+}
+
+const std::string& SceneObject::GetName() const noexcept
+{
+    return name;
 }

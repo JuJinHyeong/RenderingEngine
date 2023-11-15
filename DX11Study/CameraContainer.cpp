@@ -48,13 +48,19 @@ Camera* CameraContainer::operator->() {
 
 CameraContainer::~CameraContainer() {}
 
+const DirectX::XMFLOAT4X4& CameraContainer::GetTransform() const noexcept
+{
+	// TODO...
+	return DirectX::XMFLOAT4X4();
+}
+
 void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pCam : cameras) {
 		pCam->LinkTechniques(rg);
 	}
 }
 
-void CameraContainer::Submit(size_t channel) const {
+void CameraContainer::Submit(size_t channel) noexcept(!IS_DEBUG) {
 	for (size_t i = 0; i < cameras.size(); i++) {
 		if (i != actived) {
 			cameras[i]->Submit(channel);

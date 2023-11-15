@@ -1,10 +1,17 @@
 #include "Scene.h"
 #include "json.hpp"
+#include "CameraContainer.h"
+#include "PointLight.h"
+#include "Camera.h"
+#include "imgui/imgui.h"
+
+#include <memory>
 
 using json = nlohmann::json;
 Scene::Scene(const std::string& name)
     :
-    name(name)
+    name(name),
+    pSceneObjects()
 {
 }
 json Scene::ToJson() const
@@ -12,13 +19,57 @@ json Scene::ToJson() const
     json j;
     j["name"] = name;
     j["objects"] = json::array();
-    for(auto&& object : objects){
+    for(auto&& object : pSceneObjects){
         j["objects"].push_back(object->ToJson());
     }
     return j;
 }
 
-void Scene::AddObject(std::unique_ptr<SceneObject> object)
+void Scene::AddObject(std::shared_ptr<SceneObject> object)
 {
-    objects.push_back(std::move(object));
+    // TODO: check objects like cameras...
+    pSceneObjects.push_back(std::move(object));
+}
+
+void Scene::Submit(size_t channel) noexcept(!IS_DEBUG)
+{
+    for (auto& object : pSceneObjects) {
+		object->Submit(channel);
+	}
+}
+
+const std::vector<std::shared_ptr<SceneObject>>& Scene::GetObjects() const noexcept
+{
+    return pSceneObjects;
+}
+
+Camera& Scene::GetActiveCamera()
+{
+    for (const auto& pSceneObject : pSceneObjects) {
+        if (pSceneObject->GetType() == SceneObject::Type::camera) {
+            const auto& objPtr = pSceneObject->GetObjectPtr();
+            return dynamic_cast<CameraContainer&>(*objPtr).GetActiveCamera();
+        }
+    }
+    assert("Failed to find camera!" && false);
+}
+
+void Scene::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
+{
+    for (const auto& pSceneObject : pSceneObjects) {
+        if (pSceneObject->GetType() == SceneObject::Type::light) {
+            const auto& objPtr = pSceneObject->GetObjectPtr();
+            Camera& cam = GetActiveCamera();
+            dynamic_cast<PointLight&>(*objPtr).Bind(gfx, cam.GetMatrix());
+        }
+    }
+}
+
+void Scene::ShowWindow()
+{
+    ImGui::Begin(name.c_str());
+    for (const auto& pSceneObject : pSceneObjects) {
+        ImGui::Text(pSceneObject->GetName().c_str());
+    }
+    ImGui::End();
 }

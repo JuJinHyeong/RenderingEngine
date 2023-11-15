@@ -17,10 +17,10 @@ class Model : public Object {
 public:
 	Model(Graphics& gfx, const std::string& path, const float scale = 1.0f);
 	~Model() noexcept(!IS_DEBUG);
-	void Submit(size_t channel) noexcept(!IS_DEBUG);
+	void Submit(size_t channel) noexcept(!IS_DEBUG) override;
 	void Accept(class ModelProbe& probe);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
-	void LinkTechniques(Rgph::RenderGraph& rg);
+	void LinkTechniques(Rgph::RenderGraph& rg) override;
 	const DirectX::XMFLOAT4X4& GetTransform() const noexcept override;
 private:
 	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node, float scale, int space=0);

@@ -2,20 +2,22 @@
 #include "Graphics.h"
 #include "SolidSphere.h"
 #include "ConstantBuffers.h"
+#include "Object.h"
 
 namespace Rgph {
 	class RenderGraph;
 }
 class Camera;
 
-class PointLight {
+class PointLight : public Object {
 public:
 	PointLight(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius = 0.5f);
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
-	void Submit(size_t channel) const noexcept(!IS_DEBUG);
+	const DirectX::XMFLOAT4X4& GetTransform() const noexcept override;
+	void Submit(size_t channel) noexcept(!IS_DEBUG) override;
 	void Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept;
-	void LinkTechniques(Rgph::RenderGraph& rg);
+	void LinkTechniques(Rgph::RenderGraph& rg) override;
 	std::shared_ptr<Camera> ShareCamera() const noexcept;
 private:
 	struct PointLightCBuf {
@@ -34,4 +36,5 @@ private:
 	mutable SolidSphere mesh;
 	mutable Bind::PixelConstantBuffer<PointLightCBuf> cbuf;
 	std::shared_ptr<Camera> pCamera;
+	DirectX::XMFLOAT4X4 transform;
 };

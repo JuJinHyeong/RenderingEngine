@@ -10,6 +10,7 @@
 #include "Model.h"
 #include "BlurOutlineRenderGraph.h"
 #include "CameraContainer.h"
+#include "Scene.h"
 #include <set>
 #include <vector>
 
@@ -26,12 +27,13 @@ private:
 	ImguiManager imgui;
 	Window wnd;
 	Timer timer;
-	CameraContainer cameras;
-	PointLight light;
+	//CameraContainer cameras;
+	//PointLight light;
 
 	// TODO: add model group
-	Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
-	Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
+	Scene scene{ "first scene" };
+	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
+	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };
 	//TestPlane bluePlane{ wnd.Gfx(), 4.0f, {0.3f, 0.3f, 1.0f, 1.0f} };
 	//TestPlane redPlane{ wnd.Gfx(), 4.0f, {1.0f, 0.3f, 0.3f, 1.0f} };
