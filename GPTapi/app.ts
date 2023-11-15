@@ -23,10 +23,6 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => { // eslint-disable-line @typescript-eslint/no-unused-vars
         res.status(err[ 'status' ] || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
     });
 }
 
@@ -34,14 +30,10 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use((err, req, res, next) => { // eslint-disable-line @typescript-eslint/no-unused-vars
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
 });
 
 app.set('port', process.env.PORT || 3010);
 
 const server = app.listen(app.get('port'), function () {
-    debug(`Express server listening on port ${(server.address() as AddressInfo).port}`);
+    console.log("Server is listening on", app.get('port'), "port");
 });

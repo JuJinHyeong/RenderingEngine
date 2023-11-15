@@ -14,11 +14,6 @@ int CALLBACK WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
 		std::cout << "Hello, world!\n";
 
-		//std::string a;
-		//std::cin >> a;
-		//if (!a.empty()) {
-		//	CurlTest();
-		//}
 		App app;
 		return app.Go();
 	}

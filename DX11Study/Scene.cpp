@@ -4,8 +4,10 @@
 #include "PointLight.h"
 #include "Camera.h"
 #include "imgui/imgui.h"
+#include "ApiService.h"
 
 #include <memory>
+#include <iostream>
 
 using json = nlohmann::json;
 Scene::Scene(const std::string& name)
@@ -65,11 +67,21 @@ void Scene::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
     }
 }
 
+char buffer[256] = "";
 void Scene::ShowWindow()
 {
     ImGui::Begin(name.c_str());
+    ImGui::TextColored({ 1.0f, 1.0f, 0.2f, 0.0 }, "Object Name List");
     for (const auto& pSceneObject : pSceneObjects) {
         ImGui::Text(pSceneObject->GetName().c_str());
+    }
+    ImGui::InputText("gpt", buffer, IM_ARRAYSIZE(buffer));
+    json j;
+    j["scene"] = ToJson();
+    j["content"] = buffer;
+    if (ImGui::Button("GPT")) {
+        std::string res = ApiService::httpPostRequest("http://127.0.0.1:1337/gpt/modify_scene", j);
+        std::cout << res << std::endl;
     }
     ImGui::End();
 }

@@ -20,23 +20,15 @@ app.use((req, res, next) => {
 if (app.get('env') === 'development') {
     app.use((err, req, res, next) => {
         res.status(err['status'] || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
     });
 }
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
 });
 app.set('port', process.env.PORT || 3010);
 const server = app.listen(app.get('port'), function () {
-    debug(`Express server listening on port ${server.address().port}`);
+    console.log("Server is listening on", app.get('port'), "port");
 });
 //# sourceMappingURL=app.js.map

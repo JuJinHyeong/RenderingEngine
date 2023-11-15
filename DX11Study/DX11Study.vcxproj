@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="ApiService.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="BasicException.cpp" />
     <ClCompile Include="Bindable.cpp" />
@@ -249,6 +250,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="ApiService.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCodex.h" />
