@@ -1,7 +1,8 @@
 import express = require('express');
 import OpenAI from 'openai';
 import { Scene } from '../models/type';
-import { makeTools } from '../services/gptService';
+import { makeTools, functionMap } from '../services/gptService';
+const inspect = require("object-inspect");
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -23,10 +24,20 @@ router.post('/modify_scene', async (req, res) => {
             "model": "gpt-3.5-turbo-1106",
             "tools": makeTools(nameArr),
         });
+        console.log(inspect(completion.choices[0]));
         // change scene... using tools
-        console.log(JSON.stringify(completion.choices[0]));
-        res.send(completion.choices[0]);
+        completion.choices[0].message.tool_calls.forEach((tool_call) => {
+            const functionName = tool_call.function.name;
+            if (functionMap.hasOwnProperty(functionName)) {
+                const func = functionMap[functionName];
+                const argument = JSON.parse(tool_call.function.arguments);
+                func(scene, argument);
+            }
+        });
+        console.log(inspect(scene));
+        res.send(scene);
     } catch (err) {
+        console.log(err);
         res.send(err);
     }
 });
@@ -39,7 +50,7 @@ router.get('/test', async (req: express.Request, res: express.Response) => {
                 { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
             ],
             "model": "gpt-3.5-turbo-1106",
-            "tools": makeTools([]),
+            "tools": makeTools(["nano"]),
         });
         console.log(JSON.stringify(completion.choices[0]));
         res.send(completion.choices[0]);

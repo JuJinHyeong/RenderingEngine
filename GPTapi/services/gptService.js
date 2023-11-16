@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeTools = void 0;
+exports.makeTools = exports.functionMap = void 0;
+const sceneService_1 = require("./sceneService");
+exports.functionMap = {
+    transform: sceneService_1.SceneModifier.transform
+};
 const makeTools = (objectList) => {
     return [
         {
@@ -37,24 +41,24 @@ const makeTools = (objectList) => {
                         quaternion: {
                             type: "object",
                             properties: {
-                                a: {
+                                x: {
                                     type: "number",
-                                    description: "Value that quaternion first value. real value."
+                                    description: "When rotation is expressed as a quaternion, it is the real component."
                                 },
-                                b: {
+                                y: {
                                     type: "number",
-                                    description: "Value that quaternion second value. i value."
+                                    description: "When rotation is expressed as a quaternion, it is the i component."
                                 },
-                                c: {
+                                z: {
                                     type: "number",
-                                    description: "Value that quaternion third value, j value."
+                                    description: "When rotation is expressed as a quaternion, it is the j component."
                                 },
-                                d: {
+                                w: {
                                     type: "number",
-                                    description: "Value that quaternion last value, k value."
+                                    description: "When rotation is expressed as a quaternion, it is the k component."
                                 }
                             },
-                            required: ["a", "b", "c", "d"]
+                            required: ["x", "y", "z", "w"]
                         },
                         scale: {
                             type: "object",

@@ -16,9 +16,19 @@ SceneObject::SceneObject(const std::string& name, std::unique_ptr<Object> pObjec
 }
 json SceneObject::ToJson() const
 {
-    json j;
-    j["id"] = id;
-    j["name"] = name;
+	json j{
+		{"id", id},
+		{"name", name},
+        {"position", {
+            {"x", 0}, {"y", 0}, {"z", 0}
+        }},
+		{"quaternion", {
+			{"x", 0}, {"y", 0}, {"z", 0}, {"w", 0}
+		}},
+		{"scale", {
+			{"x", 1.0f}, {"y", 1.0f}, {"z", 1.0f}
+		}}
+	};
     //const auto& objTransform = pObject->GetTransform();
     //auto tf = DirectX::XMLoadFloat4x4(&objTransform);
     //auto pos = GetPositionFromMatrix(tf);

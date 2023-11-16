@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const openai_1 = require("openai");
 const gptService_1 = require("../services/gptService");
+const inspect = require("object-inspect");
 const dotenv = require('dotenv');
 dotenv.config();
 const router = express.Router();
@@ -24,33 +25,56 @@ router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, fun
         const completion = yield openai.chat.completions.create({
             messages: [
                 { "role": "system", "content": "you are a good scene modifier. Use the provided function to answer questions." },
-                { "role": "system", "content": "you need to reply with a description of result" },
                 { "role": "user", "content": content },
                 // "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction"
             ],
             "model": "gpt-3.5-turbo-1106",
             "tools": (0, gptService_1.makeTools)(nameArr),
         });
+        console.log(inspect(completion.choices[0]));
         // change scene... using tools
-        console.log(JSON.stringify(completion.choices[0]));
-        res.send(completion.choices[0]);
+        completion.choices[0].message.tool_calls.forEach((tool_call) => {
+            const functionName = tool_call.function.name;
+            if (gptService_1.functionMap.hasOwnProperty(functionName)) {
+                const func = gptService_1.functionMap[functionName];
+                const argument = JSON.parse(tool_call.function.arguments);
+                func(scene, argument);
+            }
+        });
+        console.log(inspect(scene));
+        res.send(scene);
     }
     catch (err) {
+        console.log(err);
         res.send(err);
     }
 }));
 router.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const completion = yield openai.chat.completions.create({
-            messages: [
-                { "role": "system", "content": "you are a good scene modifier. Use the provided function to answer questions." },
-                { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
-            ],
-            "model": "gpt-3.5-turbo-1106",
-            "tools": (0, gptService_1.makeTools)([]),
-        });
-        console.log(JSON.stringify(completion.choices[0]));
-        res.send(completion.choices[0]);
+        const a = {
+            "test": {
+                "a": {
+                    type: 'name',
+                    name: 'nano',
+                    abc: {
+                        def: 'test',
+                    }
+                },
+                "b": 2
+            }
+        };
+        console.log(a);
+        console.log(inspect(a));
+        //const completion = await openai.chat.completions.create({
+        //    messages: [
+        //        { "role": "system", "content": "you are a good scene modifier. Use the provided function to answer questions." },
+        //        { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
+        //    ],
+        //    "model": "gpt-3.5-turbo-1106",
+        //    "tools": makeTools(["nano"]),
+        //});
+        //console.log(JSON.stringify(completion.choices[0]));
+        res.send(a);
     }
     catch (err) {
         res.send(err);
