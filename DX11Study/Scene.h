@@ -3,6 +3,7 @@
 #include <vector>
 #include "SceneObject.h"
 #include "JsonSerializable.h"
+#include "SceneProbe.h"
 
 class Camera;
 class Graphics;
@@ -17,7 +18,10 @@ public:
 	Camera& GetActiveCamera();
 	void Bind(Graphics& gfx) noexcept(!IS_DEBUG);
 	void ShowWindow();
+
+	const std::string& GetName() const noexcept;
 private:
+	SceneProbe sceneProbe;
 	std::string name;
 	std::vector<std::shared_ptr<SceneObject>> pSceneObjects;
 };

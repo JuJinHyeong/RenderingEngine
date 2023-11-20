@@ -1,14 +1,18 @@
 #include "SceneObject.h"
 #include "ExtendedXMMath.h"
+#include "imgui/imgui.h"
+#include "SceneProbe.h"
 
 using json = nlohmann::json;
 SceneObject::SceneObject(const std::string& name)
     :
+    id(GenerateId()),
     name(name)
 {
 }
 SceneObject::SceneObject(const std::string& name, std::unique_ptr<Object> pObject, const Type type) noexcept
     :
+    id(GenerateId()),
     name(name),
     pObject(std::move(pObject)),
     type(type)
@@ -29,22 +33,17 @@ json SceneObject::ToJson() const
 			{"x", 1.0f}, {"y", 1.0f}, {"z", 1.0f}
 		}}
 	};
-    //const auto& objTransform = pObject->GetTransform();
-    //auto tf = DirectX::XMLoadFloat4x4(&objTransform);
-    //auto pos = GetPositionFromMatrix(tf);
-    //auto rot = GetRotationFromMatrix(tf);
-    //auto scale = GetScaleFromMatrix(tf);
-    //json transform;
-    //transform["position"] = json::array({pos.x, pos.y, pos.z});
-    //transform["rotation"] = json::array({rot.x, rot.y, rot.z, rot.w});
-    //transform["scale"] = json::array({scale.x, scale.y, scale.z});
-    //j["transform"] = transform;
     return j;
 }
 
-void SceneObject::AddChild(std::unique_ptr<SceneObject> child)
+void SceneObject::AddChild(std::shared_ptr<SceneObject> child)
 {
     children.push_back(std::move(child));
+}
+
+const std::vector<std::shared_ptr<SceneObject>>& SceneObject::GetChildren()
+{
+    return children;
 }
 
 void SceneObject::SetObject(std::unique_ptr<Object> object)
@@ -59,12 +58,36 @@ const std::unique_ptr<Object>& SceneObject::GetObjectPtr() const noexcept
 
 void SceneObject::Submit(size_t channel) noexcept(!IS_DEBUG)
 {
-    pObject->Submit(channel);
+    if (type != Type::empty) {
+        pObject->Submit(channel);
+    }
+    for (auto& child : children) {
+        child->Submit(channel);
+    }
 }
 
-void SceneObject::LinkTechniques(Rgph::RenderGraph& rg)
+void SceneObject::LinkTechniques(Rgph::RenderGraph& rg) {
+    if (type != Type::empty) {
+        pObject->LinkTechniques(rg);
+    }
+    for (auto& child : children) {
+        child->LinkTechniques(rg);
+    }
+}
+
+void SceneObject::Accept(SceneProbe& probe)
 {
-    pObject->LinkTechniques(rg);
+    if (probe.PushNode(*this)) {
+        for (auto& child : children) {
+			child->Accept(probe);
+		}
+        probe.PopNode(*this);
+    }
+}
+
+const unsigned int SceneObject::GetId() const noexcept
+{
+    return id;
 }
 
 const SceneObject::Type SceneObject::GetType() const noexcept
@@ -75,4 +98,10 @@ const SceneObject::Type SceneObject::GetType() const noexcept
 const std::string& SceneObject::GetName() const noexcept
 {
     return name;
+}
+
+unsigned int SceneObject::GenerateId() noexcept
+{
+    static unsigned int unique_id = 0;
+    return unique_id++;
 }

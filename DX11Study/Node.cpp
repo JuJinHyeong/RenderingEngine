@@ -21,14 +21,6 @@ int Node::GetId() const noexcept {
 	return id;
 }
 
-const bool Node::IsSelected() const noexcept {
-	return selected;
-}
-
-void Node::SetSelected(bool selected) noexcept {
-	this->selected = selected;
-}
-
 bool Node::HasChildren() const noexcept {
 	return !childPtrs.empty();
 }

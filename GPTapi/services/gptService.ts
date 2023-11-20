@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { SceneModifier } from './sceneService';
 
 export const functionMap = {
-    transform: SceneModifier.transform
+    transform: SceneModifier.transform,
 };
 
 export const makeTools = (objectList: string[]): OpenAI.Chat.Completions.ChatCompletionTool[] => {
@@ -41,24 +41,24 @@ export const makeTools = (objectList: string[]): OpenAI.Chat.Completions.ChatCom
                         quaternion: {
                             type: "object",
                             properties: {
-                                x: {
+                                a: {
                                     type: "number",
-                                    description: "When rotation is expressed as a quaternion, it is the real component."
+                                    description: "Value that quaternion first value. real value."
                                 },
-                                y: {
+                                b: {
                                     type: "number",
-                                    description: "When rotation is expressed as a quaternion, it is the i component."
+                                    description: "Value that quaternion second value. i value."
                                 },
-                                z: {
+                                c: {
                                     type: "number",
-                                    description: "When rotation is expressed as a quaternion, it is the j component."
+                                    description: "Value that quaternion third value, j value."
                                 },
-                                w: {
+                                d: {
                                     type: "number",
-                                    description: "When rotation is expressed as a quaternion, it is the k component."
+                                    description: "Value that quaternion last value, k value."
                                 }
                             },
-                            required: ["x", "y", "z", "w"]
+                            required: ["a", "b", "c", "d"]
                         },
                         scale: {
                             type: "object",

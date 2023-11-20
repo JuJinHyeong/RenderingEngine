@@ -2,7 +2,6 @@
 #include "Channels.h"
 #include "Vertex.h"
 #include "DynamicConstant.h"
-#include "Rasterizer.h"
 #include "TransformCbuf.h"
 #include "Blender.h"
 #include "VertexShader.h"
@@ -17,6 +16,7 @@
 #include <array>
 #include <algorithm>
 #include <unordered_map>
+#include "Rasterizer.h"
 
 #include "Dump.h"
 
@@ -28,12 +28,36 @@ Mesh::Mesh(
 	:
 	Drawable(gfx, mat, mesh, scale),
 	name(mesh.mName.C_Str()),
-	tag(mat.rootPath + "%" + mesh.mName.C_Str())
+	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
+	material(&mat)
 {
 	using namespace Bind;
 
 	InitializePerVertexData(mesh);
+	SetMaterial(gfx, mat, scale);
+}
 
+// Mesh
+Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs) {
+	AddBind(Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	for (auto& pb : bindPtrs) {
+		AddBind(std::move(pb));
+	}
+	AddBind(std::make_shared<Bind::TransformCbuf>(gfx, *this));
+}
+
+DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
+	return DirectX::XMLoadFloat4x4(&transform);
+}
+
+void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
+	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
+	Drawable::Submit(channels);
+}
+
+void Mesh::SetMaterial(Graphics& gfx, const Material& mat, const float scale) noexcept(!IS_DEBUG)
+{
+	using namespace Bind;
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
 	Dcb::RawLayout vscLayout;
@@ -110,14 +134,12 @@ Mesh::Mesh(
 
 				Dcb::Buffer buf{ std::move(pscLayout) };
 				if (auto r = buf["materialColor"]; r.Exists()) {
-					aiColor3D color = mat.materialColor;
-					r = reinterpret_cast<DirectX::XMFLOAT3&>(color);
+					r = mat.diffuseColor;
 				}
 				buf["useGlossAlpha"].SetifExists(hasGlossAlpha);
 				buf["useSpecularMap"].SetifExists(true);
 				if (auto r = buf["specularColor"]; r.Exists()) {
-					aiColor3D color = mat.specularColor;
-					r = reinterpret_cast<DirectX::XMFLOAT3&>(color);
+					r = mat.specularColor;
 				}
 				buf["specularWeight"].SetifExists(1.0f);
 				if (auto r = buf["specularGloss"]; r.Exists()) {
@@ -200,24 +222,6 @@ Mesh::Mesh(
 	}
 	pIndices = Bind::IndexBuffer::Resolve(gfx, tag, indices);
 	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-}
-
-// Mesh
-Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs) {
-	AddBind(Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	for (auto& pb : bindPtrs) {
-		AddBind(std::move(pb));
-	}
-	AddBind(std::make_shared<Bind::TransformCbuf>(gfx, *this));
-}
-
-DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept {
-	return DirectX::XMLoadFloat4x4(&transform);
-}
-
-void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
-	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
-	Drawable::Submit(channels);
 }
 
 const std::vector<DirectX::XMFLOAT3>& Mesh::GetVertices() const noexcept {

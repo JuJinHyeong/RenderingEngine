@@ -21,7 +21,6 @@ public:
 	void Accept(class ModelProbe& probe);
 	void SetRootTransform(DirectX::FXMMATRIX tf) noexcept;
 	void LinkTechniques(Rgph::RenderGraph& rg) override;
-	const DirectX::XMFLOAT4X4& GetTransform() const noexcept override;
 private:
 	std::unique_ptr<Node> ParseNode(int& curId, const aiNode& node, float scale, int space=0);
 
@@ -29,4 +28,5 @@ private:
 	float scale = 1.0f;
 	std::unique_ptr<Node> pRoot;
 	std::vector<std::unique_ptr<Mesh>> meshPtrs;
+	std::vector<Material> materials;
 };

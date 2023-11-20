@@ -156,6 +156,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="ApiService.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BaseMesh.cpp" />
     <ClCompile Include="BasicException.cpp" />
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="BindingPass.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="CameraContainer.cpp" />
     <ClCompile Include="CameraIndicator.cpp" />
     <ClCompile Include="ConstantBufferEx.cpp" />
+    <ClCompile Include="CubeMesh.cpp" />
     <ClCompile Include="CubeTexture.cpp" />
     <ClCompile Include="CustomUtils.cpp" />
     <ClCompile Include="DataMacros.h" />
@@ -218,7 +220,9 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneModifier.cpp" />
     <ClCompile Include="SceneObject.cpp" />
+    <ClCompile Include="SceneProbe.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="ShadowRasterizer.cpp" />
     <ClCompile Include="ShadowSampler.cpp" />
@@ -252,6 +256,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="ApiService.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BaseMesh.h" />
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="BindableCodex.h" />
     <ClInclude Include="BindableCommon.h" />
@@ -272,6 +277,7 @@
     <ClInclude Include="ConstantBufferEx.h" />
     <ClInclude Include="ConstantBuffers.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeMesh.h" />
     <ClInclude Include="CubeTexture.h" />
     <ClInclude Include="CustomMath.h" />
     <ClInclude Include="CustomUtils.h" />
@@ -286,6 +292,7 @@
     <ClInclude Include="ExtendedXMMath.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullscreenPass.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GraphicsResource.h" />
     <ClInclude Include="GraphicsThrowMacros.h" />
@@ -335,7 +342,9 @@
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneModifier.h" />
     <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="SceneProbe.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="ShadowMappingPass.h" />
     <ClInclude Include="ShadowRasterizer.h" />

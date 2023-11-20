@@ -28,12 +28,12 @@ Model::Model(Graphics& gfx, const std::string& pathStr, const float scale)
 		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
 	}
 
-	std::vector<Material> materials;
 	materials.reserve(pScene->mNumMaterials);
 	for (size_t i = 0; i < pScene->mNumMaterials; i++) {
 		materials.emplace_back(gfx, *(pScene->mMaterials[i]), pathStr);
 	}
 
+	meshPtrs.reserve(pScene->mNumMeshes);
 	for (size_t i = 0; i < pScene->mNumMeshes; i++) {
 		const auto& mesh = *pScene->mMeshes[i];
 		meshPtrs.push_back(std::make_unique<Mesh>(gfx, materials[mesh.mMaterialIndex], mesh, scale));
@@ -79,9 +79,4 @@ void Model::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pMesh : meshPtrs) {
 		pMesh->LinkTechniques(rg);
 	}
-}
-
-const DirectX::XMFLOAT4X4& Model::GetTransform() const noexcept
-{
-	return pRoot->GetAppliedTransform();
 }

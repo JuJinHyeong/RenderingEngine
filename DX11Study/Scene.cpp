@@ -67,21 +67,39 @@ void Scene::Bind(Graphics& gfx) noexcept(!IS_DEBUG)
     }
 }
 
-char buffer[256] = "";
+//char buffer[256] = "";
 void Scene::ShowWindow()
 {
     ImGui::Begin(name.c_str());
-    ImGui::TextColored({ 1.0f, 1.0f, 0.2f, 0.0 }, "Object Name List");
+    ImGui::Columns(2, nullptr, true);
+    ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Scene Hierachy");
     for (const auto& pSceneObject : pSceneObjects) {
-        ImGui::Text(pSceneObject->GetName().c_str());
+        pSceneObject->Accept(sceneProbe);
     }
-    ImGui::InputText("gpt", buffer, IM_ARRAYSIZE(buffer));
-    json j;
-    j["scene"] = ToJson();
-    j["content"] = buffer;
-    if (ImGui::Button("GPT")) {
-        std::string res = ApiService::httpPostRequest("http://127.0.0.1:1337/gpt/modify_scene", j);
-        std::cout << res << std::endl;
+    ImGui::NextColumn();
+    auto pSelectedNode = sceneProbe.GetSelectedNode();
+    if (pSelectedNode != nullptr) {
+        ImGui::Text(pSelectedNode->GetName().c_str());
+        auto& pObject = pSelectedNode->GetObjectPtr();
+        //auto& objectPos = pObject->GetPos();
+        //ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Translation");
+        //ImGui::SliderFloat("X", &objectPos.x, -10.0f, 10.0f);
+        //ImGui::SliderFloat("Y", &objectPos.y, -10.0f, 10.0f);
+        //ImGui::SliderFloat("Z", &objectPos.z, -10.0f, 10.0f);
+        //ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
+        //dcheck(ImGui::SliderFloat("X-rotation", &tf.xRot, -PI, PI));
+        //dcheck(ImGui::SliderFloat("Y-rotation", &tf.yRot, -PI, PI));
+        //dcheck(ImGui::SliderFloat("Z-rotation", &tf.zRot, -PI, PI));
+        //auto diff = dx::XMMatrixTranspose(dx::XMMatrixRotationX(tf.xRot) *
+        //    dx::XMMatrixRotationY(tf.yRot) *
+        //    dx::XMMatrixRotationZ(tf.zRot) *
+        //    dx::XMMatrixTranslation(tf.x, tf.y, tf.z));
+
     }
     ImGui::End();
+}
+
+const std::string& Scene::GetName() const noexcept
+{
+    return name;
 }

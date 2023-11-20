@@ -122,4 +122,7 @@ public:
 
 		return itl;
 	}
+	static std::string GetTag() noexcept {
+		return "Cube";
+	}
 };

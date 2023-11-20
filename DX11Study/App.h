@@ -21,6 +21,7 @@ public:
 private:
 	void DoFrame(float dt);
 	void HandleInput(float dt);
+	void ShowWindow();
 private:
 	bool showDemoWindow = false;
 	float speed_factor = 1.0f;
@@ -46,6 +47,7 @@ private:
 	//TestCube cube1{ wnd.Gfx(), 4.0f };
 	//TestCube cube2{ wnd.Gfx(), 4.0f };
 
+	const std::vector<std::string> makeables{ "cube", "cone", "plane", "prism", "sphere", "nano", "goblin" };
 	bool savingDepth = false;
 };
  

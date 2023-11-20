@@ -48,12 +48,6 @@ Camera* CameraContainer::operator->() {
 
 CameraContainer::~CameraContainer() {}
 
-const DirectX::XMFLOAT4X4& CameraContainer::GetTransform() const noexcept
-{
-	// TODO...
-	return DirectX::XMFLOAT4X4();
-}
-
 void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pCam : cameras) {
 		pCam->LinkTechniques(rg);

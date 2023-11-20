@@ -51,30 +51,16 @@ router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 router.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const a = {
-            "test": {
-                "a": {
-                    type: 'name',
-                    name: 'nano',
-                    abc: {
-                        def: 'test',
-                    }
-                },
-                "b": 2
-            }
-        };
-        console.log(a);
-        console.log(inspect(a));
-        //const completion = await openai.chat.completions.create({
-        //    messages: [
-        //        { "role": "system", "content": "you are a good scene modifier. Use the provided function to answer questions." },
-        //        { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
-        //    ],
-        //    "model": "gpt-3.5-turbo-1106",
-        //    "tools": makeTools(["nano"]),
-        //});
-        //console.log(JSON.stringify(completion.choices[0]));
-        res.send(a);
+        const completion = yield openai.chat.completions.create({
+            messages: [
+                { "role": "system", "content": "you are a good scene modifier. Use the provided function to answer questions." },
+                { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
+            ],
+            "model": "gpt-3.5-turbo-1106",
+            "tools": (0, gptService_1.makeTools)(["nano"]),
+        });
+        console.log(JSON.stringify(completion.choices[0]));
+        res.send(completion.choices[0]);
     }
     catch (err) {
         res.send(err);

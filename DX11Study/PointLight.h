@@ -14,7 +14,6 @@ public:
 	PointLight(Graphics& gfx, DirectX::XMFLOAT3 pos, float radius = 0.5f);
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
-	const DirectX::XMFLOAT4X4& GetTransform() const noexcept override;
 	void Submit(size_t channel) noexcept(!IS_DEBUG) override;
 	void Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept;
 	void LinkTechniques(Rgph::RenderGraph& rg) override;

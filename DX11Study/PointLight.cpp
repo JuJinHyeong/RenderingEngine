@@ -65,11 +65,6 @@ void PointLight::Reset() noexcept {
 	};
 }
 
-const DirectX::XMFLOAT4X4& PointLight::GetTransform() const noexcept
-{
-	return transform;
-}
-
 void PointLight::Submit(size_t channel) noexcept(!IS_DEBUG) {
 	mesh.SetPos(cbData.pos);
 	mesh.Submit(channel);

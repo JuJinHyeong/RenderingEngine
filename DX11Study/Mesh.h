@@ -16,6 +16,7 @@ public:
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 	void Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void SetMaterial(Graphics& gfx, const Material& mat, const float scale = 1.0f) noexcept(!IS_DEBUG);
 
 	const std::vector<DirectX::XMFLOAT3>& GetVertices() const noexcept;
 	const std::vector<DirectX::XMFLOAT3>& GetTextureCoords() const noexcept;
@@ -29,6 +30,7 @@ private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
 	std::string name;
 	std::string tag;
+	const Material* material;
 
 	std::vector<DirectX::XMFLOAT3> vertices;
 	std::vector<DirectX::XMFLOAT3> textureCoords;
