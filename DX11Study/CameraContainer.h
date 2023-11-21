@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include "Object.h"
+#include "SceneObject2.h"
 
 class Camera;
 class Graphics;
@@ -9,16 +9,19 @@ namespace Rgph {
 	class RenderGraph;
 }
 
-class CameraContainer : public Object {
+class CameraContainer : public SceneObject2 {
 public:
+	CameraContainer();
 	void SpawnWindow(Graphics& gfx);
 	void Bind(Graphics& gfx);
 	void AddCamera(std::shared_ptr<Camera> pCam);
 	Camera* operator->();
 	~CameraContainer();
 
-	void LinkTechniques(Rgph::RenderGraph& rg) override;
-	void Submit(size_t channel) noexcept(!IS_DEBUG) override;
+	json ToJson() const override;
+
+	void LinkTechniques(Rgph::RenderGraph& rg);
+	void Submit(size_t channel) noexcept(!IS_DEBUG);
 	Camera& GetActiveCamera();
 private:
 	Camera& GetControlledCamera();

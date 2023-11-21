@@ -289,6 +289,7 @@ template<> struct ReverseMap<typename Map<el>::SysType> { \
 
 	class Buffer {
 	public:
+		Buffer() noexcept = default;
 		Buffer(RawLayout&& lay) noexcept(!IS_DEBUG);
 		Buffer(const CookedLayout& lay) noexcept(!IS_DEBUG);
 		Buffer(CookedLayout&& lay) noexcept(!IS_DEBUG);

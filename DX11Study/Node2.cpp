@@ -1,4 +1,6 @@
 #include "Node2.h"
+#include "json.hpp"
+using json = nlohmann::json;
 
 Node2::Node2(const aiNode& node, const std::vector<std::shared_ptr<Mesh>>& modelMeshPtrs)
 	:
@@ -19,12 +21,27 @@ Node2::Node2(const aiNode& node, const std::vector<std::shared_ptr<Mesh>>& model
 	}
 }
 
+json Node2::ToJson() const {
+	json j;
+	j["id"] = id;
+	j["name"] = name;
+	j["type"] = type;
+	j["transform"] = {};
+	return j;
+}
+
 void Node2::Submit(size_t channel, DirectX::FXMMATRIX acuumulatedTransform) const noexcept(!IS_DEBUG) {
 	auto built = acuumulatedTransform * relativeTransform * localTransform;
 	for (const auto& pm : meshPtrs) {
-		pm->Submit(channel, built);
+		const auto& mesh = std::dynamic_pointer_cast<Mesh>(pm);
+		if (mesh != nullptr) {
+			mesh->Submit(channel, built);
+		}
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(channel, built);
+		const auto& node = std::dynamic_pointer_cast<Node2>(pc);
+		if (node != nullptr) {
+			node->Submit(channel, built);
+		}
 	}
 }

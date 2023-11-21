@@ -10,19 +10,20 @@ public:
 	enum Type {
 		empty,
 		light,
-		camera,
 		mesh,
 	};
 	SceneObject2(const std::string& name) noexcept;
 	void AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept;
 
-	void Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
+	void Submit(size_t channel) const noexcept(!IS_DEBUG);
 
-	json ToJson() const override;
 	const int GetId() const noexcept;
+	const Type GetType() const noexcept;
 	const std::string& GetName() const noexcept;
 	const DirectX::XMMATRIX& GetLocalTransform() const noexcept;
 	void SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG);
+	const std::vector<std::shared_ptr<SceneObject2>>& GetChildren() const noexcept;
+	const std::vector<std::shared_ptr<Drawable>>& GetMeshes() const noexcept;
 	bool HasChildren() const noexcept;
 private:
 	static int GenerateId() noexcept;
@@ -33,5 +34,5 @@ protected:
 	DirectX::XMMATRIX localTransform;
 
 	std::vector<std::shared_ptr<SceneObject2>> childPtrs;
-	std::vector<std::shared_ptr<Mesh>> meshPtrs;
+	std::vector<std::shared_ptr<Drawable>> meshPtrs;
 };

@@ -3,6 +3,13 @@
 #include "Camera.h"
 #include "Graphics.h"
 
+using json = nlohmann::json;
+
+CameraContainer::CameraContainer() 
+	:
+	SceneObject2("Camera Container")
+{}
+
 void CameraContainer::SpawnWindow(Graphics& gfx) {
 	if (ImGui::Begin("Cameras")) {
 		if (ImGui::BeginCombo("Active Camera", (*this)->GetName().c_str())) {
@@ -47,6 +54,10 @@ Camera* CameraContainer::operator->() {
 }
 
 CameraContainer::~CameraContainer() {}
+
+json CameraContainer::ToJson() const {
+	return json();
+}
 
 void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {
 	for (auto& pCam : cameras) {

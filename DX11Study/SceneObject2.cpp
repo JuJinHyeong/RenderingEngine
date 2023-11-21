@@ -16,25 +16,21 @@ void SceneObject2::AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept {
 	childPtrs.push_back(std::move(childPtr));
 }
 
-void SceneObject2::Submit(size_t channel, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG) {
-	auto built = accumulatedTransform * localTransform;
+void SceneObject2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	for (const auto& pm : meshPtrs) {
-		pm->Submit(channel, built);
+		pm->Submit(channel);
 	}
 	for (const auto& pc : childPtrs) {
-		pc->Submit(channel, built);
+		pc->Submit(channel);
 	}
-}
-
-json SceneObject2::ToJson() const {
-	json so;
-	so["id"] = id;
-	so["name"] = name;
-	return so;
 }
 
 const int SceneObject2::GetId() const noexcept {
 	return id;
+}
+
+const SceneObject2::Type SceneObject2::GetType() const noexcept {
+	return type;
 }
 
 const std::string& SceneObject2::GetName() const noexcept {
@@ -47,6 +43,14 @@ const DirectX::XMMATRIX& SceneObject2::GetLocalTransform() const noexcept {
 
 void SceneObject2::SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {
 	localTransform = transform;
+}
+
+const std::vector<std::shared_ptr<SceneObject2>>& SceneObject2::GetChildren() const noexcept {
+	return childPtrs;
+}
+
+const std::vector<std::shared_ptr<Drawable>>& SceneObject2::GetMeshes() const noexcept {
+	return meshPtrs;
 }
 
 bool SceneObject2::HasChildren() const noexcept {

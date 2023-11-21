@@ -8,6 +8,8 @@
 #include "Mesh.h"
 #include "Node2.h"
 #include "RenderGraph.h"
+#include "PointLight2.h"
+#include "Camera.h"
 using json = nlohmann::json;
 
 Scene2::Scene2(const std::string& name) noexcept 
@@ -18,11 +20,13 @@ Scene2::Scene2(const std::string& name) noexcept
 	materialPtrs()
 {}
 
-void Scene2::AddSceneObject(std::shared_ptr<SceneObject2>& sceneObjectPtr) noexcept {
+void Scene2::AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept {
+	// TODO: is this right???
+	meshPtrs.insert(meshPtrs.end(), sceneObjectPtr->GetMeshes().begin(), sceneObjectPtr->GetMeshes().end());
 	sceneObjectPtrs.push_back(std::move(sceneObjectPtr));
 }
 
-void Scene2::AddSceneObject(Graphics& gfx, const std::string& path) noexcept {
+void Scene2::AddSceneObject(Graphics& gfx, const std::string& path, float scale) noexcept {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(path.c_str(),
 		aiProcess_Triangulate |
@@ -43,7 +47,7 @@ void Scene2::AddSceneObject(Graphics& gfx, const std::string& path) noexcept {
 	std::vector<std::shared_ptr<Mesh>> tempMeshPtrs;
 	for (unsigned int i = 0; i < pScene->mNumMeshes; i++) {
 		const auto& mesh = *pScene->mMeshes[i];
-		tempMeshPtrs.push_back(std::make_shared<Mesh>(gfx, materialPtrs[materialOffset + mesh.mMaterialIndex], mesh));
+		tempMeshPtrs.push_back(std::make_shared<Mesh>(gfx, materialPtrs[materialOffset + mesh.mMaterialIndex], mesh, scale));
 	}
 
 	sceneObjectPtrs.push_back(std::make_shared<Node2>(*pScene->mRootNode, tempMeshPtrs));
@@ -51,16 +55,43 @@ void Scene2::AddSceneObject(Graphics& gfx, const std::string& path) noexcept {
 	meshPtrs.insert(meshPtrs.end(), std::make_move_iterator(tempMeshPtrs.begin()), std::make_move_iterator(tempMeshPtrs.end()));
 }
 
-void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
+void Scene2::SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainerPtr) noexcept {
+	this->cameraContainerPtr = std::move(cameraContainerPtr);
+}
+
+void Scene2::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 	for (auto& objPtr : sceneObjectPtrs) {
-		objPtr->Submit(channel, DirectX::XMMatrixIdentity());
+		const auto& pointLight = std::dynamic_pointer_cast<PointLight2>(objPtr);
+		if (pointLight != nullptr) {
+			pointLight->Bind(gfx, GetActiveCamera().GetMatrix());
+		}
 	}
+}
+
+void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
+	// TODO: thinking more sexyier way to submit scene objects
+	for (auto& objPtr : sceneObjectPtrs) {
+		const auto& node = std::dynamic_pointer_cast<Node2>(objPtr);
+		if (node != nullptr) {
+			node->Submit(channel, DirectX::XMMatrixIdentity());
+		}
+		const auto& light = std::dynamic_pointer_cast<PointLight2>(objPtr);
+		if (light != nullptr) {
+			light->Submit(channel);
+		}
+	}
+	cameraContainerPtr->Submit(channel);
 }
 
 void Scene2::LinkTechnique(Rgph::RenderGraph& rg) {
 	for (auto& meshPtr : meshPtrs) {
 		meshPtr->LinkTechniques(rg);
 	}
+	cameraContainerPtr->LinkTechniques(rg);
+}
+
+Camera& Scene2::GetActiveCamera() const {
+	return cameraContainerPtr->GetActiveCamera();
 }
 
 json Scene2::ToJson() const {

@@ -3,12 +3,12 @@
 
 #include <iostream>
 
-void SceneModifier::Modify(Scene& scene, const json& modifiedScene)
+void SceneModifier::Modify(Scene2& scene, const json& modifiedScene)
 {
 
 }
 
-void SceneModifier::SendToGpt(Scene& scene, std::vector<std::string> makeables, const std::string message)
+void SceneModifier::SendToGpt(Scene2& scene, std::vector<std::string> makeables, const std::string message)
 {
 	json j;
 	j["scene"] = scene.ToJson();
