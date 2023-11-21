@@ -14,6 +14,8 @@
 #include <set>
 #include <vector>
 
+#include "Scene2.h"
+
 class App {
 public:
 	App();
@@ -33,6 +35,7 @@ private:
 
 	// TODO: add model group
 	Scene scene{ "first scene" };
+	Scene2 scene2{ "second scene" };
 	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
 	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };
 	//Model wall{ wnd.Gfx(), "models/brick_wall/brick_wall.obj", 2.0f };

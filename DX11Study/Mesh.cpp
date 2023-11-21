@@ -28,8 +28,7 @@ Mesh::Mesh(
 	:
 	Drawable(gfx, mat, mesh, scale),
 	name(mesh.mName.C_Str()),
-	tag(mat.rootPath + "%" + mesh.mName.C_Str()),
-	material(&mat)
+	tag(mat.rootPath + "%" + mesh.mName.C_Str())
 {
 	using namespace Bind;
 
@@ -37,7 +36,18 @@ Mesh::Mesh(
 	SetMaterial(gfx, mat, scale);
 }
 
-// Mesh
+Mesh::Mesh(Graphics& gfx, std::shared_ptr<Material> matPtr, const aiMesh& mesh, float scale) noexcept(IS_DEBUG) 
+	:
+	Drawable(gfx, *matPtr, mesh, scale),
+	name(mesh.mName.C_Str()),
+	tag(matPtr->rootPath + "%" + mesh.mName.C_Str())
+{
+	using namespace Bind;
+
+	InitializePerVertexData(mesh);
+	SetMaterial(gfx, *matPtr, scale);
+}
+
 Mesh::Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs) {
 	AddBind(Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	for (auto& pb : bindPtrs) {

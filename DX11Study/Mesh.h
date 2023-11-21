@@ -10,8 +10,8 @@
 class Mesh : public Drawable {
 	friend class MP;
 public:
-	using string_to_uint_map = std::unordered_map<std::string, unsigned int>;
 	Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
+	Mesh(Graphics& gfx, std::shared_ptr<Material> matPtr, const aiMesh& mesh, float scale = 1.0f) noexcept(IS_DEBUG);
 	Mesh(Graphics& gfx, std::vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	//void Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG);
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
@@ -30,7 +30,6 @@ private:
 	mutable DirectX::XMFLOAT4X4 transform = DirectX::XMFLOAT4X4();
 	std::string name;
 	std::string tag;
-	const Material* material;
 
 	std::vector<DirectX::XMFLOAT3> vertices;
 	std::vector<DirectX::XMFLOAT3> textureCoords;

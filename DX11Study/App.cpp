@@ -43,10 +43,10 @@ App::App()
 
 	rg.BindShadowCamera(*pPointLight->ShareCamera());
 
+	scene.AddObject(std::make_shared<SceneObject>("Nano", std::move(pNano), SceneObject::Type::object));
 	scene.AddObject(std::make_shared<SceneObject>("Point Light", std::move(pPointLight), SceneObject::Type::light));
 	scene.AddObject(std::make_shared<SceneObject>("Cameras", std::move(pCameras), SceneObject::Type::camera));
 	scene.AddObject(std::make_shared<SceneObject>("Goblin", std::move(pGobber), SceneObject::Type::object));
-	scene.AddObject(std::make_shared<SceneObject>("Nano", std::move(pNano), SceneObject::Type::object));
 	//scene.AddObject(std::make_shared<SceneObject>("Sponza", std::move(pSponza), SceneObject::Type::object));
 	
 	auto cubeParent = std::make_shared<SceneObject>("Cube Parent");
@@ -57,6 +57,13 @@ App::App()
 	for (const auto& obj : scene.GetObjects()) {
 		obj->LinkTechniques(rg);
 	}
+
+	// initialize second scene...
+	scene2.AddSceneObject(wnd.Gfx(), "models/nano_textured/nanosuit.obj");
+	scene2.AddSceneObject(wnd.Gfx(), "models/gobber/GoblinX.obj");
+	//scene2.AddSceneObject(std::make_shared<PointLight>(wnd.Gfx(), DirectX::XMFLOAT3{ 10.0f, 4.0f, 0.0f }));
+	//scene2.AddSceneObject(std::make_shared<CameraContainer>());
+	//scene2.AddSceneObject(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), 4.0f));
 }
 
 int App::Go()

@@ -205,6 +205,7 @@
     <ClCompile Include="ModelProbe.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="Node2.cpp" />
     <ClCompile Include="NullPixelShader.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pass.cpp" />
@@ -220,8 +221,10 @@
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneModifier.cpp" />
     <ClCompile Include="SceneObject.cpp" />
+    <ClCompile Include="SceneObject2.cpp" />
     <ClCompile Include="SceneProbe.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="ShadowRasterizer.cpp" />
@@ -322,6 +325,7 @@
     <ClInclude Include="ModelProbe.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Node2.h" />
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="OutlineDrawingPass.h" />
@@ -342,8 +346,10 @@
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneModifier.h" />
     <ClInclude Include="SceneObject.h" />
+    <ClInclude Include="SceneObject2.h" />
     <ClInclude Include="SceneProbe.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="ShadowMappingPass.h" />
