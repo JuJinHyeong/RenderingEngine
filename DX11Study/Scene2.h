@@ -15,7 +15,7 @@ public:
 	void AddSceneObject(Graphics& gfx, const std::string& path) noexcept;
 
 	void Submit(size_t channel) noexcept(!IS_DEBUG);
-	void LinkTechnique(Rgph::RenderGraph rg);
+	void LinkTechnique(Rgph::RenderGraph& rg);
 
 	json ToJson() const override;
 	const std::string& GetName() const noexcept;

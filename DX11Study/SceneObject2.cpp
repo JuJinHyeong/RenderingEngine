@@ -5,6 +5,7 @@ using json = nlohmann::json;
 SceneObject2::SceneObject2(const std::string& name) noexcept 
 	:
 	id(GenerateId()),
+	type(Type::empty),
 	name(name),
 	localTransform(DirectX::XMMatrixIdentity()),
 	childPtrs(),

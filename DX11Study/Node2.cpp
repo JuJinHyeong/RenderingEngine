@@ -2,11 +2,13 @@
 
 Node2::Node2(const aiNode& node, const std::vector<std::shared_ptr<Mesh>>& modelMeshPtrs)
 	:
-	SceneObject2(node.mName.C_Str()),
 	relativeTransform(DirectX::XMLoadFloat4x4(
 		reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
-	))
+	)),
+	SceneObject2(node.mName.C_Str())
 {
+	type = node.mNumMeshes == 0 ? Type::empty : Type::mesh;
+
 	for (unsigned int i = 0; i < node.mNumMeshes; i++) {
 		const auto meshIdx = node.mMeshes[i];
 		meshPtrs.push_back(modelMeshPtrs.at(meshIdx));

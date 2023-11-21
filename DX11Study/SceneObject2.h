@@ -7,6 +7,12 @@
 
 class SceneObject2 : public JsonSerializable {
 public:
+	enum Type {
+		empty,
+		light,
+		camera,
+		mesh,
+	};
 	SceneObject2(const std::string& name) noexcept;
 	void AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept;
 
@@ -22,6 +28,7 @@ private:
 	static int GenerateId() noexcept;
 protected:
 	int id;
+	Type type;
 	std::string name;
 	DirectX::XMMATRIX localTransform;
 

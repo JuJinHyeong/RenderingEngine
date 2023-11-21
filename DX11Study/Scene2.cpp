@@ -7,6 +7,7 @@
 #include "ModelException.h"
 #include "Mesh.h"
 #include "Node2.h"
+#include "RenderGraph.h"
 using json = nlohmann::json;
 
 Scene2::Scene2(const std::string& name) noexcept 
@@ -56,7 +57,7 @@ void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
 	}
 }
 
-void Scene2::LinkTechnique(Rgph::RenderGraph rg) {
+void Scene2::LinkTechnique(Rgph::RenderGraph& rg) {
 	for (auto& meshPtr : meshPtrs) {
 		meshPtr->LinkTechniques(rg);
 	}
