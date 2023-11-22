@@ -10,6 +10,8 @@
 #include "RenderGraph.h"
 #include "PointLight2.h"
 #include "Camera.h"
+#include "imgui/imgui.h"
+
 using json = nlohmann::json;
 
 Scene2::Scene2(const std::string& name) noexcept 
@@ -106,4 +108,20 @@ json Scene2::ToJson() const {
 
 const std::string& Scene2::GetName() const noexcept {
 	return name;
+}
+
+void Scene2::ShowWindow() noexcept
+{
+	ImGui::Begin(name.c_str());
+	ImGui::Columns(2, nullptr, true);
+	ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Scene Hierachy");
+	for (auto& sceneObjectPtr : sceneObjectPtrs) {
+		sceneObjectPtr->Accept(probe);
+	}
+	ImGui::NextColumn();
+	auto* selectedNode = probe.GetSelectedNodePtr();
+	if (selectedNode != nullptr) {
+		ImGui::Text(selectedNode->GetName().c_str());
+	}
+	ImGui::End();
 }

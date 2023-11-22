@@ -16,8 +16,6 @@
 #include "Channels.h"
 #include <iostream>
 #include "SceneModifier.h"
-#include "Geometry.h"
-#include "CubeMesh.h"
 #include "PointLight2.h"
 
 #include "Testing.h"
@@ -87,6 +85,7 @@ void App::DoFrame(float dt)
 	if (showDemoWindow)
 	{
 		ShowWindow();
+		scene2.ShowWindow();
 		rg.RenderWindows(wnd.Gfx());
 		pPointLight->SpawnControlWindow();
 	}

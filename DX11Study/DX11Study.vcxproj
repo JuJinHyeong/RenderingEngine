@@ -228,6 +228,7 @@
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SceneObject2.cpp" />
     <ClCompile Include="SceneProbe.cpp" />
+    <ClCompile Include="SceneProbe2.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="ShadowRasterizer.cpp" />
     <ClCompile Include="ShadowSampler.cpp" />
@@ -355,6 +356,7 @@
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SceneObject2.h" />
     <ClInclude Include="SceneProbe.h" />
+    <ClInclude Include="SceneProbe2.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="ShadowMappingPass.h" />
     <ClInclude Include="ShadowRasterizer.h" />

@@ -20,6 +20,8 @@
 
 #include "Dump.h"
 
+using json = nlohmann::json;
+
 Mesh::Mesh(
 	Graphics& gfx,
 	const Material& mat,
@@ -40,7 +42,8 @@ Mesh::Mesh(Graphics& gfx, std::shared_ptr<Material> matPtr, const aiMesh& mesh, 
 	:
 	Drawable(gfx, *matPtr, mesh, scale),
 	name(mesh.mName.C_Str()),
-	tag(matPtr->rootPath + "%" + mesh.mName.C_Str())
+	tag(matPtr->rootPath + "%" + mesh.mName.C_Str()),
+	matPtr(matPtr)
 {
 	using namespace Bind;
 
@@ -234,6 +237,14 @@ void Mesh::SetMaterial(Graphics& gfx, const Material& mat, const float scale) no
 	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
+json Mesh::ToJson() const noexcept
+{
+	json j;
+	j["name"] = name;
+	j["material"] = matPtr->ToJson();
+	return j;
+}
+
 const std::vector<DirectX::XMFLOAT3>& Mesh::GetVertices() const noexcept {
 	return vertices;
 }
@@ -256,6 +267,11 @@ const std::vector<DirectX::XMFLOAT3>& Mesh::GetBitangents() const noexcept {
 
 const std::vector<DirectX::XMFLOAT4>& Mesh::GetColors() const noexcept {
 	return colors;
+}
+
+const std::shared_ptr<Material>& Mesh::GetMaterialPtr() const noexcept
+{
+	return matPtr;
 }
 
 #define Initialize(mData, data)\

@@ -1,5 +1,6 @@
 #include "SceneObject2.h"
 #include "json.hpp"
+#include "SceneProbe2.h"
 using json = nlohmann::json;
 
 SceneObject2::SceneObject2(const std::string& name) noexcept 
@@ -22,6 +23,16 @@ void SceneObject2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	}
 	for (const auto& pc : childPtrs) {
 		pc->Submit(channel);
+	}
+}
+
+void SceneObject2::Accept(SceneProbe2& probe) noexcept
+{
+	if (probe.PushNode(this)) {
+		for (auto& child : childPtrs) {
+			child->Accept(probe);
+		}
+		probe.PopNode(this);
 	}
 }
 

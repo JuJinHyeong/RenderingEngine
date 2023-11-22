@@ -81,20 +81,6 @@ void Scene::ShowWindow()
     if (pSelectedNode != nullptr) {
         ImGui::Text(pSelectedNode->GetName().c_str());
         auto& pObject = pSelectedNode->GetObjectPtr();
-        //auto& objectPos = pObject->GetPos();
-        //ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Translation");
-        //ImGui::SliderFloat("X", &objectPos.x, -10.0f, 10.0f);
-        //ImGui::SliderFloat("Y", &objectPos.y, -10.0f, 10.0f);
-        //ImGui::SliderFloat("Z", &objectPos.z, -10.0f, 10.0f);
-        //ImGui::TextColored({ 0.4f,1.0f,0.6f,1.0f }, "Orientation");
-        //dcheck(ImGui::SliderFloat("X-rotation", &tf.xRot, -PI, PI));
-        //dcheck(ImGui::SliderFloat("Y-rotation", &tf.yRot, -PI, PI));
-        //dcheck(ImGui::SliderFloat("Z-rotation", &tf.zRot, -PI, PI));
-        //auto diff = dx::XMMatrixTranspose(dx::XMMatrixRotationX(tf.xRot) *
-        //    dx::XMMatrixRotationY(tf.yRot) *
-        //    dx::XMMatrixRotationZ(tf.zRot) *
-        //    dx::XMMatrixTranslation(tf.x, tf.y, tf.z));
-
     }
     ImGui::End();
 }

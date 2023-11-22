@@ -26,7 +26,32 @@ json Node2::ToJson() const {
 	j["id"] = id;
 	j["name"] = name;
 	j["type"] = type;
-	j["transform"] = {};
+
+	json transform;
+	DirectX::XMVECTOR posV;
+	DirectX::XMVECTOR quatV;
+	DirectX::XMVECTOR scaleV;
+	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, relativeTransform);
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 scale;
+	DirectX::XMFLOAT4 quat;
+	DirectX::XMStoreFloat3(&pos, posV);
+	DirectX::XMStoreFloat3(&scale, scaleV);
+	DirectX::XMStoreFloat4(&quat, quatV);
+	transform["position"] = { pos.x, pos.y, pos.z };
+	transform["scale"] = { scale.x, scale.y, scale.z };
+	transform["rotation"] = { quat.x, quat.y, quat.z, quat.w };
+	j["transform"] = transform;
+
+	json meshes = json::array();
+	for (const auto& meshPtr : meshPtrs) {
+		const auto& mesh = std::dynamic_pointer_cast<Mesh>(meshPtr);
+		if(mesh != nullptr) {
+			meshes.push_back(mesh->ToJson());
+		}
+	}
+	j["meshes"] = meshes;
+
 	return j;
 }
 

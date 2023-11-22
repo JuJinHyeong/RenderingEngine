@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "RenderGraph.h"
 #include "CameraContainer.h"
+#include "SceneProbe2.h"
 
 class Scene2 : public JsonSerializable {
 public:
@@ -23,6 +24,7 @@ public:
 
 	json ToJson() const override;
 	const std::string& GetName() const noexcept;
+	void ShowWindow() noexcept;
 	
 private:
 	std::string name;
@@ -30,4 +32,6 @@ private:
 	std::vector<std::shared_ptr<Drawable>> meshPtrs;
 	std::vector<std::shared_ptr<Material>> materialPtrs;
 	std::unique_ptr<CameraContainer> cameraContainerPtr;
+
+	SceneProbe2 probe;
 };

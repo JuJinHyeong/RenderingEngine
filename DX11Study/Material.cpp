@@ -1,5 +1,7 @@
 #include "Material.h"
 
+using json = nlohmann::json;
+
 Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG)
 	:
 	rootPath(path.string())
@@ -40,6 +42,9 @@ Material::Material(
 )
 	:
 	name(name),
+	difTexturePath(difTexturePath),
+	specTexturePath(specTexturePath),
+	nrmTexturePath(nrmTexturePath),
 	diffuseColor(difColor),
 	specularColor(specColor),
 	gloss(gloss)
@@ -53,4 +58,17 @@ Material::Material(
 	if (nrmTexturePath.has_value()) {
 		nrmTexture = Bind::Texture::Resolve(gfx, nrmTexturePath.value(), 2u);
 	}
+}
+
+json Material::ToJson() const
+{
+	json j;
+	j["name"] = name;
+	j["difTexturePath"] = difTexturePath.value_or("");
+	j["specTexturePath"] = specTexturePath.value_or("");
+	j["nrmTexturePath"] = nrmTexturePath.value_or("");
+	j["diffuseColor"] = { diffuseColor.x, diffuseColor.y, diffuseColor.z };
+	j["specularColor"] = { specularColor.x, specularColor.y, specularColor.z };
+	j["gloss"] = gloss;
+	return j;
 }

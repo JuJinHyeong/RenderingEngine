@@ -2,11 +2,10 @@
 #include "IndexedTriangleList.h"
 #include "Object.h"
 #include "Graphics.h"
-
-#include "CubeMesh.h"
+#include "SceneObject2.h"
 
 template<typename T>
-class Geometry : public Object {
+class Geometry : public SceneObject2 {
 public:
 	Geometry(Graphics& gfx, float size = 1.0f) 
 		:

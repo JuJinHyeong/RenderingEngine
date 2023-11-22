@@ -56,7 +56,10 @@ Camera* CameraContainer::operator->() {
 CameraContainer::~CameraContainer() {}
 
 json CameraContainer::ToJson() const {
-	return json();
+	json j;
+	j["id"] = id;
+	j["name"] = name;
+	return j;
 }
 
 void CameraContainer::LinkTechniques(Rgph::RenderGraph& rg) {

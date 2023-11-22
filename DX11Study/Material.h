@@ -5,8 +5,9 @@
 #include <optional>
 #include "Graphics.h"
 #include "Texture.h"
+#include "JsonSerializable.h"
 
-class Material {
+class Material : public JsonSerializable {
 public:
 	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noexcept(!IS_DEBUG);
 	Material(
@@ -19,14 +20,18 @@ public:
 		const DirectX::XMFLOAT3 specColor = { 0.18f, 0.18f, 0.18f },
 		const float gloss = 8.0f
 	);
+	json ToJson() const override;
 public:
 	std::string rootPath;
 	std::string name;
 
 	std::optional<std::shared_ptr<Bind::Texture>> difTexture = std::nullopt;
+	std::optional<std::string> difTexturePath;
 	std::optional<std::shared_ptr<Bind::Texture>> specTexture = std::nullopt;
+	std::optional<std::string> specTexturePath;
 	std::optional<std::shared_ptr<Bind::Texture>> nrmTexture = std::nullopt;
-	
+	std::optional<std::string> nrmTexturePath;
+
 	DirectX::XMFLOAT3 diffuseColor = { 0.45f, 0.45f, 0.85f };
 	DirectX::XMFLOAT3 specularColor = { 0.18f, 0.18f, 0.18f };
 	float gloss = 8.0f;
