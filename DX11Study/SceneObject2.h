@@ -16,7 +16,8 @@ public:
 	SceneObject2(const std::string& name) noexcept;
 	void AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept;
 
-	void Submit(size_t channel) const noexcept(!IS_DEBUG);
+	virtual void Submit(size_t channel) const noexcept(!IS_DEBUG) = 0;
+
 	void Accept(SceneProbe2& probe) noexcept;
 
 	const int GetId() const noexcept;

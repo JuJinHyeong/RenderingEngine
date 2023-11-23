@@ -21,7 +21,7 @@ public:
 	json ToJson() const override;
 
 	void LinkTechniques(Rgph::RenderGraph& rg);
-	void Submit(size_t channel) noexcept(!IS_DEBUG);
+	void Submit(size_t channel) const noexcept(!IS_DEBUG) override;
 	Camera& GetActiveCamera();
 private:
 	Camera& GetControlledCamera();

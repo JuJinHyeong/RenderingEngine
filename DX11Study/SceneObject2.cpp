@@ -17,15 +17,6 @@ void SceneObject2::AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept {
 	childPtrs.push_back(std::move(childPtr));
 }
 
-void SceneObject2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
-	for (const auto& pm : meshPtrs) {
-		pm->Submit(channel);
-	}
-	for (const auto& pc : childPtrs) {
-		pc->Submit(channel);
-	}
-}
-
 void SceneObject2::Accept(SceneProbe2& probe) noexcept
 {
 	if (probe.PushNode(this)) {

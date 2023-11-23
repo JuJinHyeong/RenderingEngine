@@ -60,6 +60,10 @@ json Node2::ToJson() const {
 	return j;
 }
 
+void Node2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
+	Submit(channel, DirectX::XMMatrixIdentity());
+}
+
 void Node2::Submit(size_t channel, DirectX::FXMMATRIX acuumulatedTransform) const noexcept(!IS_DEBUG) {
 	auto built = acuumulatedTransform * relativeTransform * localTransform;
 	for (const auto& pm : meshPtrs) {
