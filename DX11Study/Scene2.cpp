@@ -122,6 +122,23 @@ void Scene2::ShowWindow() noexcept
 	auto* selectedNode = probe.GetSelectedNodePtr();
 	if (selectedNode != nullptr) {
 		ImGui::Text(selectedNode->GetName().c_str());
+		auto nodePtr = dynamic_cast<Node2*>(selectedNode);
+		if (nodePtr != nullptr) {
+			auto& transform = nodePtr->GetLocalTransform();
+			DirectX::XMVECTOR posV, quatV, scaleV;
+			DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, transform);
+			DirectX::XMFLOAT3 pos, scale;
+			DirectX::XMFLOAT4 quat;
+			DirectX::XMStoreFloat3(&pos, posV);
+			DirectX::XMStoreFloat3(&scale, scaleV);
+			DirectX::XMStoreFloat4(&quat, quatV);
+			ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f);
+			ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f);
+			ImGui::Text("quat %f %f %f %f", quat.x, quat.y, quat.z, quat.w);
+			nodePtr->SetLocalTransform(
+				DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) 
+				* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
+		}
 	}
 	ImGui::End();
 }

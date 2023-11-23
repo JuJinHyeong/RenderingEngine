@@ -17,12 +17,15 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 	{
 		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texFileName) == aiReturn_SUCCESS) {
 			difTexture = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 0u);
+			difTexturePath = texFileName.C_Str();
 		}
 		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texFileName) == aiReturn_SUCCESS) {
 			specTexture = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 1u);
+			specTexturePath = texFileName.C_Str();
 		}
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texFileName) == aiReturn_SUCCESS) {
 			nrmTexture = Texture::Resolve(gfx, rootPath + texFileName.C_Str(), 2u);
+			nrmTexturePath = texFileName.C_Str();
 		}
 	}
 	material.Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);

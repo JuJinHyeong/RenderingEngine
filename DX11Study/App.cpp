@@ -173,6 +173,9 @@ void App::ShowWindow()
 	for (size_t i = 0; i < makeables.size(); i++) {
 		ImGui::Text(makeables[i].c_str());
 	}
+	if (ImGui::Button("Dump To Json")) {
+		std::cout << scene2.ToJson().dump(4) << std::endl;
+	}
 	ImGui::NextColumn();
 	ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "GPT Message");
 	ImGui::InputText(" ", buffer, IM_ARRAYSIZE(buffer));

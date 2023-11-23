@@ -31,7 +31,7 @@ json Node2::ToJson() const {
 	DirectX::XMVECTOR posV;
 	DirectX::XMVECTOR quatV;
 	DirectX::XMVECTOR scaleV;
-	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, relativeTransform);
+	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
 	DirectX::XMFLOAT3 pos;
 	DirectX::XMFLOAT3 scale;
 	DirectX::XMFLOAT4 quat;
@@ -52,6 +52,11 @@ json Node2::ToJson() const {
 	}
 	j["meshes"] = meshes;
 
+	j["children"] = json::array();
+	for (const auto& childPtr : childPtrs) {
+		j["children"].push_back(childPtr->ToJson());
+	}
+
 	return j;
 }
 
@@ -69,4 +74,9 @@ void Node2::Submit(size_t channel, DirectX::FXMMATRIX acuumulatedTransform) cons
 			node->Submit(channel, built);
 		}
 	}
+}
+
+const DirectX::XMMATRIX& Node2::GetRelativeTransform() const noexcept
+{
+	return relativeTransform;
 }
