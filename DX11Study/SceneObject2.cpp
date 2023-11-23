@@ -3,18 +3,50 @@
 #include "SceneProbe2.h"
 using json = nlohmann::json;
 
-SceneObject2::SceneObject2(const std::string& name) noexcept 
+SceneObject2::SceneObject2(const std::string& name, const Type type) noexcept
 	:
 	id(GenerateId()),
-	type(Type::empty),
+	type(type),
 	name(name),
 	localTransform(DirectX::XMMatrixIdentity()),
 	childPtrs(),
 	meshPtrs()
 {}
 
-void SceneObject2::AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept {
-	childPtrs.push_back(std::move(childPtr));
+void SceneObject2::AddChild(const std::shared_ptr<SceneObject2>& childPtr) noexcept {
+	childPtrs.push_back(childPtr);
+}
+
+json SceneObject2::ToJson() const noexcept {
+	json j;
+	j["id"] = id;
+	j["name"] = name;
+	j["type"] = type;
+
+	json transform;
+	DirectX::XMVECTOR posV;
+	DirectX::XMVECTOR quatV;
+	DirectX::XMVECTOR scaleV;
+	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 scale;
+	DirectX::XMFLOAT4 quat;
+	DirectX::XMStoreFloat3(&pos, posV);
+	DirectX::XMStoreFloat3(&scale, scaleV);
+	DirectX::XMStoreFloat4(&quat, quatV);
+	transform["position"] = { pos.x, pos.y, pos.z };
+	transform["scale"] = { scale.x, scale.y, scale.z };
+	transform["rotation"] = { quat.x, quat.y, quat.z, quat.w };
+	j["transform"] = transform;
+
+	if (!childPtrs.empty()) {
+		j["children"] = json::array();
+		for (const auto& childPtr : childPtrs) {
+			j["children"].push_back(childPtr->ToJson());
+		}
+	}
+
+	return j;
 }
 
 void SceneObject2::Accept(SceneProbe2& probe) noexcept

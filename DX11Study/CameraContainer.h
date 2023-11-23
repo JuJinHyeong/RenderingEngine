@@ -18,8 +18,6 @@ public:
 	Camera* operator->();
 	~CameraContainer();
 
-	json ToJson() const override;
-
 	void LinkTechniques(Rgph::RenderGraph& rg);
 	void Submit(size_t channel) const noexcept(!IS_DEBUG) override;
 	Camera& GetActiveCamera();

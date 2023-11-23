@@ -21,27 +21,8 @@ Node2::Node2(const aiNode& node, const std::vector<std::shared_ptr<Mesh>>& model
 	}
 }
 
-json Node2::ToJson() const {
-	json j;
-	j["id"] = id;
-	j["name"] = name;
-	j["type"] = type;
-
-	json transform;
-	DirectX::XMVECTOR posV;
-	DirectX::XMVECTOR quatV;
-	DirectX::XMVECTOR scaleV;
-	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
-	DirectX::XMFLOAT3 pos;
-	DirectX::XMFLOAT3 scale;
-	DirectX::XMFLOAT4 quat;
-	DirectX::XMStoreFloat3(&pos, posV);
-	DirectX::XMStoreFloat3(&scale, scaleV);
-	DirectX::XMStoreFloat4(&quat, quatV);
-	transform["position"] = { pos.x, pos.y, pos.z };
-	transform["scale"] = { scale.x, scale.y, scale.z };
-	transform["rotation"] = { quat.x, quat.y, quat.z, quat.w };
-	j["transform"] = transform;
+json Node2::ToJson() const noexcept {
+	json j = SceneObject2::ToJson();
 
 	json meshes = json::array();
 	for (const auto& meshPtr : meshPtrs) {
@@ -51,11 +32,6 @@ json Node2::ToJson() const {
 		}
 	}
 	j["meshes"] = meshes;
-
-	j["children"] = json::array();
-	for (const auto& childPtr : childPtrs) {
-		j["children"].push_back(childPtr->ToJson());
-	}
 
 	return j;
 }

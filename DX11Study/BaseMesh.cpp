@@ -1,7 +1,11 @@
 #include "BaseMesh.h"
+#include <DirectXMath.h>
 
-BaseMesh::BaseMesh(Graphics& gfx)
+using json = nlohmann::json;
+
+BaseMesh::BaseMesh()
 {
+	DirectX::XMStoreFloat4x4(&transform, DirectX::XMMatrixIdentity());
 }
 
 DirectX::XMMATRIX BaseMesh::GetTransformXM() const noexcept
@@ -13,4 +17,9 @@ void BaseMesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) 
 {
 	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
 	Drawable::Submit(channels);
+}
+
+json BaseMesh::ToJson() const noexcept {
+	json j;
+	return j;
 }

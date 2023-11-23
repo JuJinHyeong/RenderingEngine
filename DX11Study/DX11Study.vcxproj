@@ -179,6 +179,7 @@
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="DynamicConstant.cpp" />
+    <ClCompile Include="EmptySceneObject2.cpp" />
     <ClCompile Include="ExtendedXMMath.cpp" />
     <ClCompile Include="Frustum.cpp" />
     <ClCompile Include="FullscreenPass.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="DynamicConstant.h" />
+    <ClInclude Include="EmptySceneObject2.h" />
     <ClInclude Include="ExtendedXMMath.h" />
     <ClInclude Include="Frustum.h" />
     <ClInclude Include="FullscreenPass.h" />

@@ -11,7 +11,6 @@ public:
 	void Reset() noexcept;
 	void Submit(size_t channel) const noexcept(!IS_DEBUG);
 	std::shared_ptr<Camera> ShareCamera() const noexcept;
-	json ToJson() const override;
 private:
 	struct PointLightCBuf {
 		alignas(16) DirectX::XMFLOAT3 pos;

@@ -20,7 +20,7 @@ public:
 		const DirectX::XMFLOAT3 specColor = { 0.18f, 0.18f, 0.18f },
 		const float gloss = 8.0f
 	);
-	json ToJson() const override;
+	json ToJson() const noexcept override;
 public:
 	std::string rootPath;
 	std::string name;

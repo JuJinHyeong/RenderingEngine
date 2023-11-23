@@ -63,7 +63,7 @@ Material::Material(
 	}
 }
 
-json Material::ToJson() const
+json Material::ToJson() const noexcept
 {
 	json j;
 	j["name"] = name;

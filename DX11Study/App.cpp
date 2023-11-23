@@ -17,6 +17,9 @@
 #include <iostream>
 #include "SceneModifier.h"
 #include "PointLight2.h"
+#include "Geometry.h"
+#include "CubeMesh.h"
+#include "EmptySceneObject2.h"
 
 #include "Testing.h"
 
@@ -40,6 +43,11 @@ App::App()
 
 	scene2.AddSceneObject(wnd.Gfx(), "models/nano_textured/nanosuit.obj");
 	scene2.AddSceneObject(wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f);
+	auto pCubeParent = std::make_shared<EmptySceneObject2>("Cube Parent");
+	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube1"));
+	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube2"));
+	scene2.AddSceneObject(std::move(pCubeParent));
+
 	//scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
 	scene2.AddSceneObject(pPointLight);
 	scene2.SetCameraContainer(std::move(pCameras));

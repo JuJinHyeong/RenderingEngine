@@ -22,9 +22,12 @@ public:
 	void LinkTechnique(Rgph::RenderGraph& rg);
 	Camera& GetActiveCamera() const;
 
-	json ToJson() const override;
+	json ToJson() const noexcept override;
 	const std::string& GetName() const noexcept;
 	void ShowWindow() noexcept;
+
+private:
+	void AddSceneObjectMeshes(const std::shared_ptr<SceneObject2>& sceneObjectPtr) noexcept;
 	
 private:
 	std::string name;

@@ -11,7 +11,7 @@ class Graphics;
 class Scene : public JsonSerializable {
 public:
 	Scene(const std::string& name);
-	json ToJson() const override;
+	json ToJson() const noexcept override;
 	void AddObject(std::shared_ptr<SceneObject> object);
 	void Submit(size_t channel) noexcept(!IS_DEBUG);
 	const std::vector<std::shared_ptr<SceneObject>>& GetObjects() const noexcept;

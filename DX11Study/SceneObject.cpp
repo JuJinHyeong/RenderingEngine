@@ -18,7 +18,7 @@ SceneObject::SceneObject(const std::string& name, std::unique_ptr<Object> pObjec
     type(type)
 {
 }
-json SceneObject::ToJson() const
+json SceneObject::ToJson() const noexcept
 {
 	json j{
 		{"id", id},

@@ -16,7 +16,7 @@ Scene::Scene(const std::string& name)
     pSceneObjects()
 {
 }
-json Scene::ToJson() const
+json Scene::ToJson() const noexcept
 {
     json j;
     j["name"] = name;

@@ -13,10 +13,11 @@ public:
 		light,
 		mesh,
 	};
-	SceneObject2(const std::string& name) noexcept;
-	void AddChild(std::shared_ptr<SceneObject2>& childPtr) noexcept;
+	SceneObject2(const std::string& name, const Type type = Type::empty) noexcept;
+	void AddChild(const std::shared_ptr<SceneObject2>& childPtr) noexcept;
 
 	virtual void Submit(size_t channel) const noexcept(!IS_DEBUG) = 0;
+	json ToJson() const noexcept override;
 
 	void Accept(SceneProbe2& probe) noexcept;
 

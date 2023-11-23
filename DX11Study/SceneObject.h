@@ -24,7 +24,7 @@ public:
 public:
 	SceneObject(const std::string& name);
 	SceneObject(const std::string& name, std::unique_ptr<Object> pObject, const Type type) noexcept;
-	json ToJson() const override;
+	json ToJson() const noexcept override;
 	void AddChild(std::shared_ptr<SceneObject> child);
 	const std::vector<std::shared_ptr<SceneObject>>& GetChildren();
 	void SetObject(std::unique_ptr<Object> object);

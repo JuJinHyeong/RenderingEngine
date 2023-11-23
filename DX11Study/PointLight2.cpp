@@ -122,8 +122,3 @@ void PointLight2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 std::shared_ptr<Camera> PointLight2::ShareCamera() const noexcept {
 	return pCamera;
 }
-
-json PointLight2::ToJson() const {
-	json j = {};
-	return j;
-}

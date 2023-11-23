@@ -23,8 +23,7 @@ Scene2::Scene2(const std::string& name) noexcept
 {}
 
 void Scene2::AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept {
-	// TODO: is this right???
-	meshPtrs.insert(meshPtrs.end(), sceneObjectPtr->GetMeshes().begin(), sceneObjectPtr->GetMeshes().end());
+	AddSceneObjectMeshes(sceneObjectPtr);
 	sceneObjectPtrs.push_back(std::move(sceneObjectPtr));
 }
 
@@ -71,16 +70,8 @@ void Scene2::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 }
 
 void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
-	// TODO: thinking more sexyier way to submit scene objects
 	for (auto& objPtr : sceneObjectPtrs) {
-		const auto& node = std::dynamic_pointer_cast<Node2>(objPtr);
-		if (node != nullptr) {
-			node->Submit(channel, DirectX::XMMatrixIdentity());
-		}
-		const auto& light = std::dynamic_pointer_cast<PointLight2>(objPtr);
-		if (light != nullptr) {
-			light->Submit(channel);
-		}
+		objPtr->Submit(channel);
 	}
 	cameraContainerPtr->Submit(channel);
 }
@@ -96,7 +87,7 @@ Camera& Scene2::GetActiveCamera() const {
 	return cameraContainerPtr->GetActiveCamera();
 }
 
-json Scene2::ToJson() const {
+json Scene2::ToJson() const noexcept {
 	json scene;
 	scene["name"] = name;
 	scene["objects"] = json::array();
@@ -122,23 +113,28 @@ void Scene2::ShowWindow() noexcept
 	auto* selectedNode = probe.GetSelectedNodePtr();
 	if (selectedNode != nullptr) {
 		ImGui::Text(selectedNode->GetName().c_str());
-		auto nodePtr = dynamic_cast<Node2*>(selectedNode);
-		if (nodePtr != nullptr) {
-			auto& transform = nodePtr->GetLocalTransform();
-			DirectX::XMVECTOR posV, quatV, scaleV;
-			DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, transform);
-			DirectX::XMFLOAT3 pos, scale;
-			DirectX::XMFLOAT4 quat;
-			DirectX::XMStoreFloat3(&pos, posV);
-			DirectX::XMStoreFloat3(&scale, scaleV);
-			DirectX::XMStoreFloat4(&quat, quatV);
-			ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f);
-			ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f);
-			ImGui::Text("quat %f %f %f %f", quat.x, quat.y, quat.z, quat.w);
-			nodePtr->SetLocalTransform(
-				DirectX::XMMatrixScaling(scale.x, scale.y, scale.z) 
-				* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
-		}
+
+		auto& transform = selectedNode->GetLocalTransform();
+		DirectX::XMVECTOR posV, quatV, scaleV;
+		DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, transform);
+		DirectX::XMFLOAT3 pos, scale;
+		DirectX::XMFLOAT4 quat;
+		DirectX::XMStoreFloat3(&pos, posV);
+		DirectX::XMStoreFloat3(&scale, scaleV);
+		DirectX::XMStoreFloat4(&quat, quatV);
+		ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f);
+		ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f);
+		ImGui::Text("quat %f %f %f %f", quat.x, quat.y, quat.z, quat.w);
+		selectedNode->SetLocalTransform(
+			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
+			* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
 	}
 	ImGui::End();
+}
+
+void Scene2::AddSceneObjectMeshes(const std::shared_ptr<SceneObject2>& sceneObjectPtr) noexcept {
+	meshPtrs.insert(meshPtrs.end(), sceneObjectPtr->GetMeshes().begin(), sceneObjectPtr->GetMeshes().end());
+	for (auto& childPtr : sceneObjectPtr->GetChildren()) {
+		AddSceneObjectMeshes(childPtr);
+	}
 }
