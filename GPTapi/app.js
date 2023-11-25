@@ -3,9 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const index_1 = require("./routes/index");
 const gpt_1 = require("./routes/gpt");
-const debug = require('debug')('my express app');
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 app.use('/', index_1.default);
 app.use('/gpt', gpt_1.default);
@@ -25,6 +24,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next) => {
+    console.log("error!!");
     res.status(err.status || 500);
 });
 app.set('port', process.env.PORT || 3010);

@@ -11,6 +11,7 @@ public:
 	void Reset() noexcept;
 	void Submit(size_t channel) const noexcept(!IS_DEBUG);
 	std::shared_ptr<Camera> ShareCamera() const noexcept;
+	void SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) override;
 private:
 	struct PointLightCBuf {
 		alignas(16) DirectX::XMFLOAT3 pos;

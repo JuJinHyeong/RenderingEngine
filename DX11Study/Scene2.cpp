@@ -11,6 +11,9 @@
 #include "PointLight2.h"
 #include "Camera.h"
 #include "imgui/imgui.h"
+#include "CustomUtils.h"
+#include "CubeMesh.h"
+#include "Geometry.h"
 
 using json = nlohmann::json;
 
@@ -20,7 +23,12 @@ Scene2::Scene2(const std::string& name) noexcept
 	sceneObjectPtrs(),
 	meshPtrs(),
 	materialPtrs()
-{}
+{
+	makeableObjects["Nano"] = "models/nano_textured/nanosuit.obj";
+	makeableObjects["Goblin"] = "models/gobber/GoblinX.obj";
+	makeableObjects["Sponza"] = "models/sponza/sponza.obj";
+	makeableObjects["Cube"] = "cube";
+}
 
 void Scene2::AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept {
 	AddSceneObjectMeshes(sceneObjectPtr);
@@ -58,6 +66,50 @@ void Scene2::AddSceneObject(Graphics& gfx, const std::string& path, float scale)
 
 void Scene2::SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainerPtr) noexcept {
 	this->cameraContainerPtr = std::move(cameraContainerPtr);
+}
+
+void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept {
+	SetIfChanged(name, (std::string)modifiedScene["name"]);
+	for (size_t i = 0; i < modifiedScene["objects"].size(); i++) {
+		auto modifiedSceneObject = modifiedScene["objects"][i];
+		if (modifiedSceneObject["id"] == 0) {
+			std::string makingSceneObjectName = modifiedSceneObject["name"];
+			auto it = makeableObjects.find(makingSceneObjectName);
+			if (it != makeableObjects.end()) {
+				if (it->first == "Cube") {
+					AddSceneObject(std::make_shared<Geometry<CubeMesh>>(gfx, "cube"));
+				}
+				else {
+					AddSceneObject(gfx, it->second);
+				}
+			}
+			else {
+				continue;
+			}
+
+			auto makedObjectTransform = modifiedSceneObject["transform"];
+			DirectX::XMVECTOR posV = DirectX::XMVectorSet(
+				makedObjectTransform["position"]["x"],
+				makedObjectTransform["position"]["y"],
+				makedObjectTransform["position"]["z"], 1.0f
+			);
+			DirectX::XMVECTOR quatV = DirectX::XMVectorSet(
+				makedObjectTransform["rotation"]["x"],
+				makedObjectTransform["rotation"]["y"],
+				makedObjectTransform["rotation"]["z"],
+				makedObjectTransform["rotation"]["w"]
+			);
+			DirectX::XMVECTOR scaleV = DirectX::XMVectorSet(
+				makedObjectTransform["scale"]["x"],
+				makedObjectTransform["scale"]["y"],
+				makedObjectTransform["scale"]["z"], 1.0f
+			);
+			sceneObjectPtrs.back()->SetLocalTransform(DirectX::XMMatrixAffineTransformation(scaleV, DirectX::XMVectorZero(), quatV, posV));
+		}
+		else {
+			sceneObjectPtrs[i]->Modify(modifiedScene["objects"][i]);
+		}
+	}
 }
 
 void Scene2::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
@@ -101,6 +153,10 @@ const std::string& Scene2::GetName() const noexcept {
 	return name;
 }
 
+const std::unordered_map<std::string, std::string>& Scene2::GetMakeableObjects() const noexcept {
+	return makeableObjects;
+}
+
 void Scene2::ShowWindow() noexcept
 {
 	ImGui::Begin(name.c_str());
@@ -113,6 +169,8 @@ void Scene2::ShowWindow() noexcept
 	auto* selectedNode = probe.GetSelectedNodePtr();
 	if (selectedNode != nullptr) {
 		ImGui::Text(selectedNode->GetName().c_str());
+		bool isDirty = false;
+		const auto dcheck = [&isDirty](bool dirty) {isDirty = isDirty || dirty; };
 
 		auto& transform = selectedNode->GetLocalTransform();
 		DirectX::XMVECTOR posV, quatV, scaleV;
@@ -122,12 +180,14 @@ void Scene2::ShowWindow() noexcept
 		DirectX::XMStoreFloat3(&pos, posV);
 		DirectX::XMStoreFloat3(&scale, scaleV);
 		DirectX::XMStoreFloat4(&quat, quatV);
-		ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f);
-		ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f);
+		dcheck(ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f));
+		dcheck(ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f));
 		ImGui::Text("quat %f %f %f %f", quat.x, quat.y, quat.z, quat.w);
-		selectedNode->SetLocalTransform(
-			DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
-			* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
+		if (isDirty) {
+			selectedNode->SetLocalTransform(
+				DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
+				* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
+		}
 	}
 	ImGui::End();
 }

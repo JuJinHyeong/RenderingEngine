@@ -38,15 +38,14 @@ PointLight2::PointLight2(Graphics& gfx, const std::string& name)
 
 void PointLight2::Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept {
 	Dcb::Buffer buf{ lightCBuffer->GetBuffer() };
-	DirectX::XMFLOAT3 pos = buf["position"];
-	DirectX::XMFLOAT3 originPos = pos;
-	DirectX::XMStoreFloat3(&pos, DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&pos), view));
-	buf["position"] = pos;
+	DirectX::XMVECTOR posV, quatV, scaleV;
+	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
+	DirectX::XMFLOAT3 viewPos;
+	DirectX::XMStoreFloat3(&viewPos, DirectX::XMVector3Transform(posV, view));
+	buf["position"] = viewPos;
+
 	lightCBuffer->SetBuffer(buf);
 	lightCBuffer->Bind(gfx);
-
-	buf["position"] = originPos;
-	lightCBuffer->SetBuffer(buf);
 }
 
 void PointLight2::SpawnControlWindow() noexcept {
@@ -111,8 +110,10 @@ void PointLight2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 		const auto& mesh = std::dynamic_pointer_cast<SolidSphere>(pm);
 		// TODO: fix light mesh...
 		if (mesh != nullptr) {
-			Dcb::Buffer buf{ lightCBuffer->GetBuffer() };
-			DirectX::XMFLOAT3 pos = buf["position"];
+			DirectX::XMVECTOR posV, quatV, scaleV;
+			DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
+			DirectX::XMFLOAT3 pos;
+			DirectX::XMStoreFloat3(&pos, posV);
 			mesh->SetPos(pos);
 			mesh->Submit(channel);
 		}
@@ -121,4 +122,13 @@ void PointLight2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 
 std::shared_ptr<Camera> PointLight2::ShareCamera() const noexcept {
 	return pCamera;
+}
+
+void PointLight2::SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {
+	SceneObject2::SetLocalTransform(transform);
+	DirectX::XMVECTOR posV, quatV, scaleV;
+	DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMStoreFloat3(&pos, posV);
+	pCamera->SetPos(pos);
 }

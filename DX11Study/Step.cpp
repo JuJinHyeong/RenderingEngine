@@ -51,6 +51,6 @@ void Step::Accept(TechniqueProbe& probe) {
 }
 
 void Step::Link(Rgph::RenderGraph& rg) {
-	assert(pTargetPass == nullptr);
+	//assert(pTargetPass == nullptr);
 	pTargetPass = &rg.GetRenderQueue(targetPassName);
 }

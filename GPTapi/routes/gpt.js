@@ -20,7 +20,9 @@ const openai = new openai_1.default({ apiKey: process.env.OPENAI_API_KEY });
 router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const scene = req.body.scene;
     const content = req.body.content;
+    const makeableList = req.body.makeables || [];
     const nameArr = scene.objects.map((object) => object.name);
+    console.log(nameArr, makeableList);
     try {
         const completion = yield openai.chat.completions.create({
             messages: [
@@ -29,7 +31,7 @@ router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, fun
                 // "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction"
             ],
             "model": "gpt-3.5-turbo-1106",
-            "tools": (0, gptService_1.makeTools)(nameArr),
+            "tools": (0, gptService_1.makeTools)(nameArr, makeableList),
         });
         console.log(inspect(completion.choices[0]));
         // change scene... using tools
@@ -41,7 +43,6 @@ router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, fun
                 func(scene, argument);
             }
         });
-        console.log(inspect(scene));
         res.send(scene);
     }
     catch (err) {
@@ -57,7 +58,7 @@ router.get('/test', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 { "role": "user", "content": "Move the position of nano by 10 in the x direction, rotate 90 degrees from the y-axis, scaling twice as big in the z direction" },
             ],
             "model": "gpt-3.5-turbo-1106",
-            "tools": (0, gptService_1.makeTools)(["nano"]),
+            "tools": (0, gptService_1.makeTools)(["nano"], []),
         });
         console.log(JSON.stringify(completion.choices[0]));
         res.send(completion.choices[0]);

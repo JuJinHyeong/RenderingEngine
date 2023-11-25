@@ -23,8 +23,8 @@
 
 #include "Testing.h"
 
-constexpr static int width = 1280;
-constexpr static int height = 720;
+constexpr static int width = 1980;
+constexpr static int height = 1020;
 
 App::App()
 	:
@@ -48,7 +48,7 @@ App::App()
 	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube2"));
 	scene2.AddSceneObject(std::move(pCubeParent));
 
-	//scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
+	scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
 	scene2.AddSceneObject(pPointLight);
 	scene2.SetCameraContainer(std::move(pCameras));
 
@@ -178,8 +178,11 @@ void App::ShowWindow()
 	ImGui::Begin("GPT");
 	ImGui::Columns(2, nullptr, true);
 	ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "Makeable Object List");
-	for (size_t i = 0; i < makeables.size(); i++) {
-		ImGui::Text(makeables[i].c_str());
+	std::vector<std::string> makeableNames;
+	auto& makeables = scene2.GetMakeableObjects();
+	for (auto makeable : makeables) {
+		ImGui::Text(makeable.first.c_str());
+		makeableNames.push_back(makeable.first);
 	}
 	if (ImGui::Button("Dump To Json")) {
 		std::cout << scene2.ToJson().dump(4) << std::endl;
@@ -188,7 +191,8 @@ void App::ShowWindow()
 	ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "GPT Message");
 	ImGui::InputText(" ", buffer, IM_ARRAYSIZE(buffer));
 	if (ImGui::Button("send")) {
-		SceneModifier::SendToGpt(scene2, makeables, buffer);
+		SceneModifier::SendToGpt(wnd.Gfx(), scene2, makeableNames, buffer);
+		scene2.LinkTechnique(rg);
 	}
 	ImGui::End();
 }

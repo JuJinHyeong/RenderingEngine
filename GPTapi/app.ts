@@ -1,12 +1,10 @@
 import * as express from 'express';
-import { AddressInfo } from "net";
 import routes from './routes/index';
 import gpt from './routes/gpt';
 
-const debug = require('debug')('my express app');
 const app = express();
 
-app.use(express.json());
+app.use(express.json({limit: "10mb"}));
 app.use((req, res, next) => { console.log(req.method, req.url); next(); });
 app.use('/', routes);
 app.use('/gpt', gpt);
@@ -29,6 +27,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use((err, req, res, next) => { // eslint-disable-line @typescript-eslint/no-unused-vars
+    console.log("error!!");
     res.status(err.status || 500);
 });
 

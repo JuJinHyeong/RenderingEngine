@@ -10,6 +10,6 @@
 class SceneModifier {
 	using json = nlohmann::json;
 public:
-	static void Modify(Scene2& scene, const json& modifiedScene);
-	static void SendToGpt(Scene2& scene, std::vector<std::string> makeables, const std::string message);
+	static void Modify(Graphics& gfx, Scene2& scene, const json& modifiedScene);
+	static void SendToGpt(Graphics& gfx, Scene2& scene, std::vector<std::string>& makeables, const std::string message);
 };

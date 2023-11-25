@@ -28,3 +28,10 @@ void SplitStringIter(const std::string& s, const std::string& delim, Iter out) {
 std::vector<std::string> SplitString(const std::string& s, const std::string& delim);
 
 bool StringContains(std::string_view haystack, std::string_view needle);
+
+template<typename T>
+void SetIfChanged(T& dest, const T& src) {
+	if (dest != src) {
+		dest = src;
+	}
+}

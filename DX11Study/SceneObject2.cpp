@@ -1,6 +1,7 @@
 #include "SceneObject2.h"
 #include "json.hpp"
 #include "SceneProbe2.h"
+#include "CustomMath.h"
 using json = nlohmann::json;
 
 SceneObject2::SceneObject2(const std::string& name, const Type type) noexcept
@@ -34,9 +35,9 @@ json SceneObject2::ToJson() const noexcept {
 	DirectX::XMStoreFloat3(&pos, posV);
 	DirectX::XMStoreFloat3(&scale, scaleV);
 	DirectX::XMStoreFloat4(&quat, quatV);
-	transform["position"] = { pos.x, pos.y, pos.z };
-	transform["scale"] = { scale.x, scale.y, scale.z };
-	transform["rotation"] = { quat.x, quat.y, quat.z, quat.w };
+	transform["position"] = { {"x", pos.x}, {"y", pos.y}, {"z", pos.z} };
+	transform["scale"] = { {"x", scale.x}, {"y", scale.y}, {"z", scale.z} };
+	transform["rotation"] = { {"x", quat.x}, {"y", quat.y}, {"z", quat.z}, {"w", quat.w} };
 	j["transform"] = transform;
 
 	if (!childPtrs.empty()) {
@@ -47,6 +48,32 @@ json SceneObject2::ToJson() const noexcept {
 	}
 
 	return j;
+}
+
+bool AreVectorsEqual(DirectX::XMVECTOR v1, DirectX::XMVECTOR v2, float epsilon = 1e-6f) {
+	DirectX::XMVECTOR diff = DirectX::XMVectorSubtract(v1, v2);
+	return DirectX::XMVector4LessOrEqual(DirectX::XMVectorAbs(diff), DirectX::XMVectorReplicate(epsilon));
+}
+void SceneObject2::Modify(const json& modifiedObject) noexcept {
+	using namespace DirectX;
+	name = modifiedObject["name"];
+	type = modifiedObject["type"];
+	
+	auto tf = modifiedObject["transform"];
+	XMVECTOR pos, quat, scale;
+	XMMatrixDecompose(&scale, &quat, &pos, localTransform);
+	XMVECTOR modifiedPos = XMVectorSet(tf["position"]["x"], tf["position"]["y"], tf["position"]["z"], 1.0f);
+	XMVECTOR modifiedQuat = XMVectorSet(tf["rotation"]["x"], tf["rotation"]["y"], tf["rotation"]["z"], tf["rotation"]["w"]);
+	XMVECTOR modifiedScale = XMVectorSet(tf["scale"]["x"], tf["scale"]["y"], tf["scale"]["z"], 0.0f);
+	
+	if (!AreVectorsEqual(pos, modifiedPos) || !AreVectorsEqual(quat, modifiedQuat) || !AreVectorsEqual(scale, modifiedScale)) {
+		// modified values are calculated. do not add.
+		SetLocalTransform(XMMatrixAffineTransformation(modifiedScale, XMVectorZero(), modifiedQuat, modifiedPos));
+	}
+
+	for (size_t i = 0; i < childPtrs.size(); i++) {
+		childPtrs[i]->Modify(modifiedObject["children"][i]);
+	}
 }
 
 void SceneObject2::Accept(SceneProbe2& probe) noexcept
@@ -93,5 +120,5 @@ bool SceneObject2::HasChildren() const noexcept {
 
 int SceneObject2::GenerateId() noexcept {
 	static int uid = 0;
-	return uid++;
+	return ++uid;
 }

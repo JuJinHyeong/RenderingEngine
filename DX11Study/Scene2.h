@@ -9,6 +9,7 @@
 #include "RenderGraph.h"
 #include "CameraContainer.h"
 #include "SceneProbe2.h"
+#include <unordered_map>
 
 class Scene2 : public JsonSerializable {
 public:
@@ -16,6 +17,7 @@ public:
 	void AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept;
 	void AddSceneObject(Graphics& gfx, const std::string& path, float scale = 1.0f) noexcept;
 	void SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainerPtr) noexcept;
+	void ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept;
 
 	void Bind(Graphics& gfx) noexcept(!IS_DEBUG);
 	void Submit(size_t channel) noexcept(!IS_DEBUG);
@@ -24,6 +26,7 @@ public:
 
 	json ToJson() const noexcept override;
 	const std::string& GetName() const noexcept;
+	const std::unordered_map<std::string, std::string>& GetMakeableObjects() const noexcept;
 	void ShowWindow() noexcept;
 
 private:
@@ -35,6 +38,8 @@ private:
 	std::vector<std::shared_ptr<Drawable>> meshPtrs;
 	std::vector<std::shared_ptr<Material>> materialPtrs;
 	std::unique_ptr<CameraContainer> cameraContainerPtr;
+
+	std::unordered_map<std::string, std::string> makeableObjects;
 
 	SceneProbe2 probe;
 };

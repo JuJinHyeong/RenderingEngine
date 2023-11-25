@@ -12,12 +12,19 @@ export interface Vector4 {
     w: number;
 }
 
+export interface Transform {
+    position: Vector3;
+    rotation: Vector4;
+    scale: Vector3;
+}
+
 export interface SceneObject {
     id: number;
     name: string;
-    position: Vector3;
-    quaternion: Vector4;
-    scale: Vector3;
+    type: number;
+    transform: Transform;
+    parent?: string;
+    children?: SceneObject[];
 }
 
 export interface Scene {
