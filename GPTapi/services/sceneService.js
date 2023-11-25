@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SceneModifier = void 0;
+const gl_matrix_1 = require("gl-matrix");
 const translate = (src, delta) => {
     src.x += delta.x;
     src.y += delta.y;
@@ -9,11 +10,15 @@ const translate = (src, delta) => {
 };
 const rotate = (src, delta) => {
     // rotate
-    src.x *= delta.x;
-    src.y *= delta.y;
-    src.z *= delta.z;
-    src.w *= delta.w;
-    normalizeVector4(src);
+    let quat1 = gl_matrix_1.quat.create();
+    let quat2 = gl_matrix_1.quat.create();
+    gl_matrix_1.quat.set(quat1, src.x, src.y, src.z, src.w);
+    gl_matrix_1.quat.set(quat2, delta.x, delta.y, delta.z, delta.w);
+    gl_matrix_1.quat.multiply(quat1, quat1, quat2);
+    src.x = quat1[0];
+    src.y = quat1[1];
+    src.z = quat1[2];
+    src.w = quat1[3];
     return src;
 };
 const scale = (src, delta) => {

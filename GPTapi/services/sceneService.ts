@@ -1,5 +1,5 @@
 import { Scene, Vector3, Vector4 } from "../models/type";
-
+import { glMatrix, quat } from 'gl-matrix';
 interface TransformArgument {
     name: string;
     translate?: Vector3;
@@ -17,11 +17,16 @@ const translate = (src: Vector3, delta: Vector3) => {
 }
 const rotate = (src: Vector4, delta: Vector4) => {
     // rotate
-    src.x *= delta.x;
-    src.y *= delta.y;
-    src.z *= delta.z;
-    src.w *= delta.w;
-    normalizeVector4(src);
+    let quat1 = quat.create();
+    let quat2 = quat.create();
+    quat.set(quat1, src.x, src.y, src.z, src.w);
+    quat.set(quat2, delta.x, delta.y, delta.z, delta.w);
+    quat.multiply(quat1, quat1, quat2);
+    src.x = quat1[0];
+    src.y = quat1[1];
+    src.z = quat1[2];
+    src.w = quat1[3];
+
     return src;
 }
 const scale = (src: Vector3, delta: Vector3) => {
