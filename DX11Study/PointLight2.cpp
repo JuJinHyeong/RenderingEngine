@@ -120,6 +120,40 @@ void PointLight2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
 	}
 }
 
+void PointLight2::Accept(TechniqueProbe& probe) noexcept
+{
+	using namespace ImGui;
+	Dcb::Buffer buf{ lightCBuffer->GetBuffer() };
+	bool isDirty = false;
+	const auto dcheck = [&isDirty](bool dirty) {isDirty = isDirty || dirty; };
+
+	Text("Intensity/Color");
+	float& diffuseIntensity = buf["diffuseIntensity"];
+	dcheck(SliderFloat("Intensity", &diffuseIntensity, 0.01f, 2.0f, "%.2f"));
+	DirectX::XMFLOAT3& diffuseColor = buf["diffuseColor"];
+	dcheck(ColorEdit3("Diffuse Color", &diffuseColor.x));
+	DirectX::XMFLOAT3& ambientColor = buf["ambient"];
+	dcheck(ColorEdit3("Ambient Color", &ambientColor.x));
+
+	Text("Falloff");
+	float& attConst = buf["attConst"];
+	dcheck(SliderFloat("Constant", &attConst, 0.05f, 10.0f, "%.2f"));
+	float& attLin = buf["attLin"];
+	dcheck(SliderFloat("Linear", &attLin, 0.0001f, 1.0f, "%.4f"));
+	float& attQuad = buf["attQuad"];
+	dcheck(SliderFloat("Quadratic", &attQuad, 0.0000001f, 0.3f, "%.7f"));
+
+	if (Button("Reset")) {
+		Reset();
+	}
+
+	if (isDirty) {
+		lightCBuffer->SetBuffer(std::move(buf));
+	}
+
+	SceneObject2::Accept(probe);
+}
+
 std::shared_ptr<Camera> PointLight2::ShareCamera() const noexcept {
 	return pCamera;
 }

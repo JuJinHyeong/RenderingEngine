@@ -6,6 +6,8 @@
 #include "Mesh.h"
 #include "SceneProbe2.h"
 
+class TechniqueProbe;
+
 class SceneObject2 : public JsonSerializable {
 public:
 	enum Type {
@@ -21,6 +23,7 @@ public:
 	void Modify(const json& modifiedObject) noexcept;
 
 	void Accept(SceneProbe2& probe) noexcept;
+	virtual void Accept(TechniqueProbe& probe) noexcept;
 
 	const int GetId() const noexcept;
 	const Type GetType() const noexcept;

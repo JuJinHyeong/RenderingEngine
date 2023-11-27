@@ -23,8 +23,8 @@
 
 #include "Testing.h"
 
-constexpr static int width = 1980;
-constexpr static int height = 1020;
+constexpr static int width = 1280;
+constexpr static int height = 690;
 
 App::App()
 	:
@@ -48,7 +48,7 @@ App::App()
 	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube2"));
 	scene2.AddSceneObject(std::move(pCubeParent));
 
-	scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
+	//scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
 	scene2.AddSceneObject(pPointLight);
 	scene2.SetCameraContainer(std::move(pCameras));
 

@@ -1,6 +1,6 @@
 import express = require('express');
 import OpenAI from 'openai';
-import { Scene } from '../models/type';
+import { Scene, SceneObject } from '../models/type';
 import { makeTools, functionMap } from '../services/gptService';
 const inspect = require("object-inspect");
 const dotenv = require('dotenv');
@@ -10,11 +10,21 @@ const router = express.Router();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+const SetNameArr = (nameArr: string[], object: SceneObject, parentName: string): string[] => {
+    nameArr.push(object.name);
+    if (object.children) {
+        object.children.forEach((child) => {
+            SetNameArr(nameArr, child, object.name + ".");
+        });
+    }
+    return nameArr;
+}
+
 router.post('/modify_scene', async (req, res) => {
     const scene: Scene = req.body.scene;
     const content: string = req.body.content;
     const makeableList: string[] = req.body.makeables || [];
-    const nameArr = scene.objects.map((object) => object.name);
+    const nameArr: string[] = scene.objects.map((object) => object.name);
     console.log(nameArr, makeableList);
     try {
         const completion = await openai.chat.completions.create({

@@ -10,17 +10,9 @@ public:
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
 	void Submit(size_t channel) const noexcept(!IS_DEBUG);
+	void Accept(TechniqueProbe& probe) noexcept override;
 	std::shared_ptr<Camera> ShareCamera() const noexcept;
 	void SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) override;
 private:
-	struct PointLightCBuf {
-		alignas(16) DirectX::XMFLOAT3 pos;
-		alignas(16) DirectX::XMFLOAT3 ambient;
-		alignas(16) DirectX::XMFLOAT3 diffuseColor;
-		float diffuseIntensity;
-		float attConst;
-		float attLin;
-		float attQuad;
-	} buf;
 	std::shared_ptr<Camera> pCamera;
 };

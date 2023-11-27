@@ -1,4 +1,7 @@
 #pragma once
+#include "TechniqueProbe.h"
+#include "DynamicConstant.h"
+#include "imgui/imgui.h"
 
 class SceneObject2;
 

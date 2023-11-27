@@ -17,6 +17,15 @@ const dotenv = require('dotenv');
 dotenv.config();
 const router = express.Router();
 const openai = new openai_1.default({ apiKey: process.env.OPENAI_API_KEY });
+const SetNameArr = (nameArr, object, parentName) => {
+    nameArr.push(object.name);
+    if (object.children) {
+        object.children.forEach((child) => {
+            SetNameArr(nameArr, child, object.name + ".");
+        });
+    }
+    return nameArr;
+};
 router.post('/modify_scene', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const scene = req.body.scene;
     const content = req.body.content;

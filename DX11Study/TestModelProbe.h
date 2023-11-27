@@ -10,6 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include "ExtendedXMMath.h"
+#include "CustomMath.h"
 
 namespace dx = DirectX;
 

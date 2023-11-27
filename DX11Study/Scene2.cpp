@@ -14,6 +14,8 @@
 #include "CustomUtils.h"
 #include "CubeMesh.h"
 #include "Geometry.h"
+#include "EmptySceneObject2.h"
+#include "TestModelProbe.h"
 
 using json = nlohmann::json;
 
@@ -28,6 +30,7 @@ Scene2::Scene2(const std::string& name) noexcept
 	makeableObjects["Goblin"] = "models/gobber/GoblinX.obj";
 	makeableObjects["Sponza"] = "models/sponza/sponza.obj";
 	makeableObjects["Cube"] = "cube";
+	makeableObjects["Empty"] = "empty";
 }
 
 void Scene2::AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept {
@@ -78,6 +81,9 @@ void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept {
 			if (it != makeableObjects.end()) {
 				if (it->first == "Cube") {
 					AddSceneObject(std::make_shared<Geometry<CubeMesh>>(gfx, "cube"));
+				}
+				else if (it->first == "Empty") {
+					AddSceneObject(std::make_shared<EmptySceneObject2>("empty"));
 				}
 				else {
 					AddSceneObject(gfx, it->second);
@@ -180,14 +186,31 @@ void Scene2::ShowWindow() noexcept
 		DirectX::XMStoreFloat3(&pos, posV);
 		DirectX::XMStoreFloat3(&scale, scaleV);
 		DirectX::XMStoreFloat4(&quat, quatV);
-		dcheck(ImGui::SliderFloat3("Position", &pos.x, -60.0, 60.0f));
-		dcheck(ImGui::SliderFloat3("Scale", &scale.x, 0.1f, 10.0f));
+		dcheck(ImGui::SliderFloat("pos X", &pos.x, -30.0f, 30.0f, "%.1f"));
+		dcheck(ImGui::SliderFloat("pos Y", &pos.y, -30.0f, 30.0f, "%.1f"));
+		dcheck(ImGui::SliderFloat("pos Z", &pos.z, -30.0f, 30.0f, "%.1f"));
+
+		dcheck(ImGui::SliderFloat("scale X", &scale.x, 0.1f, 5.0f, "%.1f"));
+		dcheck(ImGui::SliderFloat("scale Y", &scale.y, 0.1f, 5.0f, "%.1f"));
+		dcheck(ImGui::SliderFloat("scale Z", &scale.z, 0.1f, 5.0f, "%.1f"));
+
+		float pitch = asinf(2 * (quat.w * quat.x - quat.y * quat.z));
+		float yaw = atan2f(2 * (quat.w * quat.y + quat.z * quat.x), 1 - 2 * (quat.x * quat.x + quat.y * quat.y));
+		float roll = atan2f(2 * (quat.w * quat.z + quat.x * quat.y), 1 - 2 * (quat.y * quat.y + quat.z * quat.z));
+		dcheck(ImGui::SliderAngle("angle X", &pitch, -89.0f,89.0f));
+		//dcheck(ImGui::SliderAngle("angle Y", &yaw, -89.0f, 89.0f));
+		dcheck(ImGui::SliderAngle("angle Z", &roll, -89.0f, 89.0f));
+
 		ImGui::Text("quat %f %f %f %f", quat.x, quat.y, quat.z, quat.w);
 		if (isDirty) {
+			auto modifiedQuat = DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
 			selectedNode->SetLocalTransform(
 				DirectX::XMMatrixScaling(scale.x, scale.y, scale.z)
+				* DirectX::XMMatrixRotationQuaternion(modifiedQuat)
 				* DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z));
 		}
+		TP tProbe;
+		selectedNode->Accept(tProbe);
 	}
 	ImGui::End();
 }

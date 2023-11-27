@@ -86,6 +86,12 @@ void SceneObject2::Accept(SceneProbe2& probe) noexcept
 	}
 }
 
+void SceneObject2::Accept(TechniqueProbe& probe) noexcept {
+	for (auto& mp : meshPtrs) {
+		mp->Accept(probe);
+	}
+}
+
 const int SceneObject2::GetId() const noexcept {
 	return id;
 }
