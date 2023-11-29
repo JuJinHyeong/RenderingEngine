@@ -41,14 +41,17 @@ App::App()
 	pCameras->AddCamera(std::make_unique<Camera>(wnd.Gfx(), "Second", DirectX::XMFLOAT3{ -13.5f, 28.0f, -3.5f }, 0.0f, PI / 2.0f, false));
 	pCameras->AddCamera(pPointLight->ShareCamera());
 
-	scene2.AddSceneObject(wnd.Gfx(), "models/nano_textured/nanosuit.obj");
-	scene2.AddSceneObject(wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f);
-	auto pCubeParent = std::make_shared<EmptySceneObject2>("Cube Parent");
-	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube1"));
-	pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube2"));
-	scene2.AddSceneObject(std::move(pCubeParent));
+	//scene2.AddSceneObject(wnd.Gfx(), "models/nano_textured/nanosuit.obj");
+	//scene2.AddSceneObject(wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f);
+	//auto pCubeParent = std::make_shared<EmptySceneObject2>("Cube Parent");
+	//pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube1"));
+	//pCubeParent->AddChild(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "cube2"));
+	//scene2.AddSceneObject(std::move(pCubeParent));
 
 	//scene2.AddSceneObject(wnd.Gfx(), "models/sponza/sponza.obj", 1 / 20.0f);
+	//scene2.AddSceneObject(wnd.Gfx(), "models/box/box.obj", 1.0f);
+	//scene2.AddSceneObject(wnd.Gfx(), "models/Tree/Tree.obj", 1.0f);
+	//scene2.AddSceneObject(std::make_shared<Geometry<CubeMesh>>(wnd.Gfx(), "floor"));
 	scene2.AddSceneObject(pPointLight);
 	scene2.SetCameraContainer(std::move(pCameras));
 

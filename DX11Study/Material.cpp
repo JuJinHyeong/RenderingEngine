@@ -28,8 +28,11 @@ Material::Material(Graphics& gfx, const aiMaterial& material, const std::filesys
 			nrmTexturePath = texFileName.C_Str();
 		}
 	}
-	material.Get(AI_MATKEY_COLOR_DIFFUSE, diffuseColor);
+	aiColor3D dColor, sColor;
+	material.Get(AI_MATKEY_COLOR_DIFFUSE, dColor);
+	diffuseColor = { dColor.r, dColor.g, dColor.b };
 	material.Get(AI_MATKEY_COLOR_SPECULAR, specularColor);
+	specularColor = { sColor.r, sColor.g, sColor.b };
 	material.Get(AI_MATKEY_SHININESS, gloss);
 }
 

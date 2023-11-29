@@ -5,6 +5,7 @@ const sceneService_1 = require("./sceneService");
 exports.functionMap = {
     transform: sceneService_1.SceneModifier.transform,
     generate: sceneService_1.SceneModifier.Generate,
+    change_material: sceneService_1.SceneModifier.ChangeMaterial
 };
 const transform = {
     translate: {
@@ -101,6 +102,28 @@ const makeTools = (objectList, makeableList) => {
                             enum: objectList
                         } }, transform),
                     required: ["name"]
+                }
+            }
+        },
+        {
+            type: "function",
+            function: {
+                name: "change_material",
+                description: "change material given name's object",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        name: {
+                            type: "string",
+                            description: "Name of the object to change material",
+                            enum: objectList
+                        },
+                        materialName: {
+                            type: "string",
+                            description: "Name of the material to change to",
+                            enum: ["brick", "grass", "stone"]
+                        }
+                    },
                 }
             }
         }

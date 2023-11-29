@@ -99,22 +99,27 @@ public:
 		itl.vertices[1].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[2].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };
 		itl.vertices[3].Attr<ElementType::Texture2D>() = { 1.0f,1.0f };
+
 		itl.vertices[4].Attr<ElementType::Texture2D>() = { 0.0f,0.0f };
 		itl.vertices[5].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[6].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };
 		itl.vertices[7].Attr<ElementType::Texture2D>() = { 1.0f,1.0f };
+
 		itl.vertices[8].Attr<ElementType::Texture2D>() = { 0.0f,0.0f };
 		itl.vertices[9].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[10].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };
 		itl.vertices[11].Attr<ElementType::Texture2D>() = { 1.0f,1.0f };
+
 		itl.vertices[12].Attr<ElementType::Texture2D>() = { 0.0f,0.0f };
 		itl.vertices[13].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[14].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };
 		itl.vertices[15].Attr<ElementType::Texture2D>() = { 1.0f,1.0f };
+
 		itl.vertices[16].Attr<ElementType::Texture2D>() = { 0.0f,0.0f };
 		itl.vertices[17].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[18].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };
 		itl.vertices[19].Attr<ElementType::Texture2D>() = { 1.0f,1.0f };
+
 		itl.vertices[20].Attr<ElementType::Texture2D>() = { 0.0f,0.0f };
 		itl.vertices[21].Attr<ElementType::Texture2D>() = { 1.0f,0.0f };
 		itl.vertices[22].Attr<ElementType::Texture2D>() = { 0.0f,1.0f };

@@ -4,6 +4,7 @@ import { SceneModifier } from './sceneService';
 export const functionMap = {
     transform: SceneModifier.transform,
     generate: SceneModifier.Generate,
+    change_material: SceneModifier.ChangeMaterial
 };
 
 const transform = {
@@ -109,6 +110,28 @@ export const makeTools = (objectList: string[], makeableList: string[]): OpenAI.
                         ...transform
                     },
                     required: ["name"]
+                }
+            }
+        },
+        {
+            type: "function",
+            function: {
+                name: "change_material",
+                description: "change material given name's object",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        name: {
+                            type: "string",
+                            description: "Name of the object to change material",
+                            enum: objectList
+                        },
+                        materialName: {
+                            type: "string",
+                            description: "Name of the material to change to",
+                            enum: ["brick", "grass", "stone"]
+                        }
+                    },
                 }
             }
         }

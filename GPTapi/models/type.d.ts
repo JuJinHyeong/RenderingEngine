@@ -18,12 +18,22 @@ export interface Transform {
     scale: Vector3;
 }
 
+export interface Material {
+    name: string;
+}
+
+export interface Mesh {
+    name: string;
+    material: Material;
+}
+
 export interface SceneObject {
     id: number;
     name: string;
     type: number;
     transform: Transform;
     parent?: string;
+    mesh?: Mesh;
     children?: SceneObject[];
 }
 

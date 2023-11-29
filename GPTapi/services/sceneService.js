@@ -70,8 +70,16 @@ const Generate = (scene, { name, parent, translate: pos, quaternion: rot, scale 
         }
     });
 };
+const ChangeMaterial = (scene, { name, materialName }) => {
+    var _a, _b;
+    let obj = scene.objects.find((object) => object.name === name);
+    if ((_b = (_a = obj === null || obj === void 0 ? void 0 : obj.mesh) === null || _a === void 0 ? void 0 : _a.material) === null || _b === void 0 ? void 0 : _b.name) {
+        obj.mesh.material.name = materialName;
+    }
+};
 exports.SceneModifier = {
     transform,
-    Generate
+    Generate,
+    ChangeMaterial,
 };
 //# sourceMappingURL=sceneService.js.map

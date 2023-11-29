@@ -15,7 +15,7 @@ public:
 	}
 	void Transform(DirectX::FXMMATRIX matrix) {
 		using Elements = custom::VertexLayout::ElementType;
-		for (int i = 0; i < vertices.Size(); i++) {
+		for (size_t i = 0; i < vertices.Size(); i++) {
 			auto& pos = vertices[i].Attr<Elements::Position3D>();
 			DirectX::XMStoreFloat3(
 				&pos,

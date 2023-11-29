@@ -26,6 +26,7 @@ public:
 
 	json ToJson() const noexcept override;
 	const std::string& GetName() const noexcept;
+	const std::vector<std::shared_ptr<SceneObject2>>& GetSceneObjects() const noexcept;
 	const std::unordered_map<std::string, std::string>& GetMakeableObjects() const noexcept;
 	void ShowWindow() noexcept;
 

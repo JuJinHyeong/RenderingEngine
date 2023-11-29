@@ -54,7 +54,7 @@ bool AreVectorsEqual(DirectX::XMVECTOR v1, DirectX::XMVECTOR v2, float epsilon =
 	DirectX::XMVECTOR diff = DirectX::XMVectorSubtract(v1, v2);
 	return DirectX::XMVector4LessOrEqual(DirectX::XMVectorAbs(diff), DirectX::XMVectorReplicate(epsilon));
 }
-void SceneObject2::Modify(const json& modifiedObject) noexcept {
+void SceneObject2::Modify(Graphics& gfx, const json& modifiedObject) noexcept {
 	using namespace DirectX;
 	name = modifiedObject["name"];
 	type = modifiedObject["type"];
@@ -72,7 +72,7 @@ void SceneObject2::Modify(const json& modifiedObject) noexcept {
 	}
 
 	for (size_t i = 0; i < childPtrs.size(); i++) {
-		childPtrs[i]->Modify(modifiedObject["children"][i]);
+		childPtrs[i]->Modify(gfx, modifiedObject["children"][i]);
 	}
 }
 
@@ -106,6 +106,16 @@ const std::string& SceneObject2::GetName() const noexcept {
 
 const DirectX::XMMATRIX& SceneObject2::GetLocalTransform() const noexcept {
 	return localTransform;
+}
+
+const bool SceneObject2::IsActived() const noexcept
+{
+	return actived;
+}
+
+void SceneObject2::SetActived(bool actived) noexcept
+{
+	this->actived = actived;
 }
 
 void SceneObject2::SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) {

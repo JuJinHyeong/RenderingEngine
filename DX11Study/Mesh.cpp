@@ -71,6 +71,7 @@ void Mesh::Submit(size_t channels, DirectX::FXMMATRIX accumulatedTransform) cons
 void Mesh::SetMaterial(Graphics& gfx, const Material& mat, const float scale) noexcept(!IS_DEBUG)
 {
 	using namespace Bind;
+	techniques.clear();
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
 	Dcb::RawLayout vscLayout;

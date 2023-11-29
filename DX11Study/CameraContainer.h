@@ -19,7 +19,7 @@ public:
 	~CameraContainer();
 
 	void LinkTechniques(Rgph::RenderGraph& rg);
-	void Submit(size_t channel) const noexcept(!IS_DEBUG) override;
+	void Submit(size_t channel, const DirectX::FXMMATRIX& accumulatedTransform = DirectX::XMMatrixIdentity()) const noexcept(!IS_DEBUG) override;
 	Camera& GetActiveCamera();
 private:
 	Camera& GetControlledCamera();

@@ -29,6 +29,7 @@ Scene2::Scene2(const std::string& name) noexcept
 	makeableObjects["Nano"] = "models/nano_textured/nanosuit.obj";
 	makeableObjects["Goblin"] = "models/gobber/GoblinX.obj";
 	makeableObjects["Sponza"] = "models/sponza/sponza.obj";
+	makeableObjects["Tree"] = "models/Tree/Tree.obj";
 	makeableObjects["Cube"] = "cube";
 	makeableObjects["Empty"] = "empty";
 }
@@ -113,7 +114,7 @@ void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept {
 			sceneObjectPtrs.back()->SetLocalTransform(DirectX::XMMatrixAffineTransformation(scaleV, DirectX::XMVectorZero(), quatV, posV));
 		}
 		else {
-			sceneObjectPtrs[i]->Modify(modifiedScene["objects"][i]);
+			sceneObjectPtrs[i]->Modify(gfx, modifiedScene["objects"][i]);
 		}
 	}
 }
@@ -129,7 +130,9 @@ void Scene2::Bind(Graphics& gfx) noexcept(!IS_DEBUG) {
 
 void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
 	for (auto& objPtr : sceneObjectPtrs) {
-		objPtr->Submit(channel);
+		if (objPtr->IsActived()) {
+			objPtr->Submit(channel);
+		}
 	}
 	cameraContainerPtr->Submit(channel);
 }
@@ -159,6 +162,11 @@ const std::string& Scene2::GetName() const noexcept {
 	return name;
 }
 
+const std::vector<std::shared_ptr<SceneObject2>>& Scene2::GetSceneObjects() const noexcept
+{
+	return sceneObjectPtrs;
+}
+
 const std::unordered_map<std::string, std::string>& Scene2::GetMakeableObjects() const noexcept {
 	return makeableObjects;
 }
@@ -177,6 +185,10 @@ void Scene2::ShowWindow() noexcept
 		ImGui::Text(selectedNode->GetName().c_str());
 		bool isDirty = false;
 		const auto dcheck = [&isDirty](bool dirty) {isDirty = isDirty || dirty; };
+
+		bool isActive = selectedNode->IsActived();
+		ImGui::Checkbox("Active", &isActive);
+		selectedNode->SetActived(isActive);
 
 		auto& transform = selectedNode->GetLocalTransform();
 		DirectX::XMVECTOR posV, quatV, scaleV;

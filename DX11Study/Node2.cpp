@@ -36,12 +36,8 @@ json Node2::ToJson() const noexcept {
 	return j;
 }
 
-void Node2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
-	Submit(channel, DirectX::XMMatrixIdentity());
-}
-
-void Node2::Submit(size_t channel, DirectX::FXMMATRIX acuumulatedTransform) const noexcept(!IS_DEBUG) {
-	auto built = acuumulatedTransform * relativeTransform * localTransform;
+void Node2::Submit(size_t channel, const DirectX::FXMMATRIX& accumulatedTransform) const noexcept(!IS_DEBUG) {
+	auto built = accumulatedTransform * relativeTransform * localTransform;
 	for (const auto& pm : meshPtrs) {
 		const auto& mesh = std::dynamic_pointer_cast<Mesh>(pm);
 		if (mesh != nullptr) {

@@ -1,5 +1,5 @@
 import { Scene, Vector3, Vector4 } from "../models/type";
-import { glMatrix, quat } from 'gl-matrix';
+import { quat } from 'gl-matrix';
 interface TransformArgument {
     name: string;
     translate?: Vector3;
@@ -78,8 +78,15 @@ const Generate = (scene: Scene, { name, parent, translate: pos, quaternion: rot,
         }
     });
 }
+const ChangeMaterial = (scene: Scene, { name, materialName }: { name: string, materialName: string }) => {
+    let obj = scene.objects.find((object) => object.name === name);
+    if (obj?.mesh?.material?.name) {
+        obj.mesh.material.name = materialName;
+    }
+}
 
 export const SceneModifier = {
     transform,
-    Generate
+    Generate,
+    ChangeMaterial,
 }

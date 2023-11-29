@@ -9,7 +9,7 @@ public:
 	void Bind(Graphics& gfx, DirectX::XMMATRIX view) const noexcept;
 	void SpawnControlWindow() noexcept;
 	void Reset() noexcept;
-	void Submit(size_t channel) const noexcept(!IS_DEBUG);
+	void Submit(size_t channel, const DirectX::FXMMATRIX& accumulatedTransform = DirectX::XMMatrixIdentity()) const noexcept(!IS_DEBUG);
 	void Accept(TechniqueProbe& probe) noexcept override;
 	std::shared_ptr<Camera> ShareCamera() const noexcept;
 	void SetLocalTransform(DirectX::FXMMATRIX transform) noexcept(!IS_DEBUG) override;

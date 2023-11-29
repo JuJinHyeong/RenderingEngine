@@ -105,13 +105,13 @@ void PointLight2::Reset() noexcept {
 	lightCBuffer->SetBuffer(std::move(buf));
 }
 
-void PointLight2::Submit(size_t channel) const noexcept(!IS_DEBUG) {
+void PointLight2::Submit(size_t channel, const DirectX::FXMMATRIX& accumulatedTransform) const noexcept(!IS_DEBUG) {
 	for (const auto& pm : meshPtrs) {
 		const auto& mesh = std::dynamic_pointer_cast<SolidSphere>(pm);
 		// TODO: fix light mesh...
 		if (mesh != nullptr) {
 			DirectX::XMVECTOR posV, quatV, scaleV;
-			DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform);
+			DirectX::XMMatrixDecompose(&scaleV, &quatV, &posV, localTransform * accumulatedTransform);
 			DirectX::XMFLOAT3 pos;
 			DirectX::XMStoreFloat3(&pos, posV);
 			mesh->SetPos(pos);

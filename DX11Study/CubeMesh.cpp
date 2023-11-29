@@ -19,21 +19,34 @@
 
 using json = nlohmann::json;
 
-CubeMesh::CubeMesh(Graphics& gfx, float size)
+CubeMesh::CubeMesh(Graphics& gfx)
 	:
-	mat(gfx, "box", "Images/brickwall.jpg"),
+	mat(gfx, "brickwall", "Images/brickwall.jpg"),
 	BaseMesh()
 {
 	using namespace Bind;
-	IndexedTriangleList model = Cube::MakeIndependentTextured();
-	model.Transform(DirectX::XMMatrixScaling(size, size, size));
-	model.SetNormalsIndependentFlat();
-	const std::string geometryTag = "#cube" + std::to_string(size);
-	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
-	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pModel = std::make_unique<IndexedTriangleList>(Cube::MakeIndependentTextured());
+	pModel->SetNormalsIndependentFlat();
+	const std::string geometryTag = "#cube"
+		+ std::to_string(1.0f) + std::to_string(1.0f) + std::to_string(1.0f);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, pModel->vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, pModel->indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+	SetMaterial(gfx, mat);
+}
 
+json CubeMesh::ToJson() const noexcept {
+	json j;
+	j["type"] = "cube";
+	j["material"] = mat.ToJson();
+	return j;
+}
+
+void CubeMesh::SetMaterial(Graphics& gfx, const Material& mat) noexcept
+{
 	using namespace Bind;
+	techniques.clear();
 	custom::VertexLayout vertexLayout;
 	Dcb::RawLayout pscLayout;
 	Dcb::RawLayout vscLayout;
@@ -185,13 +198,23 @@ CubeMesh::CubeMesh(Graphics& gfx, float size)
 	}
 }
 
-json CubeMesh::ToJson() const noexcept {
-	json j;
-	j["type"] = "cube";
-	j["material"] = mat.ToJson();
-	return j;
-}
-
 const Material& CubeMesh::GetMaterial() const noexcept {
 	return mat;
+}
+
+void CubeMesh::Modify(Graphics& gfx, const json& modifiedMesh) noexcept
+{
+	std::string modifiedMaterialName = modifiedMesh["material"]["name"];
+	if (modifiedMaterialName != mat.name) {
+		// change to map...
+		if (modifiedMaterialName == "grass") {
+			SetMaterial(gfx, Material{ gfx, "grass", "Images/grass.jpg" });
+		}
+		else if (modifiedMaterialName == "brickwall") {
+			SetMaterial(gfx, Material{ gfx, "brickwall", "Images/brickwall.jpg" });
+		}
+		else if (modifiedMaterialName == "stone") {
+			SetMaterial(gfx, Material{ gfx, "stone", "Images/stone.jpg" });
+		}
+	}
 }
