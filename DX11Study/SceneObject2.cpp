@@ -23,6 +23,7 @@ json SceneObject2::ToJson() const noexcept {
 	j["id"] = id;
 	j["name"] = name;
 	j["type"] = type;
+	j["actived"] = actived;
 
 	json transform;
 	DirectX::XMVECTOR posV;
@@ -58,6 +59,7 @@ void SceneObject2::Modify(Graphics& gfx, const json& modifiedObject) noexcept {
 	using namespace DirectX;
 	name = modifiedObject["name"];
 	type = modifiedObject["type"];
+	actived = modifiedObject["actived"];
 	
 	auto tf = modifiedObject["transform"];
 	XMVECTOR pos, quat, scale;

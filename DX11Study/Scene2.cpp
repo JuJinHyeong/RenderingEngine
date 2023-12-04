@@ -72,7 +72,7 @@ void Scene2::SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainer
 	this->cameraContainerPtr = std::move(cameraContainerPtr);
 }
 
-void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept {
+void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) {
 	SetIfChanged(name, (std::string)modifiedScene["name"]);
 	for (size_t i = 0; i < modifiedScene["objects"].size(); i++) {
 		auto modifiedSceneObject = modifiedScene["objects"][i];
