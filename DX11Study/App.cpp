@@ -171,6 +171,7 @@ void App::HandleInput(float dt)
 }
 
 char buffer[256];
+bool modifiedSuccess = false;
 void App::ShowWindow()
 {
 	// gpt
@@ -190,8 +191,9 @@ void App::ShowWindow()
 	ImGui::TextColored({ 0.4f, 1.0f, 0.6f, 1.0f }, "GPT Message");
 	ImGui::InputText(" ", buffer, IM_ARRAYSIZE(buffer));
 	if (ImGui::Button("send")) {
-		SceneModifier::SendToGpt(wnd.Gfx(), scene2, makeableNames, buffer);
+		modifiedSuccess = SceneModifier::SendToGpt(wnd.Gfx(), scene2, makeableNames, buffer);
 		scene2.LinkTechnique(rg);
 	}
+	ImGui::Text(modifiedSuccess ? "Succes" : "Fail");
 	ImGui::End();
 }
