@@ -8,7 +8,6 @@
 #include <vector>
 
 class Mesh : public Drawable, public JsonSerializable {
-	friend class MP;
 public:
 	Mesh(Graphics& gfx, const Material& mat, const aiMesh& mesh, float scale = 1.0f) noexcept(!IS_DEBUG);
 	Mesh(Graphics& gfx, std::shared_ptr<Material> matPtr, const aiMesh& mesh, float scale = 1.0f) noexcept(IS_DEBUG);

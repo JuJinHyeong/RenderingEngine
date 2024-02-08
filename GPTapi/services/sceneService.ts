@@ -84,9 +84,16 @@ const ChangeMaterial = (scene: Scene, { name, materialName }: { name: string, ma
         obj.mesh.material.name = materialName;
     }
 }
+const ChangeName = (scene: Scene, { name, newName }: { name: string, newName: string }) => {
+    let obj = scene.objects.find((object) => object.name === name);
+    if (obj) {
+        obj.changedName = newName;
+    }
+}
 
 export const SceneModifier = {
     transform,
     Generate,
     ChangeMaterial,
+    ChangeName,
 }

@@ -4,13 +4,10 @@
 #include "ImguiManager.h"
 #include "Camera.h"
 #include "Drawable.h"
-#include "PointLight.h"
 #include "TestPlane.h"
 #include "TestCube.h"
-#include "Model.h"
 #include "BlurOutlineRenderGraph.h"
 #include "CameraContainer.h"
-#include "Scene.h"
 #include "PointLight2.h"
 #include <set>
 #include <vector>
@@ -35,7 +32,7 @@ private:
 	//PointLight light;
 
 	// TODO: add model group
-	Scene2 scene2{ "second scene" }; 
+	Scene2 scene2{ "second scene" };
 	std::shared_ptr<PointLight2> pPointLight;
 	//Model gobber{ wnd.Gfx(), "models/gobber/GoblinX.obj", 3.0f };
 	//Model nano{ wnd.Gfx(), "models/nano_textured/nanosuit.obj", 1.0f };

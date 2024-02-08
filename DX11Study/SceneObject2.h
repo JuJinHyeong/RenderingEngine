@@ -21,7 +21,7 @@ public:
 
 	virtual void Submit(size_t channel, const DirectX::FXMMATRIX& accumulatedTransform = DirectX::XMMatrixIdentity()) const noexcept(!IS_DEBUG) = 0;
 	json ToJson() const noexcept override;
-	virtual void Modify(Graphics& gfx, const json& modifiedObject) noexcept;
+	virtual void Modify(Graphics& gfx, const json& modifiedObject);
 
 	void Accept(SceneProbe2& probe) noexcept;
 	virtual void Accept(TechniqueProbe& probe) noexcept;

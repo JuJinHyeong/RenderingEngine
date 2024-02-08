@@ -77,9 +77,16 @@ const ChangeMaterial = (scene, { name, materialName }) => {
         obj.mesh.material.name = materialName;
     }
 };
+const ChangeName = (scene, { name, newName }) => {
+    let obj = scene.objects.find((object) => object.name === name);
+    if (obj) {
+        obj.changedName = newName;
+    }
+};
 exports.SceneModifier = {
     transform,
     Generate,
     ChangeMaterial,
+    ChangeName,
 };
 //# sourceMappingURL=sceneService.js.map

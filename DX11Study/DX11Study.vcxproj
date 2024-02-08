@@ -71,10 +71,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(ProjectDir)assimp/lib/x64;$(ProjectDir)dxtex/bin/Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)assimp/lib/x64;$(ProjectDir)dxtex/bin/Debug;$(LibraryPath);$(ProjectDir)curl/lib/x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(ProjectDir)assimp/lib/x64;$(ProjectDir)dxtex/bin/Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)assimp/lib/x64;$(ProjectDir)dxtex/bin/Release;$(LibraryPath);$(ProjectDir)curl/lib/x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,7 +116,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)assimp/include;$(ProjectDir)dxtex/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)assimp/include;$(ProjectDir)dxtex/include;$(ProjectDir)curl/include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>5105;5104</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -124,7 +124,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;DirectXTex.lib;libcurld.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,7 +141,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard_C>Default</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(ProjectDir)assimp/include;$(ProjectDir)dxtex/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)assimp/include;$(ProjectDir)dxtex/include;$(ProjectDir)curl/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,7 +150,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mt.lib;DirectXTex.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;DirectXTex.lib;libcurl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -203,18 +203,15 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelException.cpp" />
     <ClCompile Include="ModelProbe.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Node2.cpp" />
     <ClCompile Include="NullPixelShader.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="PerformanceLog.cpp" />
     <ClCompile Include="PixelShader.cpp" />
-    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PointLight2.cpp" />
     <ClCompile Include="Projection.cpp" />
     <ClCompile Include="Rasterizer.cpp" />
@@ -224,12 +221,9 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="SceneModifier.cpp" />
-    <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="SceneObject2.cpp" />
-    <ClCompile Include="SceneProbe.cpp" />
     <ClCompile Include="SceneProbe2.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="ShadowRasterizer.cpp" />
@@ -327,11 +321,9 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="ModelException.h" />
     <ClInclude Include="ModelProbe.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="Node.h" />
     <ClInclude Include="Node2.h" />
     <ClInclude Include="NullPixelShader.h" />
     <ClInclude Include="Object.h" />
@@ -341,7 +333,6 @@
     <ClInclude Include="PerformanceLog.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Plane.h" />
-    <ClInclude Include="PointLight.h" />
     <ClInclude Include="PointLight2.h" />
     <ClInclude Include="Prism.h" />
     <ClInclude Include="Projection.h" />
@@ -353,12 +344,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
-    <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="SceneModifier.h" />
-    <ClInclude Include="SceneObject.h" />
     <ClInclude Include="SceneObject2.h" />
-    <ClInclude Include="SceneProbe.h" />
     <ClInclude Include="SceneProbe2.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="ShadowMappingPass.h" />

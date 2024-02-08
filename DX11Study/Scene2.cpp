@@ -72,50 +72,55 @@ void Scene2::SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainer
 	this->cameraContainerPtr = std::move(cameraContainerPtr);
 }
 
-void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept {
-	SetIfChanged(name, (std::string)modifiedScene["name"]);
-	for (size_t i = 0; i < modifiedScene["objects"].size(); i++) {
-		auto modifiedSceneObject = modifiedScene["objects"][i];
-		if (modifiedSceneObject["id"] == 0) {
-			std::string makingSceneObjectName = modifiedSceneObject["name"];
-			auto it = makeableObjects.find(makingSceneObjectName);
-			if (it != makeableObjects.end()) {
-				if (it->first == "Cube") {
-					AddSceneObject(std::make_shared<Geometry<CubeMesh>>(gfx, "cube"));
-				}
-				else if (it->first == "Empty") {
-					AddSceneObject(std::make_shared<EmptySceneObject2>("empty"));
+void Scene2::ModifyScene(Graphics& gfx, const json& modifiedScene) {
+	try {
+		SetIfChanged(name, (std::string)modifiedScene["name"]);
+		for (size_t i = 0; i < modifiedScene["objects"].size(); i++) {
+			auto modifiedSceneObject = modifiedScene["objects"][i];
+			if (modifiedSceneObject["id"] == 0) {
+				std::string makingSceneObjectName = modifiedSceneObject["name"];
+				auto it = makeableObjects.find(makingSceneObjectName);
+				if (it != makeableObjects.end()) {
+					if (it->first == "Cube") {
+						AddSceneObject(std::make_shared<Geometry<CubeMesh>>(gfx, "cube"));
+					}
+					else if (it->first == "Empty") {
+						AddSceneObject(std::make_shared<EmptySceneObject2>("empty"));
+					}
+					else {
+						AddSceneObject(gfx, it->second);
+					}
 				}
 				else {
-					AddSceneObject(gfx, it->second);
+					continue;
 				}
+
+				auto makedObjectTransform = modifiedSceneObject["transform"];
+				DirectX::XMVECTOR posV = DirectX::XMVectorSet(
+					makedObjectTransform["position"]["x"],
+					makedObjectTransform["position"]["y"],
+					makedObjectTransform["position"]["z"], 1.0f
+				);
+				DirectX::XMVECTOR quatV = DirectX::XMVectorSet(
+					makedObjectTransform["rotation"]["x"],
+					makedObjectTransform["rotation"]["y"],
+					makedObjectTransform["rotation"]["z"],
+					makedObjectTransform["rotation"]["w"]
+				);
+				DirectX::XMVECTOR scaleV = DirectX::XMVectorSet(
+					makedObjectTransform["scale"]["x"],
+					makedObjectTransform["scale"]["y"],
+					makedObjectTransform["scale"]["z"], 1.0f
+				);
+				sceneObjectPtrs.back()->SetLocalTransform(DirectX::XMMatrixAffineTransformation(scaleV, DirectX::XMVectorZero(), quatV, posV));
 			}
 			else {
-				continue;
+				sceneObjectPtrs[i]->Modify(gfx, modifiedScene["objects"][i]);
 			}
-
-			auto makedObjectTransform = modifiedSceneObject["transform"];
-			DirectX::XMVECTOR posV = DirectX::XMVectorSet(
-				makedObjectTransform["position"]["x"],
-				makedObjectTransform["position"]["y"],
-				makedObjectTransform["position"]["z"], 1.0f
-			);
-			DirectX::XMVECTOR quatV = DirectX::XMVectorSet(
-				makedObjectTransform["rotation"]["x"],
-				makedObjectTransform["rotation"]["y"],
-				makedObjectTransform["rotation"]["z"],
-				makedObjectTransform["rotation"]["w"]
-			);
-			DirectX::XMVECTOR scaleV = DirectX::XMVectorSet(
-				makedObjectTransform["scale"]["x"],
-				makedObjectTransform["scale"]["y"],
-				makedObjectTransform["scale"]["z"], 1.0f
-			);
-			sceneObjectPtrs.back()->SetLocalTransform(DirectX::XMMatrixAffineTransformation(scaleV, DirectX::XMVectorZero(), quatV, posV));
 		}
-		else {
-			sceneObjectPtrs[i]->Modify(gfx, modifiedScene["objects"][i]);
-		}
+	}
+	catch (std::exception& e) {
+		throw e;
 	}
 }
 
@@ -134,7 +139,7 @@ void Scene2::Submit(size_t channel) noexcept(!IS_DEBUG) {
 			objPtr->Submit(channel);
 		}
 	}
-	cameraContainerPtr->Submit(channel);
+	//cameraContainerPtr->Submit(channel);
 }
 
 void Scene2::LinkTechnique(Rgph::RenderGraph& rg) {

@@ -35,6 +35,7 @@ export interface SceneObject {
     parent?: string;
     mesh?: Mesh;
     children?: SceneObject[];
+    changedName?: string;
 }
 
 export interface Scene {

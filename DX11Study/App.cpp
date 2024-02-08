@@ -10,7 +10,7 @@
 #include <dxtex/DirectXTex.h>
 #include <vector>
 #include "Material.h"
-#include "TestModelProbe.h"
+//#include "TestModelProbe.h"
 #include "ExtendedXMMath.h"
 #include "Camera.h"
 #include "Channels.h"
@@ -23,8 +23,8 @@
 
 #include "Testing.h"
 
-constexpr static int width = 1280;
-constexpr static int height = 690;
+constexpr static int width = 1980;
+constexpr static int height = 1020;
 
 App::App()
 	:
@@ -85,20 +85,16 @@ void App::DoFrame(float dt)
 
 	if (savingDepth)
 	{
-		rg.DumpShadowMap(wnd.Gfx(), "shadow.png");
+		//rg.DumpShadowMap(wnd.Gfx(), "shadow.png");
 		savingDepth = false;
 	}
-
-	static MP sponzaProbe("sponza");
-	static MP nanoProbe("nano");
-	static MP gobberProbe("goblin");
 
 	if (showDemoWindow)
 	{
 		ShowWindow();
 		scene2.ShowWindow();
-		rg.RenderWindows(wnd.Gfx());
-		pPointLight->SpawnControlWindow();
+		//rg.RenderWindows(wnd.Gfx());
+		//pPointLight->SpawnControlWindow();
 	}
 
 	wnd.Gfx().EndFrame();

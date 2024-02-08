@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 
-#include "Scene.h"
 #include "json.hpp"
 #include "Scene2.h"
 

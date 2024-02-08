@@ -54,25 +54,32 @@ bool AreVectorsEqual(DirectX::XMVECTOR v1, DirectX::XMVECTOR v2, float epsilon =
 	DirectX::XMVECTOR diff = DirectX::XMVectorSubtract(v1, v2);
 	return DirectX::XMVector4LessOrEqual(DirectX::XMVectorAbs(diff), DirectX::XMVectorReplicate(epsilon));
 }
-void SceneObject2::Modify(Graphics& gfx, const json& modifiedObject) noexcept {
-	using namespace DirectX;
-	name = modifiedObject["name"];
-	type = modifiedObject["type"];
-	
-	auto tf = modifiedObject["transform"];
-	XMVECTOR pos, quat, scale;
-	XMMatrixDecompose(&scale, &quat, &pos, localTransform);
-	XMVECTOR modifiedPos = XMVectorSet(tf["position"]["x"], tf["position"]["y"], tf["position"]["z"], 1.0f);
-	XMVECTOR modifiedQuat = XMVectorSet(tf["rotation"]["x"], tf["rotation"]["y"], tf["rotation"]["z"], tf["rotation"]["w"]);
-	XMVECTOR modifiedScale = XMVectorSet(tf["scale"]["x"], tf["scale"]["y"], tf["scale"]["z"], 0.0f);
-	
-	if (!AreVectorsEqual(pos, modifiedPos) || !AreVectorsEqual(quat, modifiedQuat) || !AreVectorsEqual(scale, modifiedScale)) {
-		// modified values are calculated. do not add.
-		SetLocalTransform(XMMatrixAffineTransformation(modifiedScale, XMVectorZero(), modifiedQuat, modifiedPos));
-	}
+void SceneObject2::Modify(Graphics& gfx, const json& modifiedObject) {
+	try {
+		using namespace DirectX;
+		if (modifiedObject.find("changedName") != modifiedObject.end()) {
+			name = modifiedObject["changedName"];
+		}
+		type = modifiedObject["type"];
 
-	for (size_t i = 0; i < childPtrs.size(); i++) {
-		childPtrs[i]->Modify(gfx, modifiedObject["children"][i]);
+		auto tf = modifiedObject["transform"];
+		XMVECTOR pos, quat, scale;
+		XMMatrixDecompose(&scale, &quat, &pos, localTransform);
+		XMVECTOR modifiedPos = XMVectorSet(tf["position"]["x"], tf["position"]["y"], tf["position"]["z"], 1.0f);
+		XMVECTOR modifiedQuat = XMVectorSet(tf["rotation"]["x"], tf["rotation"]["y"], tf["rotation"]["z"], tf["rotation"]["w"]);
+		XMVECTOR modifiedScale = XMVectorSet(tf["scale"]["x"], tf["scale"]["y"], tf["scale"]["z"], 0.0f);
+
+		if (!AreVectorsEqual(pos, modifiedPos) || !AreVectorsEqual(quat, modifiedQuat) || !AreVectorsEqual(scale, modifiedScale)) {
+			// modified values are calculated. do not add.
+			SetLocalTransform(XMMatrixAffineTransformation(modifiedScale, XMVectorZero(), modifiedQuat, modifiedPos));
+		}
+
+		for (size_t i = 0; i < childPtrs.size(); i++) {
+			childPtrs[i]->Modify(gfx, modifiedObject["children"][i]);
+		}
+	}
+	catch (std::exception& e) {
+		throw e;
 	}
 }
 

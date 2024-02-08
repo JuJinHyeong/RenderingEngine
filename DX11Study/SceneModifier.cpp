@@ -5,7 +5,12 @@
 
 void SceneModifier::Modify(Graphics& gfx, Scene2& scene, const json& modifiedScene)
 {
-	scene.ModifyScene(gfx, modifiedScene);
+	try {
+		scene.ModifyScene(gfx, modifiedScene);
+	}
+	catch (std::exception& e) {
+		std::cout << e.what() << std::endl;
+	}
 }
 
 void SceneModifier::SendToGpt(Graphics& gfx, Scene2& scene, std::vector<std::string>& makeables, const std::string message)

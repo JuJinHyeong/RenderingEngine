@@ -6,7 +6,7 @@ size_t ApiService::WriteCallback(void* contents, size_t size, size_t nmemb, std:
 	try {
 		userp->append((char*)contents, newLength);
 	}
-	catch (std::bad_alloc& e) {
+	catch (std::bad_alloc e) {
 		return 0;
 	}
 	return newLength;

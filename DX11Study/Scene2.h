@@ -17,7 +17,7 @@ public:
 	void AddSceneObject(std::shared_ptr<SceneObject2>&& sceneObjectPtr) noexcept;
 	void AddSceneObject(Graphics& gfx, const std::string& path, float scale = 1.0f) noexcept;
 	void SetCameraContainer(std::unique_ptr<CameraContainer> cameraContainerPtr) noexcept;
-	void ModifyScene(Graphics& gfx, const json& modifiedScene) noexcept;
+	void ModifyScene(Graphics& gfx, const json& modifiedScene);
 
 	void Bind(Graphics& gfx) noexcept(!IS_DEBUG);
 	void Submit(size_t channel) noexcept(!IS_DEBUG);
