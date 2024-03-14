@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-03-14T05:54:46.527Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0" etag="bBrq_G2D5a8Sb8Me5S0k" version="24.0.6" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-14T05:58:17.918Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0" etag="GL2UCV0jc7LBL6amLJp2" version="24.0.6" type="github">
   <diagram name="페이지-1" id="sZPuGg_SH_d918SeGX3l">
-    <mxGraphModel dx="11849" dy="3703" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="7717" dy="1481" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1687,45 +1687,6 @@
               <mxPoint x="-1981" y="4010" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-1" value="Scene" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-4430" y="5630" width="390" height="240" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-2" value="- name: string&lt;br&gt;- pSceneObjects: vector&amp;lt;sp&amp;lt;SceneObject&amp;gt;&amp;gt; pSceneObjects" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-1" vertex="1">
-          <mxGeometry y="26" width="390" height="44" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-3" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="U-yE1-UU2bJKEVfpB2dz-1" vertex="1">
-          <mxGeometry y="70" width="390" height="8" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-4" value="+ ToJson(): json&lt;br&gt;+ AddObject(sp&amp;lt;SceneObject&amp;gt; object): void&lt;br&gt;+ Submit(size_t channel): void&lt;br&gt;+ GetObjects(): vector&amp;lt;sp&amp;lt;SceneObject&amp;gt;&amp;gt;&lt;br&gt;+ Bind(Graphics&amp;amp; gfx): void&lt;br&gt;+ ShowWindow(): void&lt;br&gt;+ LinkTechniques(RenderGraph&amp;amp; rg): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-1" vertex="1">
-          <mxGeometry y="78" width="390" height="112" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-5" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="U-yE1-UU2bJKEVfpB2dz-1" vertex="1">
-          <mxGeometry y="190" width="390" height="8" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-6" value="Scene의 데이터들을 저장하는 클래스이다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-1" vertex="1">
-          <mxGeometry y="198" width="390" height="42" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-7" value="SceneObject" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-3930" y="5630" width="390" height="240" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-8" value="- id: uint&lt;br&gt;- name: string&lt;br&gt;- type: Type(empty, light, object, camera)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-7" vertex="1">
-          <mxGeometry y="26" width="390" height="54" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-9" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="U-yE1-UU2bJKEVfpB2dz-7" vertex="1">
-          <mxGeometry y="80" width="390" height="8" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-10" value="+ ToJson(): json&lt;br&gt;+ AddChild(up&amp;lt;SceneObject&amp;gt; child): void&lt;br&gt;+ SetObject(up&amp;lt;Object&amp;gt; obj): void&lt;br&gt;+ GetObjectPtr(): up&amp;lt;Object&amp;gt;&lt;br&gt;+ Submit(size_t channel): void&lt;br&gt;+ LinkTechniques(RenderGraph&amp;amp; rg): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-7" vertex="1">
-          <mxGeometry y="88" width="390" height="102" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-11" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="U-yE1-UU2bJKEVfpB2dz-7" vertex="1">
-          <mxGeometry y="190" width="390" height="8" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-12" value="Scene 안에 있는 object를 저장하고 사용하고 있다." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" parent="U-yE1-UU2bJKEVfpB2dz-7" vertex="1">
-          <mxGeometry y="198" width="390" height="42" as="geometry" />
-        </mxCell>
-        <mxCell id="U-yE1-UU2bJKEVfpB2dz-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.067;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.998;exitY=0.622;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="U-yE1-UU2bJKEVfpB2dz-2" target="U-yE1-UU2bJKEVfpB2dz-7" edge="1">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="rU0S2UXrk4623Vnb-WaZ-1" value="Node" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="-20" y="4100" width="353" height="270" as="geometry" />
