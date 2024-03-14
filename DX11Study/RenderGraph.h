@@ -19,7 +19,7 @@ namespace Rgph {
 	class RenderGraph {
 	public:
 		RenderGraph(Graphics& gfx);
-		~RenderGraph();
+		virtual ~RenderGraph();
 		void Execute(Graphics& gfx) noexcept(!IS_DEBUG);
 		void Reset() noexcept;
 		RenderQueuePass& GetRenderQueue(const std::string& passName);

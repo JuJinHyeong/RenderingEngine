@@ -62,17 +62,14 @@ namespace Rgph {
 
 	void RenderGraph::AppendPass(std::unique_ptr<Pass> pass) {
 		assert(!finalized);
-		// validate name uniqueness
 		for (const auto& p : passes) {
 			if (pass->GetName() == p->GetName()) {
 				throw RGC_EXCEPTION("Pass name already exists: " + pass->GetName());
 			}
 		}
 
-		// link outputs from passes (and global outputs) to pass inputs
 		LinkSinks(*pass);
 
-		// add to container of passes
 		passes.push_back(std::move(pass));
 	}
 

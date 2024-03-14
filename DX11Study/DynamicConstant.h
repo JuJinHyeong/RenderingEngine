@@ -75,9 +75,9 @@ namespace Dcb {
 #define X(el) static_assert(Map<el>::valid, "Missing implementation for " #el);
 	LEAF_ELEMENT_TYPES
 #undef X
-		template <typename T>
+	template <typename T>
 	struct ReverseMap {
-	static constexpr bool valid = false;
+		static constexpr bool valid = false;
 	};
 #define X(el) \
 template<> struct ReverseMap<typename Map<el>::SysType> { \
