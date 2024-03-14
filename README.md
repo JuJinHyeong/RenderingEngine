@@ -12,6 +12,6 @@ VS 2022 Comminity
 (ProjectDir).env 에 OPENAI_API_KEY 필요  
 
 ## 사용법
-wsadrf: 카메라 앞뒤, 양옆, 위아래
-esc: 마우스 커서 on/off 토글
+wsadrf: 카메라 앞뒤, 양옆, 위아래  
+esc: 마우스 커서 on/off 토글  
 f1: scene ui on/off 토글
